@@ -24,3 +24,7 @@ public interface MonsterInterface {
 	public void decreaseHealth(int healthDecNum);
 	public Move getAttack();
 }
+
+
+
+skibblydibbly
