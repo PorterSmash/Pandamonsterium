@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.swing.ImageIcon;
 
 public interface MonsterInterface {
 	int maxHealthPoints;
@@ -19,6 +20,8 @@ public interface MonsterInterface {
 	
 	String monsterImagePath;
 	String soundFilePath;
+	
+	ImageIcon spriteImage;
 	
 	public void levelUp(int statID);
 	public void decreaseHealth(int healthDecNum);
