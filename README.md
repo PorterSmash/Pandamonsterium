@@ -2,4 +2,5 @@
 CIS 350 Project
 Panda(monster)ium
 Use discord to discuss the project
-I'll ban u
+
+Pokemon Sprite Website: https://pokemondb.net/sprites 
