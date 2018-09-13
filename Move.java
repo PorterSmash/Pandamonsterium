@@ -1,5 +1,5 @@
 
-public class Move {
+public /*interface */class Move {
 	int attackPower;
 	int critChance;
 	int hitChance;
@@ -10,3 +10,4 @@ public class Move {
 		hitChance = htChc;
 	}
 }
+//shouldn't this be an interface?
