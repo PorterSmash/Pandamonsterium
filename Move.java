@@ -1,11 +1,10 @@
+package Release1;
 
-public /*interface */class Move {
-	
-	int attackPower; //some number between -10 and 10, negative so that the monster can heal
-	int critChance; //represents a percentage
+public class Move {
+	int attackPower;
+	int critChance;
 	int hitChance;
-	int moveTarget; //represents which monster the move is applied to. 1 if it is applied to the enemy, 0 if it is applied to itself
-	
+	int moveTarget;
 	
 	public Move(int atkPwr, int crtChc, int htChc, int mveTgt) {
 		attackPower = atkPwr;
@@ -13,5 +12,12 @@ public /*interface */class Move {
 		hitChance = htChc;
 		moveTarget = mveTgt;
 	}
+	public String toString() {
+		String toReturn = "";
+		toReturn += "Attack Power: " + this.attackPower;
+		toReturn += "\nCrit Chance: " + this.critChance;
+		toReturn += "\nHit Chance: " + this.hitChance;
+		toReturn += "\n Move Target: " + this.moveTarget;
+		return toReturn;
+	}
 }
-//shouldn't this be an interface?
