@@ -2,8 +2,8 @@ package Release1;
 
 public class StartBattle {
 	public static void main(String[] args) {
-		Charizard Char1 = new Charizard();
-		Charizard Char2 = new Charizard();
+		Monster Char1 = new Monster();
+		Monster Char2 = new Monster();
 		
 		Logic engine = new Logic(Char1, Char2);
 		//Attack the other Charizard

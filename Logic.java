@@ -1,17 +1,15 @@
-
-
 package Release1;
 
 import java.util.ArrayList;
 import java.util.Random;
 public class Logic {
-	ArrayList<Charizard> player1Team = new ArrayList<Charizard>();
-	ArrayList<Charizard> player2Team = new ArrayList<Charizard>();
-	Charizard mon1;
-	Charizard mon2;
+	ArrayList<Monster> player1Team = new ArrayList<Monster>();
+	ArrayList<Monster> player2Team = new ArrayList<Monster>();
+	Monster mon1;
+	Monster mon2;
 	Move lastMove;
 	
-	Logic(ArrayList<Charizard> player1, ArrayList<Charizard> player2) {
+	Logic(ArrayList<Monster> player1, ArrayList<Monster> player2) {
 		this.mon1 = player1.get(0);
 		this.mon2 = player2.get(0);
 		
@@ -67,16 +65,16 @@ public class Logic {
 		System.out.println("Last Move: " + lastMove.toString());
 		
 	}
-	public void switchMonster(ArrayList<Charizard> playerList, int monster) {
+	public void switchMonster(ArrayList<Monster> playerList, int monster) {
 		if(playerList.get(monster).getOnField() == true) {
 			System.out.println("The monster you selected is already on the field");
 		}
 		else {
-			for(Charizard mon : playerList) {
+			for(Monster mon : playerList) {
 				mon.setOnField(false);
 			}
 			playerList.get(monster).setOnField(true);
-			for(Charizard mon : playerList) {
+			for(Monster mon : playerList) {
 				if(player1Team.contains(mon)) {
 					mon1 = mon;
 				}
@@ -93,7 +91,7 @@ public class Logic {
 		if(mon1.healthBattle <= 0) {
 			System.out.println("Player 1 monster fainted, switching to another monster");
 			int counter = 0;
-			for(Charizard notDead : player1Team) {
+			for(Monster notDead : player1Team) {
 				if(notDead.healthBattle > 0) {
 					switchMonster(player1Team, counter);
 				}
@@ -106,7 +104,7 @@ public class Logic {
 		if(mon2.healthBattle <= 0) {
 			System.out.println("Player 2 monster fainted, switching to another monster");
 			int counter = 0;
-			for(Charizard notDead : player2Team) {
+			for(Monster notDead : player2Team) {
 				if(notDead.healthBattle > 0) {
 					switchMonster(player2Team, counter);
 				}
