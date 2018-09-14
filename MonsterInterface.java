@@ -1,5 +1,6 @@
+package Release1;
 import java.util.ArrayList;
-import java.swing.ImageIcon;
+import javax.swing.ImageIcon;
 
 public interface MonsterInterface {
 	int maxHealthPoints;
@@ -27,7 +28,3 @@ public interface MonsterInterface {
 	public void decreaseHealth(int healthDecNum);
 	public Move getAttack();
 }
-
-
-
-skibblydibbly
