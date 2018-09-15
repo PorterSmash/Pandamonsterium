@@ -155,7 +155,7 @@ public class Monster implements MonsterInterface {
 		if (atkNum >= 1 && atkNum <= 4) {
 			return attackList.get(atkNum);
 		} else {
-			return null;
+			return null; //tes
 		}
 	}
 
