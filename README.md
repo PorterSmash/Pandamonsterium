@@ -1,6 +1,6 @@
-# PublishThis
+# PandeMonsterium
 CIS 350 Project
-Panda(monster)ium
+Pande(monster)ium
 Use discord to discuss the project
 
 Pokemon Sprite Website: https://pokemondb.net/sprites 
