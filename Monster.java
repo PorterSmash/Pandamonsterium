@@ -1,5 +1,7 @@
 package Release1;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 
@@ -26,7 +28,37 @@ public class Monster implements MonsterInterface {
 	ImageIcon spriteImage;
 	private boolean onField;
 
-	public void monsterFactory(String monsterName) {
+	public void monsterFactory(String monsterName, String fileName) {
+	        File monFile = new File(fileName);
+	        Scanner scnr = null;
+	        try {
+	            scnr = new Scanner(monFile);
+	            while (scnr.hasNextLine()) {
+	                if (scnr.next().equals(monsterName)) {
+	                	setMaxHealthPoints(scnr.nextInt());
+	        			setAttackPoints(scnr.nextInt());
+	        			setDefensePoints(scnr.nextInt());
+	        			setSpeedPoints(scnr.nextInt());
+	        			
+	        			ArrayList<Move> attackList = new ArrayList<Move>();
+	        			Move move1 = new Move(scnr.nextInt(), scnr.nextInt(), scnr.nextInt(), scnr.nextInt()); //light attack
+	        			Move move2 = new Move(scnr.nextInt(), scnr.nextInt(), scnr.nextInt(), scnr.nextInt()); //heavy attack
+	        			Move move3 = new Move(scnr.nextInt(), scnr.nextInt(), scnr.nextInt(), scnr.nextInt()); //heal
+	        			Move move4 = new Move(scnr.nextInt(), scnr.nextInt(), scnr.nextInt(), scnr.nextInt()); //block
+	        			
+	        			//block may be impossible to implement, it would be easier to do a stat change move for every mon
+	        			//also it may be better to increase the bounds of the stats. 10 is pretty limiting. Even 20 would be better
+	                }
+	            }
+	        } catch (FileNotFoundException e) {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        } finally {
+	            if (scnr != null) {
+	                scnr.close();
+	            }
+	        }
+	    //}
 		if (monsterName.equals("Charizard")) {
 			setMaxHealthPoints(120);
 			setAttackPoints(4);
@@ -189,4 +221,5 @@ public class Monster implements MonsterInterface {
 		speedBattle = speedPoints;
 		defenseBattle = defensePoints;
 	}
+
 }

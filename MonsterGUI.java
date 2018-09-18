@@ -1,5 +1,7 @@
 package Release1;
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,7 +10,10 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
@@ -19,6 +24,7 @@ import javafx.stage.Stage;
 public class MonsterGUI extends Application implements EventHandler<ActionEvent>{
 
 	Scene monsterPick,battle;
+	private boolean playerOnePicked = false;
 	@Override
 	public void start(Stage stage) throws Exception {
 		// TODO Auto-generated method stub
@@ -80,6 +86,59 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		chooseMonster.setOnAction(e -> getChoice(choiceBox,choiceBox1,choiceBox2));
 		
 		stage.show();
+		
+		//Logic engine = new Logic();
+		
+		button1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                //some check to see if the person has chosen their monsters yet
+            	//if they have, create a new engine object with their monsters in
+            	String[] choices = returnChoice(choiceBox, choiceBox1, choiceBox2);
+            	ArrayList<Monster> player1Team = new ArrayList<Monster>();
+            	ArrayList<Monster> player2Team = new ArrayList<Monster>();
+            	
+            	for(int i = 0; i < choices.length; i ++) {
+            		if(choices[i] == null) {
+            			Alert alert = new Alert(AlertType.INFORMATION);
+            			alert.setTitle("Choose 3 Monsters");
+            			alert.setContentText("You need to select all three monsters");
+            			alert.showAndWait().ifPresent(rs -> {
+            			    if (rs == ButtonType.OK) {
+            			        //System.out.println("Pressed OK.");
+            			    }
+            			});
+            		}
+            		else {
+            			if(!(playerOnePicked)) {
+            				playerOnePicked = true;
+            				Alert alert = new Alert(AlertType.INFORMATION);
+                			alert.setTitle("Player 2 Turn");
+                			alert.setContentText("Player 1 has chosen their monsters, now it is player 2's turn to pick");
+                			alert.showAndWait().ifPresent(rs -> {
+                			    if (rs == ButtonType.OK) {
+                			        //System.out.println("Pressed OK.");
+                			    }
+                			});
+                			for(int j = 0; j < choices.length; j ++) {
+                				Monster monster = new Monster();
+                				monster.monsterFactory(choices[j], "Monsterinfo.txt");
+                				player1Team.add(monster);
+                			}
+            			}
+            			else {
+                			for(int k = 0; k < choices.length; k ++) {
+                				Monster monster = new Monster();
+                				monster.monsterFactory(choices[k], "Monsterinfo.txt");
+                				player2Team.add(monster);
+            			}
+                		System.out.println("Let the battle begin!");
+                		Logic engine = new Logic(player1Team, player2Team);
+                		engine.startBattle();
+            		}
+            	}
+            }
+            }});
+			
 
 	}
 	private void getChoice(ChoiceBox<String> choiceBox,ChoiceBox<String> choiceBox1,ChoiceBox<String> choiceBox2){
@@ -87,15 +146,26 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		String monster2 = choiceBox1.getValue();
 		String monster3 = choiceBox2.getValue();
 		System.out.println(monster1 + monster2 + monster3);
+		
+	}
+	
+	private String[] returnChoice(ChoiceBox<String> choiceBox,ChoiceBox<String> choiceBox1,ChoiceBox<String> choiceBox2){
+		String monster1 = choiceBox.getValue();
+		String monster2 = choiceBox1.getValue();
+		String monster3 = choiceBox2.getValue();
+		
+		String[] toReturn = {monster1, monster2, monster3};
+		return toReturn;
 	}
 
 	@Override
 	public void handle(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		System.out.println("ButtonListener?");
 
 	}
 	public static void main(String[] args) 
 	{
+		System.out.println("This is a test");
 		launch(args);
 	}
 }
