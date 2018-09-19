@@ -1,5 +1,7 @@
 package Release1;
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,6 +27,8 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 	Monster choose = null;
 	Rectangle healthBar1;
 	Label HPLabel;
+	ArrayList<Monster> player1Team = new ArrayList<Monster>();
+	ArrayList<Monster> player2Team = new ArrayList<Monster>();
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -81,15 +85,42 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		Button chooseMonsterButton = new Button("Choose your Monster");
 
 		chooseMonsterButton.setOnAction(new EventHandler<ActionEvent>() {
+			private boolean playerOnePicked;
+
 			@Override
 			public void handle(ActionEvent arg0) {
 				String monster1 = monsterBox1.getValue();
 				String monster2 = monsterBox2.getValue();
 				String monster3 = monsterBox3.getValue();
-
-				System.out.println(monster1 + monster2 + monster3);
-
+				
+            	String[] choices = {monster1, monster2, monster3};
+            	
+				if(choices[0] == null || choices[1] == null || choices[2] == null) {
+					System.out.println("You haven't chosen all monsters yet.");
+				}
+				else {
+					if(!(playerOnePicked)) {
+						for(int i = 0; i < 3; i ++) {
+						Monster monster = new Monster();
+						monster.monsterFactory(choices[i]);
+						player1Team.add(monster);
+						}
+						playerOnePicked = true;
+					}
+					else {
+						for(int i = 0; i < 3; i ++) {
+							Monster monster = new Monster();
+							monster.monsterFactory(choices[i]);
+							player2Team.add(monster);
+							}
+					}
+				}
+				System.out.println(player1Team.size());
+				if(player1Team.size() == player2Team.size() && player1Team.size() == 3) {
+				Logic engine = new Logic(player1Team, player2Team);
+				engine.startBattle();
 				primaryStage.setScene(battleScene);
+				}
 			}
 		});
 
