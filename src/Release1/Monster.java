@@ -8,7 +8,7 @@ public class Monster implements MonsterInterface {
 	int defensePoints;
 	int attackPoints;
 	int speedPoints;
-
+	
 	int healthBattle;
 	int attackBattle;
 	int defenseBattle;
@@ -22,19 +22,145 @@ public class Monster implements MonsterInterface {
 
 	String monsterImagePath;
 	String soundFilePath;
+	String monsterName;
+
+
 
 	ImageIcon spriteImage;
 	private boolean onField;
+	
+	public String getMonsterName() {
+		return monsterName;
+	}
+
+	public void setMonsterName(String monsterName) {
+		this.monsterName = monsterName;
+	}
+	public int getHealthBattle() {
+		return healthBattle;
+	}
+
+	public void setHealthBattle(int healthBattle) {
+		this.healthBattle = healthBattle;
+	}
+
+	public int getAttackBattle() {
+		return attackBattle;
+	}
+
+	public void setAttackBattle(int attackBattle) {
+		this.attackBattle = attackBattle;
+	}
+
+	public int getDefenseBattle() {
+		return defenseBattle;
+	}
+
+	public void setDefenseBattle(int defenseBattle) {
+		this.defenseBattle = defenseBattle;
+	}
+
+	public int getSpeedBattle() {
+		return speedBattle;
+	}
+
+	public void setSpeedBattle(int speedBattle) {
+		this.speedBattle = speedBattle;
+	}
+
+	public ArrayList<Move> getAttackList() {
+		return attackList;
+	}
+
+	public void setAttackList(ArrayList<Move> attackList) {
+		this.attackList = attackList;
+	}
+
+	public Move getMove1() {
+		return move1;
+	}
+
+	public void setMove1(Move move1) {
+		this.move1 = move1;
+	}
+
+	public Move getMove2() {
+		return move2;
+	}
+
+	public void setMove2(Move move2) {
+		this.move2 = move2;
+	}
+
+	public Move getMove3() {
+		return move3;
+	}
+
+	public void setMove3(Move move3) {
+		this.move3 = move3;
+	}
+
+	public Move getMove4() {
+		return move4;
+	}
+
+	public void setMove4(Move move4) {
+		this.move4 = move4;
+	}
+
+	public String getMonsterImagePath() {
+		return monsterImagePath;
+	}
+
+	public void setMonsterImagePath(String monsterImagePath) {
+		this.monsterImagePath = monsterImagePath;
+	}
+
+	public String getSoundFilePath() {
+		return soundFilePath;
+	}
+
+	public void setSoundFilePath(String soundFilePath) {
+		this.soundFilePath = soundFilePath;
+	}
+
+	public ImageIcon getSpriteImage() {
+		return spriteImage;
+	}
+
+	public void setSpriteImage(ImageIcon spriteImage) {
+		this.spriteImage = spriteImage;
+	}
+
+	public int getMaxHealthPoints() {
+		return maxHealthPoints;
+	}
+
+	public int getDefensePoints() {
+		return defensePoints;
+	}
+
+	public int getAttackPoints() {
+		return attackPoints;
+	}
+
+	public int getSpeedPoints() {
+		return speedPoints;
+	}
+
+	
 
 	public void monsterFactory(String monsterName) {
+	
 		if (monsterName.equals("Charizard")) {
+			this.monsterName = "Charizard";
 			setMaxHealthPoints(120);
 			setAttackPoints(4);
 			setDefensePoints(8);
 			setSpeedPoints(6);
 			
 			//when the monster is first created, we can set these to the values above
-			int healthBattle  = maxHealthPoints;
+			healthBattle  = maxHealthPoints;
 			int attackBattle  = 8;
 			int defenseBattle = 0;
 			int speedBattle   = 0;
@@ -44,15 +170,16 @@ public class Monster implements MonsterInterface {
 			Move move2 = new Move(7, 1, 75, 1); //heavy attack
 			Move move3 = new Move(-3, 1, 95, 0); //heal
 			Move move4 = new Move(0, 1, 95, 1); //block
-			
+			return;
 		} else if (monsterName.equals("Staryu")) {
+			this.monsterName = "Staryu";
 			setMaxHealthPoints(100);
 			setAttackPoints(6);
 			setDefensePoints(6);
 			setSpeedPoints(6);
 			
 			//when the monster is first created, we can set these to the values above
-			int healthBattle  = maxHealthPoints;
+			healthBattle  = maxHealthPoints;
 			int attackBattle  = 8;
 			int defenseBattle = 0;
 			int speedBattle   = 0;
@@ -62,8 +189,9 @@ public class Monster implements MonsterInterface {
 			Move move2 = new Move(7, 1, 75, 1); 
 			Move move3 = new Move(-3, 1, 95, 0);
 			Move move4 = new Move(0, 1, 95, 1); //block
-			
+			return;
 		} else if (monsterName.equals("Nidoking")) {
+			this.monsterName = "Nidoking";
 			setMaxHealthPoints(150);
 			setAttackPoints(8);
 			setDefensePoints(6);
@@ -80,8 +208,9 @@ public class Monster implements MonsterInterface {
 			Move move2 = new Move(7, 1, 75, 1); 
 			Move move3 = new Move(-3, 1, 95, 0);
 			Move move4 = new Move(0, 1, 95, 1); //block
-			
+			return;
 		} else if (monsterName.equals("Jolteon")) {
+			this.monsterName = "Jolteon";
 			setMaxHealthPoints(80);
 			setAttackPoints(6);
 			setDefensePoints(4);
@@ -98,8 +227,9 @@ public class Monster implements MonsterInterface {
 			Move move2 = new Move(7, 1, 75, 1); 
 			Move move3 = new Move(-3, 1, 95, 0);
 			Move move4 = new Move(0, 1, 95, 1); //block
-			
+			return;
 		} else if (monsterName.equals("Ferguson")) {
+			this.monsterName = "Ferguson";
 			setMaxHealthPoints(999);
 			setAttackPoints(999);
 			setDefensePoints(999);
@@ -116,8 +246,10 @@ public class Monster implements MonsterInterface {
 			Move move2 = new Move(120, 20, 100, 1); 
 			Move move3 = new Move(120, 20, 100, 0);
 			Move move4 = new Move(120, 20, 100, 1); //block
+			return;
 		} else {
 			//do nothing?! let user know something failed
+			System.out.println("fail");
 		}
 	}
 	
