@@ -115,6 +115,17 @@ public class Logic {
 			}
 		}
 	}
+		public void startBattle() {
+		player1Team.get(0).setOnField(true);
+		player2Team.get(0).setOnField(true);
+		//current turn is player 1
+		//chooseMove()
+		// 	// calculateDamage()
+		//checkCondition
+		//chooseMove()
+		//...
+		//Battle gameovers, return to menu
+	}
 	
 	
 }
