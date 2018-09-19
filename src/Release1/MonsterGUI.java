@@ -21,6 +21,10 @@ import javafx.stage.Stage;
 
 public class MonsterGUI extends Application implements EventHandler<ActionEvent>{
 	Scene titleScene, monsterScene,battleScene;
+	String test;
+	Monster choose = null;
+	Rectangle healthBar1;
+	Label HPLabel;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -28,6 +32,7 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 
 		GridPane titleLayout = new GridPane();
 		Canvas canvas = new Canvas(600, 400);	
+
 
 		// Title
 		GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -64,27 +69,43 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		ChoiceBox<String> monsterBox1 = new ChoiceBox<>();
 		monsterBox1.setLayoutX(100);
 		monsterBox1.setLayoutY(100);
-		monsterBox1.getItems().addAll("Monster 1", "Monster 2", "Monster 3", "Monster 4", "Monster 5");
+		monsterBox1.getItems().addAll("Charizard", "Staryu", "Monster 3", "Monster 4", "Monster 5");
 
 		ChoiceBox<String> monsterBox2 = new ChoiceBox<>();
-		monsterBox2.getItems().addAll("Monster 1", "Monster 2", "Monster 3", "Monster 4", "Monster 5");
+		monsterBox2.getItems().addAll("Nidoking", "Monster 2", "Monster 3", "Monster 4", "Monster 5");
 
 		ChoiceBox<String> monsterBox3 = new ChoiceBox<>();
-		monsterBox3.getItems().addAll("Monster 1", "Monster 2", "Monster 3", "Monster 4", "Monster 5");
+		monsterBox3.getItems().addAll("Staryu", "Monster 2", "Monster 3", "Monster 4", "Monster 5");
 
 		// Choose monster button (goes to next scene)
 		Button chooseMonsterButton = new Button("Choose your Monster");
+
 		chooseMonsterButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				String monster1 = monsterBox1.getValue();
 				String monster2 = monsterBox2.getValue();
 				String monster3 = monsterBox3.getValue();
+
 				System.out.println(monster1 + monster2 + monster3);
 
 				primaryStage.setScene(battleScene);
 			}
 		});
+
+		//Creating new monster for each of the three chosen, and the one that you ultimately choose if you switch
+
+		Monster m0 = new Monster(); //the one you choose
+		Monster m1 = new Monster();
+		Monster m2 = new Monster();
+		Monster m3 = new Monster();
+
+		m1.monsterFactory("Charizard");
+
+		choose = m1;
+		//		m0 = m1;
+		//		m2.monsterFactory("Staryu");
+		//		m3.monsterFactory("Joltean");
 
 		monsterLayout.add(monsterBox1, 0, 0);
 		monsterLayout.add(monsterBox2, 0, 1);
@@ -112,13 +133,28 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		Rectangle healthBarBack1 = new Rectangle(250, 5);
 		healthBarBack1.setStroke(Color.BLACK);
 		healthBarBack1.setFill(Color.RED);
-		Rectangle healthBar1 = new Rectangle(240, 5);
+		//in ratio to your actual health
+		healthBar1 = new Rectangle((250*choose.healthBattle)/choose.maxHealthPoints, 5);
+		
 		healthBar1.setStroke(Color.BLACK);
 		healthBar1.setFill(Color.GREEN);
-		Label HPLabel = new Label("120/120");
-		Label nameLabel = new Label("Pikachu");
+		HPLabel = new Label(choose.healthBattle + "/" + choose.maxHealthPoints);
+		Label nameLabel = new Label("" +choose.getMonsterName());
 		Label levelLabel = new Label("Lv. 42");
-		
+		//simulates attacking not using attack yet though
+		attackButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				//just testing the decrease health
+				choose.decreaseHealth(30);
+				//updates
+				healthBar1.setWidth((250*choose.healthBattle)/choose.maxHealthPoints);
+				HPLabel.setText(choose.healthBattle + "/" + choose.maxHealthPoints);
+				System.out.print(choose.healthBattle);
+	
+			}
+		});
+
 		// This is just a health bar ATM, haven't added the other things to this scene yet
 		battleScene = new Scene(battleLayout, 800, 600);
 		battleLayout.add(healthBarBack1, 0, 1);
@@ -126,11 +162,12 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		battleLayout.add(nameLabel, 0, 0);
 		battleLayout.add(levelLabel, 1, 0);
 		battleLayout.add(HPLabel, 0, 2);
+		battleLayout.add(attackButton, 9, 1);
 
 		primaryStage.show();
 
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -138,6 +175,6 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 	@Override
 	public void handle(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
