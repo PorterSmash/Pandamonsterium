@@ -20,6 +20,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 
 public class MonsterGUI extends Application implements EventHandler<ActionEvent>{
 	Scene titleScene, monsterScene,battleScene;
@@ -29,6 +30,7 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 	Label HPLabel;
 	ArrayList<Monster> player1Team = new ArrayList<Monster>();
 	ArrayList<Monster> player2Team = new ArrayList<Monster>();
+	//Logic engine = new Logic(player1Team, player2Team);
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -73,13 +75,14 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		ChoiceBox<String> monsterBox1 = new ChoiceBox<>();
 		monsterBox1.setLayoutX(100);
 		monsterBox1.setLayoutY(100);
-		monsterBox1.getItems().addAll("Charizard", "Staryu", "Monster 3", "Monster 4", "Monster 5");
+		
+		monsterBox1.getItems().addAll("Charizard", "Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
 
 		ChoiceBox<String> monsterBox2 = new ChoiceBox<>();
-		monsterBox2.getItems().addAll("Nidoking", "Monster 2", "Monster 3", "Monster 4", "Monster 5");
+		monsterBox2.getItems().addAll("Charizard", "Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
 
 		ChoiceBox<String> monsterBox3 = new ChoiceBox<>();
-		monsterBox3.getItems().addAll("Staryu", "Monster 2", "Monster 3", "Monster 4", "Monster 5");
+		monsterBox3.getItems().addAll("Charizard", "Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
 
 		// Choose monster button (goes to next scene)
 		Button chooseMonsterButton = new Button("Choose your Monster");
@@ -117,8 +120,11 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 				}
 				System.out.println(player1Team.size());
 				if(player1Team.size() == player2Team.size() && player1Team.size() == 3) {
-				Logic engine = new Logic(player1Team, player2Team);
-				engine.startBattle();
+				//Logic engine = new Logic(player1Team, player2Team);
+				//engine.startBattle();
+				//the engine needs to have a copy of the teams so it can do all the damage calculation,
+				//the GUI then receives the teams and displays the data from their health and info
+				//then the GUI needs to pass the teams back, refer to setTeams() in logic class
 				primaryStage.setScene(battleScene);
 				}
 			}
@@ -152,8 +158,8 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		battleLayout.setVgap(10);
 
 		// Not sure what the javaFX imageIcon is, so commented out for now
-		//ImageIcon monsterIcon1;
-		//ImageIcon monsterIcon2;
+		//Image monsterOneImage = new Image(engine.getMon1().getMonsterImagePath()); // https://docs.oracle.com/javase/8/javafx/api/javafx/scene/image/Image.html
+		//Image monsterTwoImage = new Image(engine.getMon2().getMonsterImagePath()); //more params can be added here
 
 		Button attackButton = new Button("Attack");
 		Button blockButton = new Button("Block");
@@ -200,6 +206,8 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 	}
 
 	public static void main(String[] args) {
+		Monster monster = new Monster();
+		monster.monsterFactory("Charizard");
 		launch(args);
 	}
 
