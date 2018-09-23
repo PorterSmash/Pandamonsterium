@@ -1,5 +1,8 @@
 package Release1;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 
@@ -25,8 +28,7 @@ public class Monster implements MonsterInterface {
 	String monsterName;
 
 
-
-	ImageIcon spriteImage;
+	//ImageIcon spriteImage;
 	private boolean onField;
 	
 	public String getMonsterName() {
@@ -124,13 +126,13 @@ public class Monster implements MonsterInterface {
 		this.soundFilePath = soundFilePath;
 	}
 
-	public ImageIcon getSpriteImage() {
+/*	public ImageIcon getSpriteImage() {
 		return spriteImage;
 	}
 
 	public void setSpriteImage(ImageIcon spriteImage) {
 		this.spriteImage = spriteImage;
-	}
+	}*/
 
 	public int getMaxHealthPoints() {
 		return maxHealthPoints;
@@ -151,8 +153,43 @@ public class Monster implements MonsterInterface {
 	
 
 	public void monsterFactory(String monsterName) {
-	
-		if (monsterName.equals("Charizard")) {
+		String fileName = "MonsterInfo.txt";
+		File monFile = new File(fileName);
+        Scanner scnr = null;
+        try {
+            scnr = new Scanner(monFile);
+            while (scnr.hasNextLine()) {
+                if (scnr.next().equals(monsterName)) {
+                	
+                    scnr.nextLine(); //skip past the monster name
+                    
+                    //there's got to be a better looking way to do this, but I can't think of anything at the moment
+                    this.maxHealthPoints = Integer.parseInt(scnr.nextLine());
+                    this.defensePoints = Integer.parseInt(scnr.nextLine());
+                    this.attackPoints = Integer.parseInt(scnr.nextLine());
+                    this.speedPoints = Integer.parseInt(scnr.nextLine());
+                    
+                    
+                    //there's got to be a cleaner way to do this but I can't think of it at the moment
+                    this.move1 = new Move(Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()));
+                    this.move2 = new Move(Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()));
+                    this.move3 = new Move(Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()));
+                    this.move4 = new Move(Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()));
+                    
+                    this.monsterImagePath = scnr.nextLine();
+                    break;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("The file was not found");
+            e.printStackTrace();
+        } finally {
+            if (scnr != null) {
+                scnr.close();
+            }
+        }
+	}
+		/*if (monsterName.equals("Charizard")) {
 			this.monsterName = "Charizard";
 			setMaxHealthPoints(120);
 			setAttackPoints(4);
@@ -251,8 +288,9 @@ public class Monster implements MonsterInterface {
 			//do nothing?! let user know something failed
 			System.out.println("fail");
 		}
-	}
+	}*/
 	
+	//this level up method will be useless until release 2, because it's just pick a monster and fight atm
 	public void levelUp(int statID) {
 		switch(statID) {
 		case 1:

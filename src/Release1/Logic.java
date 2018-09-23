@@ -8,6 +8,7 @@ public class Logic {
 	Monster mon1;
 	Monster mon2;
 	Move lastMove;
+	public int playerTurn = 0;
 	
 	Logic(ArrayList<Monster> player1, ArrayList<Monster> player2) {
 		this.mon1 = player1.get(0);
@@ -15,6 +16,9 @@ public class Logic {
 		
 		player1Team = player1;
 		player2Team = player2;
+	}
+	public Logic() {
+		
 	}
 	
 	public void calculateDamage(Move moveCommitted) {
@@ -87,7 +91,7 @@ public class Logic {
 			}
 		}
 	}
-	private void checkCondition() {
+	private boolean checkCondition() {
 		if(mon1.healthBattle <= 0) {
 			System.out.println("Player 1 monster fainted, switching to another monster");
 			int counter = 0;
@@ -96,7 +100,7 @@ public class Logic {
 					switchMonster(player1Team, counter);
 				}
 				if(player1Team.get(player2Team.size()).healthBattle <= 0) {
-					System.out.println("All your team is dead.");
+					return true;
 				}
 			counter += 1;
 			}
@@ -109,22 +113,44 @@ public class Logic {
 					switchMonster(player2Team, counter);
 				}
 				if(player2Team.get(player2Team.size()).healthBattle <= 0) {
-					System.out.println("All your team is dead.");
+					return true;
 				}
 			counter += 1;
 			}
 		}
+		return false;
 	}
-		public void startBattle() {
+	public void changeTurn() {
+		playerTurn = (playerTurn + 1) % 2;
+	}
+	
+	public void setTeams(ArrayList<Monster> team1, ArrayList<Monster> team2) {
+		player1Team = team1;
+		player2Team = team2;
+		
+		this.mon1 = team1.get(0);
+		this.mon2 = team2.get(0);
+		//this is so that the GUI and engine can pass the teams back and forth and remain updated
+		//that way you also don't need to create a new engine object every time you do a calculation
+	}
+	
+	public ArrayList<Monster> getTeam1() {
+		return player1Team;
+	}
+	
+	public ArrayList<Monster> getTeam2() {
+		return player2Team;
+	}
+	
+	public void startBattle() {
 		player1Team.get(0).setOnField(true);
 		player2Team.get(0).setOnField(true);
-		//current turn is player 1
-		//chooseMove()
-		// 	// calculateDamage()
-		//checkCondition
-		//chooseMove()
-		//...
-		//Battle gameovers, return to menu
+	}
+	public Monster getMon1() {
+		return mon1;
+	}
+	public Monster getMon2() {
+		return mon2;
 	}
 	
 	
