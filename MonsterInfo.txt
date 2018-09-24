@@ -144,7 +144,3 @@ Raichu
 1
 99
 1
-
-
-
-Tank(Huge HP and defense, slow as dicks, low attack)
