@@ -1,39 +1,44 @@
 package Release1;
 
+import java.awt.FlowLayout;
 import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MonsterGUI extends Application {
-	Scene titleScene, monsterScene,battleScene;
+	Scene titleScene, monsterScene,battleScene,pickPokemon;
+	GridPane grid;
+	Stage stage;
 	String test;
-	Monster choose = null;
+	Monster choose,opt1,opt2,opt3 = null;
 	Rectangle healthBar1;
 	Label HPLabel;
 	Label nameLabel;
 	Label levelLabel;
+	Text display;
 	ArrayList<Monster> player1Team = new ArrayList<Monster>();
 	ArrayList<Monster> player2Team = new ArrayList<Monster>();
-	
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -78,7 +83,7 @@ public class MonsterGUI extends Application {
 		ChoiceBox<String> monsterBox1 = new ChoiceBox<>();
 		monsterBox1.setLayoutX(100);
 		monsterBox1.setLayoutY(100);
-		
+
 		monsterBox1.getItems().addAll("Charizard", "Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
 
 		ChoiceBox<String> monsterBox2 = new ChoiceBox<>();
@@ -93,24 +98,24 @@ public class MonsterGUI extends Application {
 		// Chooses the monster, updates elements in the battle scene accordingly
 		chooseMonsterButton.setOnAction(new EventHandler<ActionEvent>() {
 			private boolean playerOnePicked;
-			
+
 			@Override
 			public void handle(ActionEvent arg0) {
 				String monster1 = monsterBox1.getValue();
 				String monster2 = monsterBox2.getValue();
 				String monster3 = monsterBox3.getValue();
-				
+
 				String[] choices = {monster1, monster2, monster3};
-            	
+
 				if(choices[0] == null || choices[1] == null || choices[2] == null) {
 					System.out.println("You haven't chosen all monsters yet.");
 				}
 				else {
 					if(!(playerOnePicked)) {
 						for(int i = 0; i < 3; i ++) {
-						Monster monster = new Monster();
-						monster.monsterFactory(choices[i]);
-						player1Team.add(monster);
+							Monster monster = new Monster();
+							monster.monsterFactory(choices[i]);
+							player1Team.add(monster);
 						}
 						playerOnePicked = true;
 					}
@@ -119,20 +124,22 @@ public class MonsterGUI extends Application {
 							Monster monster = new Monster();
 							monster.monsterFactory(choices[i]);
 							player2Team.add(monster);
-							}
+						}
 					}
 				}
-				
+
 				Monster m1 = new Monster();
-				Monster m2 = new Monster();
+				Monster	m2 = new Monster();
 				Monster m3 = new Monster();
-				
-				choose = m1;
-				
+
+
 				m1.monsterFactory(monster1);
 				m2.monsterFactory(monster2);
 				m3.monsterFactory(monster3);
-				
+				choose = m1;
+				opt1 = m1;
+				opt2 = m2;
+				opt3 = m3;
 				int number = (250*choose.healthBattle)/choose.getHealthBattle();
 				healthBar1.setWidth(number);
 				healthBar1.setHeight(5);
@@ -145,15 +152,15 @@ public class MonsterGUI extends Application {
 				//nameLabel = new Label("" +choose.getMonsterName());
 				levelLabel.setText("Lvl. " + choose.getLevel());
 				//levelLabel = new Label("Lv. 42");
-				
+
 				System.out.println(monster1 + monster2 + monster3);
 				System.out.println(player1Team.size());
 				if(player1Team.size() == player2Team.size() && player1Team.size() == 3) {
-				//Logic engine = new Logic(player1Team, player2Team);
-				//engine.startBattle();
-				//the engine needs to have a copy of the teams so it can do all the damage calculation,
-				//the GUI then receives the teams and displays the data from their health and info
-				//then the GUI needs to pass the teams back, refer to setTeams() in logic class
+					//Logic engine = new Logic(player1Team, player2Team);
+					//engine.startBattle();
+					//the engine needs to have a copy of the teams so it can do all the damage calculation,
+					//the GUI then receives the teams and displays the data from their health and info
+					//then the GUI needs to pass the teams back, refer to setTeams() in logic class
 				}
 				primaryStage.setScene(battleScene);
 
@@ -196,18 +203,44 @@ public class MonsterGUI extends Application {
 		//in ratio to your actual health
 		//healthBar1 = new Rectangle((250*choose.healthBattle)/choose.maxHealthPoints, 5);
 		//simulates attacking not using attack yet though
+
+		//displays comments
+		display = new Text();
+		display.setText("hello");
+
+		//for the fainted new stage
+		stage = new Stage();
+		grid = new GridPane();
+		grid.setPadding(new Insets(10, 10, 10, 10));
+		grid.setHgap(10);
+		grid.setVgap(10);
+		pickPokemon = new Scene(grid);
+
+
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				//just testing the decrease health
-				choose.decreaseHealth(30);
+				if(choose.getMonsterName().equals(opt1.getMonsterName())){
+					//choose.decreaseHealth(30);
+					opt1.decreaseHealth(30);
+					System.out.println(opt1.getHealthBattle() );
+				}else if(choose.getMonsterName().equals(opt2.getMonsterName())) {
+					//choose.decreaseHealth(30);
+					opt2.decreaseHealth(30);
+				}else {
+					//	choose.decreaseHealth(30);
+					opt3.decreaseHealth(30);
+				}
+
 				//updates
 				healthBar1.setWidth((250*choose.healthBattle)/choose.maxHealthPoints);
 				HPLabel.setText(choose.healthBattle + "/" + choose.maxHealthPoints);
-				
-	
+				//checks if it fainted/ needs to switch pokemon
+				checkFainted();
 			}
 		});
+
 
 		// This is just a health bar ATM, haven't added the other things to this scene yet
 		battleScene = new Scene(battleLayout, 800, 600);
@@ -225,17 +258,85 @@ public class MonsterGUI extends Application {
 		//add listeners to each of these buttons
 		//use the an int to decide each move the player chose
 		//performMove(int)
-		
-		
+
+		battleLayout.add(display, 4, 47);
+
+
 
 		primaryStage.show();
 
+	}
+	//checks if pokemon fainted
+	public void checkFainted() {
+		if(healthBar1.getWidth()<=0) {
+			
+			display.setText(choose.getMonsterName() + " Has Fainted");
+			Button b1 = new Button();
+			Button b2 = new Button();
+			Button b3 = new Button();
+			//only adds a button if the monster can battle
+			if(!choose.getMonsterName().equals(opt1.getMonsterName()) && opt1.getHealthBattle() > 0) {
+				b3.setText("Pick " + opt1.getMonsterName());
+
+				grid.add(b3, 2, 2);
+				System.out.println(opt1.getHealthBattle() );
+			}
+			if(!choose.getMonsterName().equals(opt2.getMonsterName()) && opt2.getHealthBattle() > 0) {
+				b1.setText("Pick " + opt2.getMonsterName());
+				grid.add(b1, 2, 2);
+				//System.out.println(opt2.getHealthBattle() );
+			}
+			if(!choose.getMonsterName().equals(opt3.getMonsterName()) && opt3.getHealthBattle() > 0) {
+				b2.setText("Pick " + opt3.getMonsterName());
+				grid.add(b2, 4, 4);
+				//System.out.println(opt3.getHealthBattle() );
+			}
+			if(opt1.getHealthBattle() <= 0 && opt2.getHealthBattle() <= 0&& opt3.getHealthBattle() <=0) {
+				display.setText("you lose");
+				grid.getChildren().clear();
+				stage.close();
+			}
+
+			b3.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent arg0) {
+					choose = opt1;
+					buttonFaint();
+				}
+			});
+			b1.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent arg0) {
+					choose = opt2;
+					buttonFaint();
+				}
+			});
+			b2.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent arg0) {
+					choose = opt3;
+					buttonFaint();
+				}
+			});
+			stage.setScene(pickPokemon);
+			//	stage.initModality(Modality.APPLICATION_MODAL);
+			stage.show();
+
+		}
+	}
+	//updates the battle stage.
+	public void buttonFaint() {
+
+		healthBar1.setWidth((250*choose.healthBattle)/choose.maxHealthPoints);
+		HPLabel.setText(choose.healthBattle + "/" + choose.maxHealthPoints);
+		nameLabel.setText("" +choose.getMonsterName());
+		display.setText("Monster playing is " + choose.getMonsterName());
+		levelLabel.setText("Lvl. " + choose.getLevel());
+		grid.getChildren().clear();
+		stage.close();
 	}
 
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	private void performMove(int moveChoice) {
 		Monster onField = new Monster();
 		Logic engine = new Logic(this.player1Team, this.player2Team);
