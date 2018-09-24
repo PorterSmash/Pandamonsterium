@@ -20,17 +20,18 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.scene.image.Image;
 
-public class MonsterGUI extends Application implements EventHandler<ActionEvent>{
+public class MonsterGUI extends Application {
 	Scene titleScene, monsterScene,battleScene;
 	String test;
 	Monster choose = null;
 	Rectangle healthBar1;
 	Label HPLabel;
+	Label nameLabel;
+	Label levelLabel;
 	ArrayList<Monster> player1Team = new ArrayList<Monster>();
 	ArrayList<Monster> player2Team = new ArrayList<Monster>();
-	//Logic engine = new Logic(player1Team, player2Team);
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -87,16 +88,17 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		// Choose monster button (goes to next scene)
 		Button chooseMonsterButton = new Button("Choose your Monster");
 
+		// Chooses the monster, updates elements in the battle scene accordingly
 		chooseMonsterButton.setOnAction(new EventHandler<ActionEvent>() {
 			private boolean playerOnePicked;
-
+			
 			@Override
 			public void handle(ActionEvent arg0) {
 				String monster1 = monsterBox1.getValue();
 				String monster2 = monsterBox2.getValue();
 				String monster3 = monsterBox3.getValue();
 				
-            	String[] choices = {monster1, monster2, monster3};
+				String[] choices = {monster1, monster2, monster3};
             	
 				if(choices[0] == null || choices[1] == null || choices[2] == null) {
 					System.out.println("You haven't chosen all monsters yet.");
@@ -118,6 +120,31 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 							}
 					}
 				}
+				
+				Monster m1 = new Monster();
+				Monster m2 = new Monster();
+				Monster m3 = new Monster();
+				
+				choose = m1;
+				
+				m1.monsterFactory(monster1);
+				m2.monsterFactory(monster2);
+				m3.monsterFactory(monster3);
+				
+				int number = (250*choose.healthBattle)/choose.getHealthBattle();
+				healthBar1.setWidth(number);
+				healthBar1.setHeight(5);
+				//healthBar1 = new Rectangle((250*choose.healthBattle)/choose.maxHealthPoints, 5);
+				healthBar1.setStroke(Color.BLACK);
+				healthBar1.setFill(Color.GREEN);
+				HPLabel.setText(choose.healthBattle + "/" + choose.maxHealthPoints);
+				//HPLabel = new Label(choose.healthBattle + "/" + choose.maxHealthPoints);
+				nameLabel.setText("" +choose.getMonsterName());
+				//nameLabel = new Label("" +choose.getMonsterName());
+				levelLabel.setText("Lvl. " + choose.getLevel());
+				//levelLabel = new Label("Lv. 42");
+				
+				System.out.println(monster1 + monster2 + monster3);
 				System.out.println(player1Team.size());
 				if(player1Team.size() == player2Team.size() && player1Team.size() == 3) {
 				//Logic engine = new Logic(player1Team, player2Team);
@@ -125,24 +152,18 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 				//the engine needs to have a copy of the teams so it can do all the damage calculation,
 				//the GUI then receives the teams and displays the data from their health and info
 				//then the GUI needs to pass the teams back, refer to setTeams() in logic class
-				primaryStage.setScene(battleScene);
 				}
+				primaryStage.setScene(battleScene);
+
+
+				primaryStage.setScene(battleScene);
 			}
 		});
-
-		//Creating new monster for each of the three chosen, and the one that you ultimately choose if you switch
-
-		Monster m0 = new Monster(); //the one you choose
-		Monster m1 = new Monster();
-		Monster m2 = new Monster();
-		Monster m3 = new Monster();
-
-		m1.monsterFactory("Charizard");
-
-		choose = m1;
-		//		m0 = m1;
-		//		m2.monsterFactory("Staryu");
-		//		m3.monsterFactory("Joltean");
+		// instantiating these here because, while the values can be updated later, they need to be objects to add them to the scene
+		healthBar1 = new Rectangle();
+		HPLabel = new Label();
+		nameLabel = new Label();
+		levelLabel = new Label();
 
 		monsterLayout.add(monsterBox1, 0, 0);
 		monsterLayout.add(monsterBox2, 0, 1);
@@ -158,8 +179,8 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		battleLayout.setVgap(10);
 
 		// Not sure what the javaFX imageIcon is, so commented out for now
-		//Image monsterOneImage = new Image(engine.getMon1().getMonsterImagePath()); // https://docs.oracle.com/javase/8/javafx/api/javafx/scene/image/Image.html
-		//Image monsterTwoImage = new Image(engine.getMon2().getMonsterImagePath()); //more params can be added here
+		//ImageIcon monsterIcon1;
+		//ImageIcon monsterIcon2;
 
 		Button attackButton = new Button("Attack");
 		Button blockButton = new Button("Block");
@@ -171,13 +192,7 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		healthBarBack1.setStroke(Color.BLACK);
 		healthBarBack1.setFill(Color.RED);
 		//in ratio to your actual health
-		healthBar1 = new Rectangle((250*choose.healthBattle)/choose.maxHealthPoints, 5);
-		
-		healthBar1.setStroke(Color.BLACK);
-		healthBar1.setFill(Color.GREEN);
-		HPLabel = new Label(choose.healthBattle + "/" + choose.maxHealthPoints);
-		Label nameLabel = new Label("" +choose.getMonsterName());
-		Label levelLabel = new Label("Lv. 42");
+		//healthBar1 = new Rectangle((250*choose.healthBattle)/choose.maxHealthPoints, 5);
 		//simulates attacking not using attack yet though
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -209,11 +224,5 @@ public class MonsterGUI extends Application implements EventHandler<ActionEvent>
 		Monster monster = new Monster();
 		monster.monsterFactory("Charizard");
 		launch(args);
-	}
-
-	@Override
-	public void handle(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 }
