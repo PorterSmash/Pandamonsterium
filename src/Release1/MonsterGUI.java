@@ -13,6 +13,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -183,9 +185,9 @@ public class MonsterGUI extends Application {
 		//ImageIcon monsterIcon2;
 
 		Button attackButton = new Button("Attack");
-		Button blockButton = new Button("Block");
-		Button itemButton = new Button("Item");
-		Button otherButton = new Button("Other (???)");
+		Button heavyButton = new Button("Heavy Attack");
+		Button healButton = new Button("Heal");
+		Button otherButton = new Button("Other");
 
 		// Pokemon HP bar, make sure to make a border around it and add the monster and level name, as well as a text showing the total HP left
 		Rectangle healthBarBack1 = new Rectangle(250, 5);
@@ -202,7 +204,7 @@ public class MonsterGUI extends Application {
 				//updates
 				healthBar1.setWidth((250*choose.healthBattle)/choose.maxHealthPoints);
 				HPLabel.setText(choose.healthBattle + "/" + choose.maxHealthPoints);
-				System.out.print(choose.healthBattle);
+				
 	
 			}
 		});
@@ -211,18 +213,50 @@ public class MonsterGUI extends Application {
 		battleScene = new Scene(battleLayout, 800, 600);
 		battleLayout.add(healthBarBack1, 0, 1);
 		battleLayout.add(healthBar1, 0, 1);
+		//add another health bar above the other sprite
 		battleLayout.add(nameLabel, 0, 0);
 		battleLayout.add(levelLabel, 1, 0);
 		battleLayout.add(HPLabel, 0, 2);
 		battleLayout.add(attackButton, 9, 1);
+		//add the sprite images //Couldn't figure out how to do this - Alex
+		battleLayout.add(heavyButton, 8, 1);
+		battleLayout.add(healButton, 8, 2);
+		battleLayout.add(otherButton, 9, 2);
+		//add listeners to each of these buttons
+		//use the an int to decide each move the player chose
+		//performMove(int)
+		
+		
 
 		primaryStage.show();
 
 	}
 
 	public static void main(String[] args) {
-		Monster monster = new Monster();
-		monster.monsterFactory("Charizard");
 		launch(args);
+	}
+	
+	private void performMove(int moveChoice) {
+		Monster onField = new Monster();
+		Logic engine = new Logic(this.player1Team, this.player2Team);
+		for(Monster mon : player1Team) {
+			if(mon.getOnField()) {
+				onField = mon;
+			}
+		}
+		switch(moveChoice) {
+		case 1:
+			engine.calculateDamage(onField.getMove2());
+			break;
+		case 2:
+			engine.calculateDamage(onField.getMove2());
+			break;
+		case 3:
+			engine.calculateDamage(onField.getMove2());
+			break;
+		case 4:
+			engine.calculateDamage(onField.getMove2());
+			break;
+		}
 	}
 }

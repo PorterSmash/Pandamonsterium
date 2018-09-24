@@ -153,6 +153,8 @@ import java.util.Scanner;
 					Move move2 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //heavy attack
 					Move move3 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //heal
 					Move move4 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //block
+					
+					monsterImagePath = fileIn.nextLine();
 					break;
 				}
 			}
