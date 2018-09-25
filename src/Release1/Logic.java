@@ -124,7 +124,7 @@ public class Logic {
 		playerTurn = (playerTurn + 1) % 2;
 	}
 	
-	public void setTeams(ArrayList<Monster> team1, ArrayList<Monster> team2) {
+	public void setTeamsAndMons(ArrayList<Monster> team1, ArrayList<Monster> team2) {
 		player1Team = team1;
 		player2Team = team2;
 		
@@ -132,6 +132,10 @@ public class Logic {
 		this.mon2 = team2.get(0);
 		//this is so that the GUI and engine can pass the teams back and forth and remain updated
 		//that way you also don't need to create a new engine object every time you do a calculation
+	}
+	public void setTeams(ArrayList<Monster> team1, ArrayList<Monster> team2) {
+		player1Team = team1;
+		player2Team = team2;
 	}
 	
 	public ArrayList<Monster> getTeam1() {
@@ -151,6 +155,9 @@ public class Logic {
 	}
 	public Monster getMon2() {
 		return mon2;
+	}
+	public int getTurn() {
+		return playerTurn;
 	}
 	
 	

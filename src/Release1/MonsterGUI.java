@@ -38,7 +38,7 @@ public class MonsterGUI extends Application {
 	Text display;
 	ArrayList<Monster> player1Team = new ArrayList<Monster>();
 	ArrayList<Monster> player2Team = new ArrayList<Monster>();
-
+	Logic engine = new Logic();
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -98,6 +98,7 @@ public class MonsterGUI extends Application {
 		// Chooses the monster, updates elements in the battle scene accordingly
 		chooseMonsterButton.setOnAction(new EventHandler<ActionEvent>() {
 			private boolean playerOnePicked;
+			private boolean playerTwoPicked;
 
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -125,8 +126,10 @@ public class MonsterGUI extends Application {
 							monster.monsterFactory(choices[i]);
 							player2Team.add(monster);
 						}
+						playerTwoPicked = true;
 					}
 				}
+				if(playerTwoPicked) {
 
 				Monster m1 = new Monster();
 				Monster	m2 = new Monster();
@@ -153,19 +156,10 @@ public class MonsterGUI extends Application {
 				levelLabel.setText("Lvl. " + choose.getLevel());
 				//levelLabel = new Label("Lv. 42");
 
-				System.out.println(monster1 + monster2 + monster3);
-				System.out.println(player1Team.size());
-				if(player1Team.size() == player2Team.size() && player1Team.size() == 3) {
-					//Logic engine = new Logic(player1Team, player2Team);
-					//engine.startBattle();
-					//the engine needs to have a copy of the teams so it can do all the damage calculation,
-					//the GUI then receives the teams and displays the data from their health and info
-					//then the GUI needs to pass the teams back, refer to setTeams() in logic class
+				engine.setTeamsAndMons(player1Team, player2Team); //sets the teams in the engine class to current teams
+				engine.startBattle(); //sets monster 1 of both teams onField value to true
+				primaryStage.setScene(battleScene);
 				}
-				primaryStage.setScene(battleScene);
-
-
-				primaryStage.setScene(battleScene);
 			}
 		});
 		// instantiating these here because, while the values can be updated later, they need to be objects to add them to the scene
@@ -218,9 +212,12 @@ public class MonsterGUI extends Application {
 
 
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
+			//Logic engine = new Logic(player1Team, player2Team);
 			@Override
+			
 			public void handle(ActionEvent arg0) {
 				//just testing the decrease health
+				performMove(1);
 				if(choose.getMonsterName().equals(opt1.getMonsterName())){
 					//choose.decreaseHealth(30);
 					opt1.decreaseHealth(30);
@@ -329,6 +326,7 @@ public class MonsterGUI extends Application {
 		nameLabel.setText("" +choose.getMonsterName());
 		display.setText("Monster playing is " + choose.getMonsterName());
 		levelLabel.setText("Lvl. " + choose.getLevel());
+		choose.setOnField(true);
 		grid.getChildren().clear();
 		stage.close();
 	}
@@ -339,25 +337,37 @@ public class MonsterGUI extends Application {
 
 	private void performMove(int moveChoice) {
 		Monster onField = new Monster();
-		Logic engine = new Logic(this.player1Team, this.player2Team);
-		for(Monster mon : player1Team) {
+		engine.setTeams(this.player1Team, this.player2Team);
+		
+		ArrayList<Monster> team = new ArrayList<Monster>();
+		if(engine.getTurn() == 0) {
+			team = this.player1Team;
+		}
+		else {
+			team = this.player2Team;
+		}
+		for(Monster mon : team) {
 			if(mon.getOnField()) {
 				onField = mon;
 			}
 		}
+		System.out.println(onField);
+		System.out.println(onField.getMove1());
 		switch(moveChoice) {
 		case 1:
-			engine.calculateDamage(onField.getMove2());
+			engine.calculateDamage(onField.getMove1());
 			break;
 		case 2:
 			engine.calculateDamage(onField.getMove2());
 			break;
 		case 3:
-			engine.calculateDamage(onField.getMove2());
+			engine.calculateDamage(onField.getMove3());
 			break;
 		case 4:
-			engine.calculateDamage(onField.getMove2());
+			engine.calculateDamage(onField.getMove4());
 			break;
 		}
+		this.player1Team = engine.getTeam1();
+		this.player2Team = engine.getTeam2();
 	}
 }

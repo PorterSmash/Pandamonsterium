@@ -154,6 +154,11 @@ import java.util.Scanner;
 					Move move3 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //heal
 					Move move4 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //block
 					
+					this.move1 = move1;
+					this.move2 = move2;
+					this.move3 = move3;
+					this.move4 = move4;
+					
 					monsterImagePath = fileIn.nextLine();
 					break;
 				}
