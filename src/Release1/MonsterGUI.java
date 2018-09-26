@@ -168,7 +168,7 @@ public class MonsterGUI extends Application {
 					nameLabel2.setText("" + team2Chosen.getMonsterName());
 					levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
 
-					engine.setTeamsAndMons(player1Team, player2Team); //sets the teams in the engine class to current teams
+					engine.setTeamsAndMons(player1Team, player2Team, 0, 0); //sets the teams in the engine class to current teams
 					engine.startBattle(); //sets monster 1 of both teams onField value to true
 					primaryStage.setScene(battleScene);
 				}
@@ -237,18 +237,20 @@ public class MonsterGUI extends Application {
 			@Override
 
 			public void handle(ActionEvent arg0) {
-				if (engine.playerTurn == 1) {
+				performMove(1);
+				
+				/*if (engine.playerTurn == 1) {
 					team1Chosen.decreaseHealth(20);
 				} else {
 					team2Chosen.decreaseHealth(20);
-				}
+				}*/
 //				performMove(1);
 //				player1Team = engine.getTeam1();
 //				player2Team = engine.getTeam2();
 
 				//updates
 				updateHpBars();
-				engine.changeTurn();
+				//engine.changeTurn();
 				//checks if it fainted/ needs to switch pokemon
 				checkFainted();
 				
@@ -298,7 +300,6 @@ public class MonsterGUI extends Application {
 			teamList = player2Team;
 			onFieldMon = team2Chosen;
 		}
-		
 		if(onFieldMon.getHealthBattle() <= 0) {
 
 			display.setText(onFieldMon.getMonsterName() + " Has Fainted");
@@ -320,7 +321,7 @@ public class MonsterGUI extends Application {
 									break;
 							}
 							updateHpBars();
-							chosenMon.setOnField(true);
+							chosenMon.setOnField(true); //maybe it is set on field already?
 							switchMonPane.getChildren().clear();
 							stage.close();
 						}
@@ -330,6 +331,7 @@ public class MonsterGUI extends Application {
 
 			}
 			
+			//engine.setTeamsAndMons(player1Team, player2Team);
 			stage.setScene(pickPokemon);
 			//	stage.initModality(Modality.APPLICATION_MODAL);
 			stage.show();
