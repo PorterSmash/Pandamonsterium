@@ -1,20 +1,22 @@
 package Release1;
 
-import java.awt.FlowLayout;
+
 import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
+
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -22,7 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
+
 import javafx.stage.Stage;
 
 public class MonsterGUI extends Application {
@@ -30,7 +32,7 @@ public class MonsterGUI extends Application {
 	FlowPane switchMonPane;
 	Stage stage;
 	String test;
-	Monster choose,opt1,opt2,opt3 = null;
+	Monster choose = null;
 	Monster team1Chosen, team2Chosen = null;
 	Rectangle healthBar1, healthBar2;
 	Label HPLabel1, HPLabel2;
@@ -44,32 +46,53 @@ public class MonsterGUI extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Pandemon(ster)ium");
-
-		GridPane titleLayout = new GridPane();
-		Canvas canvas = new Canvas(600, 400);	
+		//the gridpane was functioning weird, so i did borderpane
+		//i think that it is good for what we are doing
+		BorderPane titleLayout = new BorderPane();
+		//		titleLayout.setPadding(new Insets(10, 10, 10, 10));
+		//		titleLayout.setHgap(10);
+		//		titleLayout.setVgap(10);
+		//Canvas canvas = new Canvas(600, 70);	
 
 
 		// Title
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.setFill( Color.RED );
-		gc.setStroke( Color.BLACK );
-		gc.setLineWidth(2);
-		Font theFont = Font.font( "Verdana", FontWeight.BOLD, 48 );
-		gc.setFont( theFont );
-		gc.fillText( "PandeMonsterium", 60, 50 );
-		gc.strokeText( "PandeMonsterium", 60, 50 );
-
+		//		GraphicsContext gc = canvas.getGraphicsContext2D();
+		//		gc.setFill( Color.RED );
+		//		gc.setStroke( Color.BLACK );
+		//		gc.setLineWidth(2);
+		//		Font theFont = Font.font( "Verdana", FontWeight.BOLD, 48 );
+		//		gc.setFont( theFont );
+		//		gc.fillText( "PandeMonsterium", 60, 50 );
+		//		gc.strokeText( "PandeMonsterium", 60, 50 );
+		
+		//instead of canvas, just do a text. less code?
+		Image titleImage = new Image("titlePic.png");
+		Text titleText = new Text("Pandemonsterium");
+		titleText.setFont(Font.font("Verdana", FontWeight.BOLD, 50));
+		titleText.setFill(Color.RED);
+	
 		// Start button
 		Button button = new Button("Start");
-		button.setLayoutX(250);
-		button.setLayoutY(300);
+		//button.setLayoutX(500);
+		//button.setLayoutY(500);
 		button.setPrefWidth(100);
 		button.setPrefHeight(50);
 		button.setOnAction(e -> primaryStage.setScene(monsterScene));
 
-		titleLayout.add(canvas, 0, 0);
-		titleLayout.add(button, 0, 1);
-
+		
+		titleLayout.setTop(titleText);
+		titleLayout.setBottom(button);
+		
+		ImageView titleImage1 = new ImageView(titleImage);
+		titleLayout.setCenter(titleImage1);
+		titleImage1.setFitHeight(300);
+		titleImage1.setFitWidth(300);
+		BorderPane.setMargin(button, new Insets(100, 50, 50, 350));
+		BorderPane.setMargin(titleText, new Insets(10, 50, 50, 150));
+		//titleLayout.add(titleText, 11, 0);
+		//titleLayout.add(button, 1, 20);  
+		//	titleLayout.add(canvas, 3, 2);
+		
 		titleScene = new Scene(titleLayout, 800, 600);
 		primaryStage.setScene(titleScene);
 
@@ -143,16 +166,17 @@ public class MonsterGUI extends Application {
 					team1Chosen = player1Team.get(0);
 					team2Chosen = player2Team.get(0);
 					choose = m1;
-					opt1 = m1;
-					opt2 = m2;
-					opt3 = m3;
-
 
 					int healthPercent1 = (250*team1Chosen.healthBattle)/team1Chosen.getHealthBattle();
 					healthBar1.setWidth(healthPercent1);
 					healthBar1.setHeight(5);
 					healthBar1.setStroke(Color.BLACK);
 					healthBar1.setFill(Color.GREEN);
+
+
+
+
+
 
 					int healthPercent2 = (250*team2Chosen.healthBattle)/team2Chosen.getHealthBattle();
 					healthBar2.setWidth(healthPercent2);
@@ -238,28 +262,70 @@ public class MonsterGUI extends Application {
 
 			public void handle(ActionEvent arg0) {
 				performMove(1);
-				
+
 				/*if (engine.playerTurn == 1) {
 					team1Chosen.decreaseHealth(20);
 				} else {
 					team2Chosen.decreaseHealth(20);
 				}*/
-//				performMove(1);
-//				player1Team = engine.getTeam1();
-//				player2Team = engine.getTeam2();
+				//				performMove(1);
+				//				player1Team = engine.getTeam1();
+				//				player2Team = engine.getTeam2();
 
 				//updates
 				updateHpBars();
 				//engine.changeTurn();
 				//checks if it fainted/ needs to switch pokemon
 				checkFainted();
-				
+
 			}
 		});
 
+		heavyButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				performMove(2);
+				updateHpBars();
+				checkFainted();
+			}
+		});
+
+		healButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				performMove(3);
+				updateHpBars();
+				checkFainted();
+			}
+		});
+
+		otherButton.setOnAction(new EventHandler<ActionEvent>(){
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				performMove(4);
+				updateHpBars();
+				checkFainted();
+			}
+		});
+
+		//images 
+		Image charizard = new Image("charizard.png");
+		Image nidoking = new Image("nidoking.png");
+		//Image jolteon = new Image("jolteon.png");
+		//Image raichu = new Image("raichu.png");
+		//Image squirtle = new Image("squirtle.png");
+
 
 		// This is just a health bar ATM, haven't added the other things to this scene yet
-		battleScene = new Scene(battleLayout, 800, 600);
+		battleScene = new Scene(battleLayout, 900, 600);
+
+
 		battleLayout.add(healthBarBack1, 0, 1);
 		battleLayout.add(healthBar1, 0, 1);
 
@@ -282,8 +348,25 @@ public class MonsterGUI extends Application {
 		//use the an int to decide each move the player chose
 		//performMove(int)
 
-		battleLayout.add(display, 4, 47);
+		battleLayout.add(display, 8, 7);
 
+
+		//ok so this shows the image but idk how to make it change based off the pokemon. 
+		//bc the pokemon isnt chosen yet. maybe im being stupid bout it but LOL.
+
+		//	battleLayout.add(new ImageView(charizard),0,12);	
+		battleLayout.add(new ImageView(nidoking),0,12);		
+		//	battleLayout.add(new ImageView(jolteon),0,12);		
+		//	battleLayout.add(new ImageView(raichu),0,12);
+		//	battleLayout.add(new ImageView(squirtle),0,12);
+
+
+		battleLayout.add(new ImageView(charizard),2,12);
+
+		//battleLayout.add(new ImageView(nidoking),2,12);
+		//battleLayout.add(new ImageView(jolteon),2,12);
+		//battleLayout.add(new ImageView(raichu),2,12);
+		//	battleLayout.add(new ImageView(squirtle),2,12);
 
 
 		primaryStage.show();
@@ -311,14 +394,14 @@ public class MonsterGUI extends Application {
 						public void handle(ActionEvent arg0) {
 							Monster chosenMon = null;
 							switch (engine.getTurn()) {
-								case 0:
-									team1Chosen = mon;
-									chosenMon = team1Chosen;
-									break;
-								case 1:
-									team2Chosen = mon;
-									chosenMon = team2Chosen;
-									break;
+							case 0:
+								team1Chosen = mon;
+								chosenMon = team1Chosen;
+								break;
+							case 1:
+								team2Chosen = mon;
+								chosenMon = team2Chosen;
+								break;
 							}
 							updateHpBars();
 							chosenMon.setOnField(true); //maybe it is set on field already?
@@ -330,7 +413,7 @@ public class MonsterGUI extends Application {
 				}
 
 			}
-			
+
 			//engine.setTeamsAndMons(player1Team, player2Team);
 			stage.setScene(pickPokemon);
 			//	stage.initModality(Modality.APPLICATION_MODAL);
@@ -339,7 +422,7 @@ public class MonsterGUI extends Application {
 
 		}
 	}
-	
+
 	public void updateHpBars() {
 		healthBar1.setWidth((250*team1Chosen.healthBattle)/team1Chosen.maxHealthPoints);
 		HPLabel1.setText(team1Chosen.healthBattle + "/" + team1Chosen.maxHealthPoints);
@@ -350,19 +433,11 @@ public class MonsterGUI extends Application {
 		HPLabel2.setText(team2Chosen.healthBattle + "/" + team2Chosen.maxHealthPoints);
 		levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
 		nameLabel2.setText("" +team2Chosen.getMonsterName());
-	}
-	//updates the battle stage.
-	public void buttonFaint() {
 
-		healthBar1.setWidth((250*choose.healthBattle)/choose.maxHealthPoints);
-		HPLabel1.setText(choose.healthBattle + "/" + choose.maxHealthPoints);
-		nameLabel1.setText("" +choose.getMonsterName());
-		display.setText("Monster playing is " + choose.getMonsterName());
-		levelLabel1.setText("Lvl. " + choose.getLevel());
-		choose.setOnField(true);
-		switchMonPane.getChildren().clear();
-		stage.close();
+		System.out.println(team1Chosen.healthBattle);
+		System.out.println(team1Chosen.getMonsterName());
 	}
+
 
 	public static void main(String[] args) {
 		launch(args);
