@@ -178,11 +178,6 @@ public class MonsterGUI extends Application {
 					healthBar1.setStroke(Color.BLACK);
 					healthBar1.setFill(Color.GREEN);
 
-
-
-
-
-
 					int healthPercent2 = (250*team2Chosen.healthBattle)/team2Chosen.getHealthBattle();
 					healthBar2.setWidth(healthPercent2);
 					healthBar2.setHeight(5);
@@ -199,6 +194,7 @@ public class MonsterGUI extends Application {
 
 					engine.setTeamsAndMons(player1Team, player2Team, 0, 0); //sets the teams in the engine class to current teams
 					engine.startBattle(); //sets monster 1 of both teams onField value to true
+
 					primaryStage.setScene(battleScene);
 				}
 			}
@@ -228,9 +224,6 @@ public class MonsterGUI extends Application {
 		battleLayout.setHgap(10);
 		battleLayout.setVgap(10);
 
-		// Not sure what the javaFX imageIcon is, so commented out for now
-		//ImageIcon monsterIcon1;
-		//ImageIcon monsterIcon2;
 
 		Button attackButton = new Button("Attack");
 		Button heavyButton = new Button("Heavy Attack");
@@ -322,8 +315,8 @@ public class MonsterGUI extends Application {
 		});
 
 		//images 
-		Image charizard = new Image("charizard.png");
-		Image nidoking = new Image("nidoking.png");
+		//Image charizard = new Image("charizard.png");
+		//Image nidoking = new Image("nidoking.png");
 		//Image jolteon = new Image("jolteon.png");
 		//Image raichu = new Image("raichu.png");
 		//Image squirtle = new Image("squirtle.png");
@@ -360,15 +353,17 @@ public class MonsterGUI extends Application {
 
 		//ok so this shows the image but idk how to make it change based off the pokemon. 
 		//bc the pokemon isnt chosen yet. maybe im being stupid bout it but LOL.
+		//battleLayout.add(updateImages(player1Team, 0), 0, 12);
+		//battleLayout.add(updateImages(player2Team, 0), 2, 12);
 
 		//	battleLayout.add(new ImageView(charizard),0,12);	
-		battleLayout.add(new ImageView(nidoking),0,12);		
+		//battleLayout.add(new ImageView(nidoking),0,12);		
 		//	battleLayout.add(new ImageView(jolteon),0,12);		
 		//	battleLayout.add(new ImageView(raichu),0,12);
 		//	battleLayout.add(new ImageView(squirtle),0,12);
 
 
-		battleLayout.add(new ImageView(charizard),2,12);
+		//battleLayout.add(new ImageView(charizard),2,12);
 
 		//battleLayout.add(new ImageView(nidoking),2,12);
 		//battleLayout.add(new ImageView(jolteon),2,12);
@@ -410,8 +405,28 @@ public class MonsterGUI extends Application {
 								chosenMon = team2Chosen;
 								break;
 							}
+							int switchedMonsterIndex = 1;
+							for(int i = 0; i < teamList.size(); i++) {
+								if(teamList.get(i) == chosenMon) {
+									switchedMonsterIndex = i;
+									//we may need to define a .equals() here, but it might still work
+								}
+							}
 							updateHpBars();
-							chosenMon.setOnField(true); //maybe it is set on field already?
+							if(teamList == player1Team) {
+							engine.setTeamsAndMons(player1Team, player2Team, switchedMonsterIndex, -1);
+							}
+							else {
+								engine.setTeamsAndMons(player1Team, player2Team, -1, switchedMonsterIndex);
+							}
+							
+							int xCoord = (teamList == player1Team) ? 0 : 2;
+							
+							//battleLayout.add(updateImages(teamList, switchedMonsterIndex), xCoord, 12 );
+							
+							
+							//chooseMon.getImagePath set on screen
+							//delete the other image path from being on screen?
 							switchMonPane.getChildren().clear();
 							stage.close();
 						}
@@ -501,5 +516,9 @@ public class MonsterGUI extends Application {
 		this.player1Team = engine.getTeam1();
 		this.player2Team = engine.getTeam2();
 
+	}
+	private ImageView updateImages(ArrayList<Monster> playerTeam, int monsterIndex) {
+		Image monsterSprite = new Image(playerTeam.get(monsterIndex).getMonsterImagePath());
+		return new ImageView(monsterSprite);
 	}
 }

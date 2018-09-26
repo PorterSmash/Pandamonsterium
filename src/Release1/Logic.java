@@ -144,8 +144,16 @@ public class Logic {
 		player1Team = team1;
 		player2Team = team2;
 		
+		if(team1Index == -1) {
+			this.mon2 = team2Index;
+		}
+		else if(team2Index == -1) {
+			this.mon1 = team1Index;
+		}
+		else {
 		this.mon1 = team1Index;
 		this.mon2 = team2Index;
+		}
 		
 		player1Team.get(mon1).setOnField(true);
 		player2Team.get(mon2).setOnField(true);
