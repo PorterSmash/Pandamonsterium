@@ -19,6 +19,7 @@ Charizard
 1
 95
 1
+charizard.png
 Staryu
 100
 6
@@ -40,7 +41,8 @@ Staryu
 1
 95
 1
-NidoKing
+staryu.png
+Nidoking
 150
 8
 6
@@ -61,6 +63,7 @@ NidoKing
 1
 95
 1
+nidoking.png
 Jolteon
 80
 6
@@ -82,6 +85,7 @@ Jolteon
 1
 95
 1
+jolteon.png
 Ferguson
 999
 999
@@ -103,6 +107,7 @@ Ferguson
 20
 100
 1
+ferguson.png
 Squirtle
 90
 5
@@ -120,9 +125,11 @@ Squirtle
 2
 100
 0
+-3
+2
+7
 1
-85
-1
+squirtle.png
 Raichu
 130
 3
@@ -144,3 +151,4 @@ Raichu
 1
 99
 1
+raichu.png
