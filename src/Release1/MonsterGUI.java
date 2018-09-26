@@ -64,13 +64,13 @@ public class MonsterGUI extends Application {
 		//		gc.setFont( theFont );
 		//		gc.fillText( "PandeMonsterium", 60, 50 );
 		//		gc.strokeText( "PandeMonsterium", 60, 50 );
-		
+
 		//instead of canvas, just do a text. less code?
 		Image titleImage = new Image("titlePic.png");
 		Text titleText = new Text("Pandemonsterium");
 		titleText.setFont(Font.font("Verdana", FontWeight.BOLD, 50));
 		titleText.setFill(Color.RED);
-	
+
 		// Start button
 		Button button = new Button("Start");
 		//button.setLayoutX(500);
@@ -79,10 +79,10 @@ public class MonsterGUI extends Application {
 		button.setPrefHeight(50);
 		button.setOnAction(e -> primaryStage.setScene(monsterScene));
 
-		
+
 		titleLayout.setTop(titleText);
 		titleLayout.setBottom(button);
-		
+
 		ImageView titleImage1 = new ImageView(titleImage);
 		titleLayout.setCenter(titleImage1);
 		titleImage1.setFitHeight(300);
@@ -92,7 +92,7 @@ public class MonsterGUI extends Application {
 		//titleLayout.add(titleText, 11, 0);
 		//titleLayout.add(button, 1, 20);  
 		//	titleLayout.add(canvas, 3, 2);
-		
+
 		titleScene = new Scene(titleLayout, 800, 600);
 		primaryStage.setScene(titleScene);
 
@@ -119,6 +119,8 @@ public class MonsterGUI extends Application {
 		// Choose monster button (goes to next scene)
 		Button chooseMonsterButton = new Button("Choose your Monster");
 
+		Text whichTeam = new Text("Pick Team One Monsters");
+
 		// Chooses the monster, updates elements in the battle scene accordingly
 		chooseMonsterButton.setOnAction(new EventHandler<ActionEvent>() {
 			private boolean playerOnePicked;
@@ -137,6 +139,8 @@ public class MonsterGUI extends Application {
 				}
 				else {
 					if(!(playerOnePicked)) {
+						whichTeam.setText("Pick Team Two Monsters");
+
 						for(int i = 0; i < 3; i ++) {
 							Monster monster = new Monster();
 							monster.monsterFactory(choices[i]);
@@ -154,6 +158,7 @@ public class MonsterGUI extends Application {
 					}
 				}
 				if(playerTwoPicked) {
+
 
 					Monster m1 = new Monster();
 					Monster	m2 = new Monster();
@@ -213,6 +218,7 @@ public class MonsterGUI extends Application {
 		monsterLayout.add(monsterBox2, 0, 1);
 		monsterLayout.add(monsterBox3, 0, 2);
 		monsterLayout.add(chooseMonsterButton, 0, 3);
+		monsterLayout.add(whichTeam,4,6);
 		monsterScene = new Scene(flowLayout, 400, 600);
 
 		// Battle scene
@@ -245,7 +251,7 @@ public class MonsterGUI extends Application {
 
 		//displays comments
 		display = new Text();
-		display.setText("hello");
+		display.setText("Welcome to the Pandemonsterium Arena");
 
 		//for the fainted new stage
 		stage = new Stage();
@@ -262,6 +268,7 @@ public class MonsterGUI extends Application {
 
 			public void handle(ActionEvent arg0) {
 				performMove(1);
+
 
 				/*if (engine.playerTurn == 1) {
 					team1Chosen.decreaseHealth(20);
@@ -348,7 +355,7 @@ public class MonsterGUI extends Application {
 		//use the an int to decide each move the player chose
 		//performMove(int)
 
-		battleLayout.add(display, 8, 7);
+		battleLayout.add(display, 0, 20);
 
 
 		//ok so this shows the image but idk how to make it change based off the pokemon. 
@@ -464,15 +471,31 @@ public class MonsterGUI extends Application {
 		switch(moveChoice) {
 		case 1:
 			engine.calculateDamage(onField.getMove1());
+			if(team == player1Team)
+				display.setText("Player 1 has attacked");
+			else
+				display.setText("Player 2 has attacked");
 			break;
 		case 2:
 			engine.calculateDamage(onField.getMove2());
+			if(team == player1Team)
+				display.setText("Player 1 has attacked");
+			else
+				display.setText("Player 2 has attacked");
 			break;
 		case 3:
 			engine.calculateDamage(onField.getMove3());
+			if(team == player1Team)
+				display.setText("Player 1 has healed");
+			else
+				display.setText("Player 2 has healed");
 			break;
 		case 4:
 			engine.calculateDamage(onField.getMove4());
+			if(team == player1Team)
+				display.setText("Player 1 performed move");
+			else
+				display.setText("Player 2 performed move");
 			break;
 		}
 		this.player1Team = engine.getTeam1();
