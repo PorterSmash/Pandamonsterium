@@ -42,6 +42,10 @@ public class MonsterGUI extends Application {
 	ArrayList<Monster> player1Team = new ArrayList<Monster>();
 	ArrayList<Monster> player2Team = new ArrayList<Monster>();
 	Logic engine = new Logic();
+	
+	ImageView player1Sprite;
+	ImageView player2Sprite;
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -315,11 +319,7 @@ public class MonsterGUI extends Application {
 		});
 
 		//images 
-		//Image charizard = new Image("charizard.png");
-		//Image nidoking = new Image("nidoking.png");
-		//Image jolteon = new Image("jolteon.png");
-		//Image raichu = new Image("raichu.png");
-		//Image squirtle = new Image("squirtle.png");
+		Image placeHolder = new Image("titlePic.png");
 
 
 		// This is just a health bar ATM, haven't added the other things to this scene yet
@@ -356,8 +356,11 @@ public class MonsterGUI extends Application {
 		//battleLayout.add(updateImages(player1Team, 0), 0, 12);
 		//battleLayout.add(updateImages(player2Team, 0), 2, 12);
 
-		//	battleLayout.add(new ImageView(charizard),0,12);	
-		//battleLayout.add(new ImageView(nidoking),0,12);		
+		player1Sprite = new ImageView(placeHolder);
+		player2Sprite = new ImageView(placeHolder);
+		
+		battleLayout.add(player1Sprite, 0, 12);	
+		battleLayout.add(player2Sprite, 2, 12);		
 		//	battleLayout.add(new ImageView(jolteon),0,12);		
 		//	battleLayout.add(new ImageView(raichu),0,12);
 		//	battleLayout.add(new ImageView(squirtle),0,12);
@@ -455,7 +458,11 @@ public class MonsterGUI extends Application {
 		HPLabel2.setText(team2Chosen.healthBattle + "/" + team2Chosen.maxHealthPoints);
 		levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
 		nameLabel2.setText("" +team2Chosen.getMonsterName());
-
+		
+		//this is what I'm trying now, but somehow we need to access the battleLayout. Is there a way to do that?
+		player1Sprite.setImage(updateImages(team1Chosen));
+		player2Sprite.setImage(updateImages(team2Chosen));
+		
 		System.out.println(team1Chosen.healthBattle);
 		System.out.println(team1Chosen.getMonsterName());
 	}
@@ -517,8 +524,7 @@ public class MonsterGUI extends Application {
 		this.player2Team = engine.getTeam2();
 
 	}
-	private ImageView updateImages(ArrayList<Monster> playerTeam, int monsterIndex) {
-		Image monsterSprite = new Image(playerTeam.get(monsterIndex).getMonsterImagePath());
-		return new ImageView(monsterSprite);
+	private Image updateImages(Monster monster) {
+		return new Image(monster.getMonsterImagePath());
 	}
 }
