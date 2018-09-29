@@ -4,28 +4,71 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
  import javax.swing.ImageIcon;
+ 
+ /*********************************************************************
+  * Monster class that holds all of the monsters statistics that 
+  * implements the monster interface.
+  * @author Michelle Vu, Alex Porter, and Justin Kaukonen 
+  * @version Fall 2018
+  ********************************************************************/
  public class Monster implements MonsterInterface {
+	/** the monsters max health points*/
 	int maxHealthPoints;
+	
+	/** how much initial defense the monster has*/
 	int defensePoints;
+	
+	/** how strong the monster initially is*/
 	int attackPoints;
+	
+	/** how fast the monster initially is*/
 	int speedPoints;
 	
+	/** the monsters max health points during battle*/
 	int healthBattle;
+	
+	/** how strong the monster is during battle*/
 	int attackBattle;
+	
+	/** how much defense the monster has during battle*/
 	int defenseBattle;
+	
+	/** how fast the monster is during battle*/
 	int speedBattle;
 	
+	/** what level the monster currently is*/
 	int monsterLevel;
+	
+	/** array list of the moves*/
  	ArrayList<Move> attackList;
+ 	
+ 	/** normal attack move*/
 	Move move1;
+	
+	/** heavy attack move */
 	Move move2;
+	
+	/** heal move */
 	Move move3;
+	
+	/** other attack move*/
 	Move move4;
+	
+	/** string that holds the name of image */
  	String monsterImagePath;
+ 	
+ 	/** string that holds the name of the sound file */
 	String soundFilePath;
+	
+	/** string that holds the monster name*/
 	String monsterName;
+	
+	/** holds the image of the monster*/
  	ImageIcon spriteImage;
+ 	
+ 	/** tells whether the monster is on field or not*/
 	private boolean onField;
+	
 	
 	public int getLevel() {
 		return monsterLevel;
@@ -34,9 +77,11 @@ import java.util.Scanner;
 	public String getMonsterName() {
 		return monsterName;
 	}
+	
  	public void setMonsterName(String monsterName) {
 		this.monsterName = monsterName;
 	}
+ 	
 	public int getHealthBattle() {
 		return healthBattle;
 	}
