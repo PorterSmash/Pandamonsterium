@@ -11,6 +11,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -42,6 +44,7 @@ public class MonsterGUI extends Application {
 	ArrayList<Monster> player1Team = new ArrayList<Monster>();
 	ArrayList<Monster> player2Team = new ArrayList<Monster>();
 	Logic engine = new Logic();
+	Button attackButton, heavyButton, healButton, otherButton;
 	
 	ImageView player1Sprite;
 	ImageView player2Sprite;
@@ -200,6 +203,7 @@ public class MonsterGUI extends Application {
 					engine.startBattle(); //sets monster 1 of both teams onField value to true
 
 					primaryStage.setScene(battleScene);
+					updateHpBars();
 				}
 			}
 		});
@@ -229,10 +233,10 @@ public class MonsterGUI extends Application {
 		battleLayout.setVgap(10);
 
 
-		Button attackButton = new Button("Attack");
-		Button heavyButton = new Button("Heavy Attack");
-		Button healButton = new Button("Heal");
-		Button otherButton = new Button("Other");
+		attackButton = new Button("Attack");
+		heavyButton = new Button("Heavy Attack");
+		healButton = new Button("Heal");
+		otherButton = new Button("Other");
 
 		// Pokemon HP bar, make sure to make a border around it and add the monster and level name, as well as a text showing the total HP left
 		Rectangle healthBarBack1 = new Rectangle(250, 5);
@@ -381,19 +385,29 @@ public class MonsterGUI extends Application {
 	public void checkFainted() {
 		ArrayList<Monster> teamList;
 		Monster onFieldMon;
+		int teamNum = 0;
 		if (engine.getTurn() == 0) {
 			teamList = player1Team;
+			teamNum = 1;
 			onFieldMon = team1Chosen;
 		} else {
 			teamList = player2Team;
 			onFieldMon = team2Chosen;
+			teamNum = 2;
 		}
 		if(onFieldMon.getHealthBattle() <= 0) {
 
 			display.setText(onFieldMon.getMonsterName() + " Has Fainted");
 
+			boolean hasMonstersLeft = false;
+			attackButton.setDisable(true);
+			heavyButton.setDisable(true);
+			healButton.setDisable(true);
+			otherButton.setDisable(true);
+			
 			for (Monster mon : teamList) {
 				if (mon.getHealthBattle() > 0) {
+					hasMonstersLeft = true;
 					Button but = new Button("Pick " + mon.getMonsterName());
 					but.setOnAction(new EventHandler<ActionEvent>() {
 						public void handle(ActionEvent arg0) {
@@ -427,6 +441,10 @@ public class MonsterGUI extends Application {
 							
 							//battleLayout.add(updateImages(teamList, switchedMonsterIndex), xCoord, 12 );
 							
+							attackButton.setDisable(false);
+							heavyButton.setDisable(false);
+							healButton.setDisable(false);
+							otherButton.setDisable(false);
 							
 							//chooseMon.getImagePath set on screen
 							//delete the other image path from being on screen?
@@ -438,13 +456,29 @@ public class MonsterGUI extends Application {
 				}
 
 			}
+			if (!hasMonstersLeft) {
+				//game needs to end
+				Alert alert = new Alert(AlertType.INFORMATION);
+				
+				alert.setTitle("Someone has run out of Pokemon!");
+				alert.setHeaderText("Player " + teamNum + " wins!");
+				int otherTeam = (teamNum + 1) % 2;
+				alert.setContentText("Player " + otherTeam + " has run out of Pokemon, so the match is over!");
 
-			//engine.setTeamsAndMons(player1Team, player2Team);
-			stage.setScene(pickPokemon);
-			//	stage.initModality(Modality.APPLICATION_MODAL);
-			stage.show();
-
-
+				alert.showAndWait();
+				
+				//return to main menu, or exit program
+				attackButton.setDisable(true);
+				heavyButton.setDisable(true);
+				healButton.setDisable(true);
+				otherButton.setDisable(true);
+				
+			} else {
+				//engine.setTeamsAndMons(player1Team, player2Team);
+				stage.setScene(pickPokemon);
+				//	stage.initModality(Modality.APPLICATION_MODAL);
+				stage.show();
+			}
 		}
 	}
 

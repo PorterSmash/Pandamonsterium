@@ -182,10 +182,19 @@ import java.util.Scanner;
 					// Reads the activity name, ON icon file path, and OFF icon file path.
 					monsterName = nextLine;
 					monsterLevel = 1;
-					setMaxHealthPoints(fileIn.nextInt());
-					setAttackPoints(fileIn.nextInt());
-					setDefensePoints(fileIn.nextInt());
-					setSpeedPoints(fileIn.nextInt());
+					
+					int[] statArray = new int[20];
+					for (int i = 0; i < 20; i++) {
+						statArray[i] = Integer.parseInt(fileIn.nextLine());
+					}
+					
+					setMonsterImagePath(fileIn.nextLine());
+					
+					
+					setMaxHealthPoints(statArray[0]);
+					setAttackPoints(statArray[1]);
+					setDefensePoints(statArray[2]);
+					setSpeedPoints(statArray[3]);
 					
 					//when the monster is first created, we can set these to the values above
 					healthBattle  = maxHealthPoints;
@@ -194,17 +203,17 @@ import java.util.Scanner;
 					speedBattle   = speedPoints;
 					
 					attackList = new ArrayList<Move>();
-					Move move1 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //light attack
-					Move move2 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //heavy attack
-					Move move3 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //heal
-					Move move4 = new Move(fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt(), fileIn.nextInt()); //block
+					Move move1 = new Move(statArray[4], statArray[5], statArray[6], statArray[7]); //light attack
+					Move move2 = new Move(statArray[8], statArray[9], statArray[10], statArray[11]); //heavy attack
+					Move move3 = new Move(statArray[12], statArray[13], statArray[14], statArray[15]); //heal
+					Move move4 = new Move(statArray[16], statArray[17], statArray[18], statArray[19]); //block
 					
 					this.move1 = move1;
 					this.move2 = move2;
 					this.move3 = move3;
 					this.move4 = move4;
 					
-					monsterImagePath = fileIn.nextLine();
+					
 					break;
 				}
 			}
