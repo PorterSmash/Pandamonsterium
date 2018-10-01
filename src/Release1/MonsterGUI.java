@@ -128,51 +128,54 @@ public class MonsterGUI extends Application {
 		monsterBox1.setLayoutX(100);
 		monsterBox1.setLayoutY(100);
 
-		monsterBox1.getItems().addAll("Charizard", "Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
+		monsterBox1.getItems().addAll("Charizard", "Staryu", 
+				"Nidoking", "Squirtle", "Jolteon", "Raichu");
 
 		ChoiceBox<String> monsterBox2 = new ChoiceBox<>();
-		monsterBox2.getItems().addAll("Charizard", "Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
+		monsterBox2.getItems().addAll("Charizard", 
+		"Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
 
 		ChoiceBox<String> monsterBox3 = new ChoiceBox<>();
-		monsterBox3.getItems().addAll("Charizard", "Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
+		monsterBox3.getItems().addAll("Charizard", 
+		"Staryu", "Nidoking", "Squirtle", "Jolteon", "Raichu");
 
 		// Choose monster button (goes to next scene)
 		Button chooseMonsterButton = new Button("Choose your Monster");
 
 		Text whichTeam = new Text("Pick Team One Monsters");
 
-		// Chooses the monster, updates elements in the battle scene accordingly
-		chooseMonsterButton.setOnAction(new EventHandler<ActionEvent>() {
+		// Chooses the monster, updates elements in the battle scene
+	chooseMonsterButton.setOnAction(new EventHandler<ActionEvent>() {
 			private boolean playerOnePicked;
 			private boolean playerTwoPicked;
 
 			@Override
-			public void handle(ActionEvent arg0) {
+			public void handle(final ActionEvent arg0) {
 				String monster1 = monsterBox1.getValue();
 				String monster2 = monsterBox2.getValue();
 				String monster3 = monsterBox3.getValue();
 
-				String[] choices = {monster1, monster2, monster3};
+			String[] choices = {monster1, monster2, monster3};
 
-				if (choices[0] == null || choices[1] == null || choices[2] == null) {
-					System.out.println("You haven't chosen all monsters yet.");
-				}
-				else {
+				if (choices[0] == null || choices[1] == null
+						|| choices[2] == null) {
+				System.out.println("Choose all monsters");
+				 } else {
 					if (!(playerOnePicked)) {
-						whichTeam.setText("Pick Team Two Monsters");
+				whichTeam.setText("Pick Team Two Monsters");
 
-						for (int i = 0; i < 3; i ++) {
-							Monster monster = new Monster();
-							monster.monsterFactory(choices[i]);
-							player1Team.add(monster);
+						for (int i = 0; i < 3; i++) {
+						Monster monster = new Monster();
+					monster.monsterFactory(choices[i]);
+						player1Team.add(monster);
 						}
 						playerOnePicked = true;
-					}
-					else {
-						for (int i = 0; i < 3; i ++) {
-							Monster monster = new Monster();
-							monster.monsterFactory(choices[i]);
-							player2Team.add(monster);
+					
+				 } else {
+						for (int i = 0; i < 3; i++) {
+						Monster monster = new Monster();
+					monster.monsterFactory(choices[i]);
+						player2Team.add(monster);
 						}
 						playerTwoPicked = true;
 					}
@@ -192,8 +195,9 @@ public class MonsterGUI extends Application {
 
 					setUpHealthBars();
 
-					engine.setTeamsAndMons(player1Team, player2Team, 0, 0); //sets the teams in the engine class to current teams
-					engine.startBattle(); //sets monster 1 of both teams onField value to true
+					engine.setTeamsAndMons(player1Team, 
+							player2Team, 0, 0); 
+					engine.startBattle(); 
 
 					primaryStage.setScene(battleScene);
 					updateHpBars();
@@ -202,18 +206,18 @@ public class MonsterGUI extends Application {
 
 			
 		});
-		// instantiating these here because, while the values can be updated later, they need to be objects to add them to the scene
+		
 		instantiateHealthAndLabels();
 
 		monsterLayout.add(monsterBox1, 0, 0);
 		monsterLayout.add(monsterBox2, 0, 1);
 		monsterLayout.add(monsterBox3, 0, 2);
 		monsterLayout.add(chooseMonsterButton, 0, 3);
-		monsterLayout.add(whichTeam,4,6);
+		monsterLayout.add(whichTeam, 4, 6);
 		monsterScene = new Scene(flowLayout, 400, 600);
 
 		// Battle scene
-		// Might need to change to a different layout type because of the health bars, depending on how we do it
+		
 		GridPane battleLayout = new GridPane();
 		battleLayout.setPadding(new Insets(10, 10, 10, 10));
 		battleLayout.setHgap(10);
@@ -225,7 +229,7 @@ public class MonsterGUI extends Application {
 		healButton = new Button("Heal");
 		otherButton = new Button("Other");
 
-		// Pokemon HP bar, make sure to make a border around it and add the monster and level name, as well as a text showing the total HP left
+		// Pokemon HP bar
 		Rectangle healthBarBack1 = new Rectangle(250, 5);
 		healthBarBack1.setStroke(Color.BLACK);
 		healthBarBack1.setFill(Color.RED);
@@ -233,9 +237,6 @@ public class MonsterGUI extends Application {
 		Rectangle healthBarBack2 = new Rectangle(250, 5);
 		healthBarBack2.setStroke(Color.BLACK);
 		healthBarBack2.setFill(Color.RED);
-		//in ratio to your actual health
-		//healthBar1 = new Rectangle((250*choose.healthBattle)/choose.maxHealthPoints, 5);
-		//simulates attacking not using attack yet though
 
 		//displays comments
 		display = new Text();
@@ -253,7 +254,7 @@ public class MonsterGUI extends Application {
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 
-			public void handle(ActionEvent arg0) {
+			public void handle(final ActionEvent arg0) {
 				performMove(1);
 				updateHpBars();
 				checkFainted();
@@ -261,33 +262,30 @@ public class MonsterGUI extends Application {
 			}
 		});
 
-		heavyButton.setOnAction(new EventHandler<ActionEvent>(){
+		heavyButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
+			public void handle(final ActionEvent event) {
 				performMove(2);
 				updateHpBars();
 				checkFainted();
 			}
 		});
 
-		healButton.setOnAction(new EventHandler<ActionEvent>(){
+		healButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
+			public void handle(final ActionEvent event) {
 				performMove(3);
 				updateHpBars();
 				checkFainted();
 			}
 		});
 
-		otherButton.setOnAction(new EventHandler<ActionEvent>(){
+		otherButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
+			public void handle(final ActionEvent event) {
 				performMove(4);
 				updateHpBars();
 				checkFainted();
@@ -297,8 +295,6 @@ public class MonsterGUI extends Application {
 		//images 
 		Image placeHolder = new Image("titlePic.png");
 
-
-		// This is just a health bar ATM, haven't added the other things to this scene yet
 		battleScene = new Scene(battleLayout, 900, 600);
 		setUpBattleLayout(battleLayout, healthBarBack1, healthBarBack2);
 
@@ -313,7 +309,9 @@ public class MonsterGUI extends Application {
 
 	}
 	
-	//checks if pokemon fainted
+	/**
+	 * Checks if a monster fainted (0 health).
+	 */
 	public void checkFainted() {
 		ArrayList<Monster> teamList;
 		Monster onFieldMon;
@@ -329,7 +327,8 @@ public class MonsterGUI extends Application {
 		}
 		if (onFieldMon.getHealthBattle() <= 0) {
 
-			display.setText(onFieldMon.getMonsterName() + " Has Fainted");
+			display.setText(onFieldMon.getMonsterName() 
+					+ " Has Fainted");
 
 			boolean hasMonstersLeft = false;
 			attackButton.setDisable(true);
@@ -340,47 +339,47 @@ public class MonsterGUI extends Application {
 			for (Monster mon : teamList) {
 				if (mon.getHealthBattle() > 0) {
 					hasMonstersLeft = true;
-					Button but = new Button("Pick " + mon.getMonsterName());
-					but.setOnAction(new EventHandler<ActionEvent>() {
-						public void handle(ActionEvent arg0) {
-							Monster chosenMon = null;
-							switch (engine.getTurn()) {
+					Button but = new Button("Pick " 
+					+ mon.getMonsterName());
+					but.setOnAction(new 
+					EventHandler<ActionEvent>() {
+				public void handle(final ActionEvent arg0) {
+						Monster chosenMon = null;
+						switch (engine.getTurn()) {
 							case 0:
-								team1Chosen = mon;
-								chosenMon = team1Chosen;
+							team1Chosen = mon;
+							chosenMon = team1Chosen;
 								break;
 							case 1:
-								team2Chosen = mon;
-								chosenMon = team2Chosen;
+							team2Chosen = mon;
+							chosenMon = team2Chosen;
 								break;
+						default:
+							break;
 							}
-							int switchedMonsterIndex = 1;
-							for (int i = 0; i < teamList.size(); i++) {
-								if (teamList.get(i) == chosenMon) {
-									switchedMonsterIndex = i;
-									//we may need to define a .equals() here, but it might still work
+						int switchedMonsterIndex = 1;
+				for (int i = 0; i < teamList.size(); i++) {
+					if (teamList.get(i) == chosenMon) {
+						switchedMonsterIndex = i;
 								}
 							}
 							updateHpBars();
-							if (teamList == player1Team) {
-							engine.setTeamsAndMons(player1Team, player2Team, switchedMonsterIndex, -1);
+						if (teamList == player1Team) {
+					engine.setTeamsAndMons(player1Team,
+					player2Team, switchedMonsterIndex, -1);
+							
+				} else {
+					engine.setTeamsAndMons(player1Team,
+					player2Team, -1, switchedMonsterIndex);
 							}
-							else {
-								engine.setTeamsAndMons(player1Team, player2Team, -1, switchedMonsterIndex);
-							}
 							
-							int xCoord = (teamList == player1Team) ? 0 : 2;
+						attackButton.setDisable(false);
+						heavyButton.setDisable(false);
+						healButton.setDisable(false);
+						otherButton.setDisable(false);
 							
-							//battleLayout.add(updateImages(teamList, switchedMonsterIndex), xCoord, 12 );
-							
-							attackButton.setDisable(false);
-							heavyButton.setDisable(false);
-							healButton.setDisable(false);
-							otherButton.setDisable(false);
-							
-							//chooseMon.getImagePath set on screen
-							//delete the other image path from being on screen?
-							switchMonPane.getChildren().clear();
+					//chooseMon.getImagePath set on screen
+					switchMonPane.getChildren().clear();
 							stage.close();
 						}
 					});
@@ -392,10 +391,11 @@ public class MonsterGUI extends Application {
 				//game needs to end
 				Alert alert = new Alert(AlertType.INFORMATION);
 				
-				alert.setTitle("Someone has run out of Pokemon!");
-				alert.setHeaderText("Player " + teamNum + " wins!");
+			alert.setTitle("Someone has run out of Pokemon!");
+			alert.setHeaderText("Player " + teamNum + " wins!");
 				int otherTeam = (teamNum + 1) % 2;
-				alert.setContentText("Player " + otherTeam + " has run out of Pokemon, so the match is over!");
+			alert.setContentText("Player " + otherTeam +
+			" has run out of Pokemon, so the match is over!");
 
 				alert.showAndWait();
 				
@@ -406,26 +406,29 @@ public class MonsterGUI extends Application {
 				otherButton.setDisable(true);
 				
 			} else {
-				//engine.setTeamsAndMons(player1Team, player2Team);
 				stage.setScene(pickPokemon);
-				//	stage.initModality(Modality.APPLICATION_MODAL);
 				stage.show();
 			}
 		}
 	}
-
+	/**
+	 * Updates the HP bars for each monster.
+	 */
 	public void updateHpBars() {
-		healthBar1.setWidth((250*team1Chosen.getHealthBattle())/team1Chosen.getMaxHealthPoints());
-		healthPointsLabel1.setText(team1Chosen.getHealthBattle() + "/" + team1Chosen.getMaxHealthPoints());
+		healthBar1.setWidth((250 * team1Chosen.getHealthBattle())
+				/ team1Chosen.getMaxHealthPoints());
+		healthPointsLabel1.setText(team1Chosen.getHealthBattle()
+				+ "/" + team1Chosen.getMaxHealthPoints());
 		levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
 		nameLabel1.setText("" + team1Chosen.getMonsterName());
 
-		healthBar2.setWidth((250*team2Chosen.getHealthBattle())/team2Chosen.getMaxHealthPoints());
-		healthPointsLabel2.setText(team2Chosen.getHealthBattle() + "/" + team2Chosen.getMaxHealthPoints());
+		healthBar2.setWidth((250 * team2Chosen.getHealthBattle())
+				/ team2Chosen.getMaxHealthPoints());
+		healthPointsLabel2.setText(team2Chosen.getHealthBattle() 
+				+ "/" + team2Chosen.getMaxHealthPoints());
 		levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
-		nameLabel2.setText("" +team2Chosen.getMonsterName());
+		nameLabel2.setText("" + team2Chosen.getMonsterName());
 		
-		//this is what I'm trying now, but somehow we need to access the battleLayout. Is there a way to do that?
 		player1Sprite.setImage(updateImages(team1Chosen));
 		player2Sprite.setImage(updateImages(team2Chosen));
 		
@@ -433,12 +436,18 @@ public class MonsterGUI extends Application {
 		System.out.println(team1Chosen.getMonsterName());
 	}
 
-
-	public static void main(String[] args) {
+	/**
+	 * Launches the program.
+	 * @param args String input, unused
+	 */
+	public static void main(final String[] args) {
 		launch(args);
 	}
-
-	private void performMove(int moveChoice) {
+	/**
+	 * Executes the move using the engine class.
+	 * @param moveChoice Move index to execute
+	 */
+	private void performMove(final int moveChoice) {
 		Monster onField = new Monster();
 		engine.setTeams(this.player1Team, this.player2Team);
 
@@ -456,65 +465,86 @@ public class MonsterGUI extends Application {
 		}
 		System.out.println(onField.getMonsterName());
 		System.out.println(onField.getMove1());
-		switch(moveChoice) {
+		switch (moveChoice) {
 		case 1:
 			engine.calculateDamage(onField.getMove1());
-			if (team == player1Team)
+			if (team == player1Team) {
 				display.setText("Player 1 has attacked");
-			else
+			} else {
 				display.setText("Player 2 has attacked");
+			}
 			break;
 		case 2:
 			engine.calculateDamage(onField.getMove2());
-			if (team == player1Team)
+			if (team == player1Team) {
 				display.setText("Player 1 has attacked");
-			else
+			} else {
 				display.setText("Player 2 has attacked");
+			}
 			break;
 		case 3:
 			engine.calculateDamage(onField.getMove3());
-			if (team == player1Team)
+			if (team == player1Team) {
 				display.setText("Player 1 has healed");
-			else
+			} else {
 				display.setText("Player 2 has healed");
+			}
 			break;
 		case 4:
 			engine.calculateDamage(onField.getMove4());
-			if (team == player1Team)
+			if (team == player1Team) {
 				display.setText("Player 1 performed move");
-			else
+			}	else {
 				display.setText("Player 2 performed move");
+			}
+			break;
+		default:
 			break;
 		}
 		this.player1Team = engine.getTeam1();
 		this.player2Team = engine.getTeam2();
 
 	}
-	private Image updateImages(Monster monster) {
+	/**
+	 * Updates the sprites on screen when one is replaced.
+	 * @param monster Monster with image to replace current
+	 * @return Image the image of the monster
+	 */
+	private Image updateImages(final Monster monster) {
 		System.out.println(monster.getMonsterImagePath());
 		return new Image(monster.getMonsterImagePath());
 	}
+	/**
+	 * Helper method creates health bars.
+	 */
 	private void setUpHealthBars() {
-		int healthPercent1 = (250*team1Chosen.getHealthBattle())/team1Chosen.getHealthBattle();
+		int healthPercent1 = (250 * team1Chosen.getHealthBattle())
+				/ team1Chosen.getHealthBattle();
 		healthBar1.setWidth(healthPercent1);
 		healthBar1.setHeight(5);
 		healthBar1.setStroke(Color.BLACK);
 		healthBar1.setFill(Color.GREEN);
 
-		int healthPercent2 = (250*team2Chosen.getHealthBattle())/team2Chosen.getHealthBattle();
+		int healthPercent2 = (250 * team2Chosen.getHealthBattle())
+				/ team2Chosen.getHealthBattle();
 		healthBar2.setWidth(healthPercent2);
 		healthBar2.setHeight(5);
 		healthBar2.setStroke(Color.BLACK);
 		healthBar2.setFill(Color.GREEN);
 
-		healthPointsLabel1.setText(team1Chosen.getHealthBattle() + "/" + team1Chosen.getMaxHealthPoints());
+		healthPointsLabel1.setText(team1Chosen.getHealthBattle() 
+				+ "/" + team1Chosen.getMaxHealthPoints());
 		nameLabel1.setText("" + team1Chosen.getMonsterName());
 		levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
 
-		healthPointsLabel2.setText(team2Chosen.getHealthBattle() + "/" + team2Chosen.getMaxHealthPoints());
+		healthPointsLabel2.setText(team2Chosen.getHealthBattle() 
+				+ "/" + team2Chosen.getMaxHealthPoints());
 		nameLabel2.setText("" + team2Chosen.getMonsterName());
 		levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
 	}
+	/**
+	 * Helper method creates labels and health bar rects.
+	 */
 	private void instantiateHealthAndLabels() {
 		healthBar1 = new Rectangle();
 		healthPointsLabel1 = new Label();
@@ -526,7 +556,15 @@ public class MonsterGUI extends Application {
 		nameLabel2 = new Label();
 		levelLabel2 = new Label();
 	}
-	private void setUpBattleLayout(GridPane battleLayout, Rectangle healthBarBack1, Rectangle healthBarBack2) {
+	/**
+	 * Sets up the battleLayout GridLayout.
+	 * @param battleLayout Layout to set up
+	 * @param healthBarBack1 Back of one health bar
+	 * @param healthBarBack2 Back of second health bar
+	 */
+	private void setUpBattleLayout(final GridPane battleLayout, 
+			final Rectangle healthBarBack1, 
+			final Rectangle healthBarBack2) {
 		battleLayout.add(healthBarBack1, 0, 1);
 		battleLayout.add(healthBar1, 0, 1);
 
@@ -539,7 +577,6 @@ public class MonsterGUI extends Application {
 		battleLayout.add(nameLabel2, 2, 0);
 		battleLayout.add(levelLabel2, 3, 0);
 		battleLayout.add(healthPointsLabel2, 2, 2);
-		//add the sprite images //Couldn't figure out how to do this - Alex
 		battleLayout.add(attackButton, 9, 1);
 		battleLayout.add(heavyButton, 8, 1);
 		battleLayout.add(healButton, 8, 2);
