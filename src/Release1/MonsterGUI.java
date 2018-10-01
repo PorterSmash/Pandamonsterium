@@ -9,8 +9,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+//import javafx.scene.canvas.Canvas;
+//import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -28,49 +28,67 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
-
+/**
+ * This class displays the monster battle to the user.
+ * It uses javafx elements to display a launch screen, monster
+ * choice menu, and a battle screen. The screen updates as the
+ * logic class does the bulk of the calculations.
+ * @author Michelle Vu, Justin Kaukonen, Alex Porter
+ *
+ */
 public class MonsterGUI extends Application {
-	Scene titleScene, monsterScene,battleScene,pickPokemon;
-	FlowPane switchMonPane;
-	Stage stage;
-	String test;
-	Monster choose = null;
-	Monster team1Chosen, team2Chosen = null;
-	Rectangle healthBar1, healthBar2;
-	Label HPLabel1, HPLabel2;
-	Label nameLabel1, nameLabel2;
-	Label levelLabel1, levelLabel2;
-	Text display;
-	ArrayList<Monster> player1Team = new ArrayList<Monster>();
-	ArrayList<Monster> player2Team = new ArrayList<Monster>();
-	Logic engine = new Logic();
-	Button attackButton, heavyButton, healButton, otherButton;
+	/** Declares the three needed scenes.*/
+	private Scene titleScene, monsterScene, battleScene, pickPokemon;
 	
-	ImageView player1Sprite;
-	ImageView player2Sprite;
+	/** Pane used for switching monsters. */
+	private FlowPane switchMonPane;
 	
+	/** Stage to be launched. */
+	private Stage stage;
+	
+	/** Placeholder for a chosen monster. */
+	private Monster choose = null;
+	
+	/** Placeholder for the monster from each chosen team. */
+	private Monster team1Chosen, team2Chosen = null;
+	
+	/**Health bars displays. */
+	private Rectangle healthBar1, healthBar2;
+	
+	/** Labels of each monsters health.*/
+	private Label healthPointsLabel1, healthPointsLabel2;
+	
+	/** Labels of each monster's name.*/
+	private Label nameLabel1, nameLabel2;
+	
+	/** Label for the monsters level.*/
+	private Label levelLabel1, levelLabel2;
+	
+	/** Text that gets shown on screen.*/
+	private Text display;
+	
+	/** Player one's team of monsters.*/
+	private ArrayList<Monster> player1Team = new ArrayList<Monster>();
+	
+	/** Player two's team of monsters.*/
+	private ArrayList<Monster> player2Team = new ArrayList<Monster>();
+	
+	/** An logic engine used for damage calculations.*/
+	private Logic engine = new Logic();
+	
+	/** the four buttons the player can access.*/
+	private Button attackButton, heavyButton, healButton, otherButton;
+	
+	/** Image for player 1s sprite.*/
+	private ImageView player1Sprite;
+	
+	/** Image for player 2s sprite.*/
+	private ImageView player2Sprite;
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(final Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Pandemon(ster)ium");
-		//the gridpane was functioning weird, so i did borderpane
-		//i think that it is good for what we are doing
 		BorderPane titleLayout = new BorderPane();
-		//		titleLayout.setPadding(new Insets(10, 10, 10, 10));
-		//		titleLayout.setHgap(10);
-		//		titleLayout.setVgap(10);
-		//Canvas canvas = new Canvas(600, 70);	
-
-
-		// Title
-		//		GraphicsContext gc = canvas.getGraphicsContext2D();
-		//		gc.setFill( Color.RED );
-		//		gc.setStroke( Color.BLACK );
-		//		gc.setLineWidth(2);
-		//		Font theFont = Font.font( "Verdana", FontWeight.BOLD, 48 );
-		//		gc.setFont( theFont );
-		//		gc.fillText( "PandeMonsterium", 60, 50 );
-		//		gc.strokeText( "PandeMonsterium", 60, 50 );
 
 		//instead of canvas, just do a text. less code?
 		Image titleImage = new Image("titlePic.png");
@@ -80,8 +98,6 @@ public class MonsterGUI extends Application {
 
 		// Start button
 		Button button = new Button("Start");
-		//button.setLayoutX(500);
-		//button.setLayoutY(500);
 		button.setPrefWidth(100);
 		button.setPrefHeight(50);
 		button.setOnAction(e -> primaryStage.setScene(monsterScene));
@@ -96,9 +112,6 @@ public class MonsterGUI extends Application {
 		titleImage1.setFitWidth(300);
 		BorderPane.setMargin(button, new Insets(100, 50, 50, 350));
 		BorderPane.setMargin(titleText, new Insets(10, 50, 50, 150));
-		//titleLayout.add(titleText, 11, 0);
-		//titleLayout.add(button, 1, 20);  
-		//	titleLayout.add(canvas, 3, 2);
 
 		titleScene = new Scene(titleLayout, 800, 600);
 		primaryStage.setScene(titleScene);
@@ -166,11 +179,9 @@ public class MonsterGUI extends Application {
 				}
 				if(playerTwoPicked) {
 
-
 					Monster m1 = new Monster();
 					Monster	m2 = new Monster();
 					Monster m3 = new Monster();
-
 
 					m1.monsterFactory(monster1);
 					m2.monsterFactory(monster2);
@@ -179,25 +190,7 @@ public class MonsterGUI extends Application {
 					team2Chosen = player2Team.get(0);
 					choose = m1;
 
-					int healthPercent1 = (250*team1Chosen.healthBattle)/team1Chosen.getHealthBattle();
-					healthBar1.setWidth(healthPercent1);
-					healthBar1.setHeight(5);
-					healthBar1.setStroke(Color.BLACK);
-					healthBar1.setFill(Color.GREEN);
-
-					int healthPercent2 = (250*team2Chosen.healthBattle)/team2Chosen.getHealthBattle();
-					healthBar2.setWidth(healthPercent2);
-					healthBar2.setHeight(5);
-					healthBar2.setStroke(Color.BLACK);
-					healthBar2.setFill(Color.GREEN);
-
-					HPLabel1.setText(team1Chosen.healthBattle + "/" + team1Chosen.maxHealthPoints);
-					nameLabel1.setText("" + team1Chosen.getMonsterName());
-					levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
-
-					HPLabel2.setText(team2Chosen.healthBattle + "/" + team2Chosen.maxHealthPoints);
-					nameLabel2.setText("" + team2Chosen.getMonsterName());
-					levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
+					setUpHealthBars();
 
 					engine.setTeamsAndMons(player1Team, player2Team, 0, 0); //sets the teams in the engine class to current teams
 					engine.startBattle(); //sets monster 1 of both teams onField value to true
@@ -206,17 +199,11 @@ public class MonsterGUI extends Application {
 					updateHpBars();
 				}
 			}
+
+			
 		});
 		// instantiating these here because, while the values can be updated later, they need to be objects to add them to the scene
-		healthBar1 = new Rectangle();
-		HPLabel1 = new Label();
-		nameLabel1 = new Label();
-		levelLabel1 = new Label();
-
-		healthBar2 = new Rectangle();
-		HPLabel2 = new Label();
-		nameLabel2 = new Label();
-		levelLabel2 = new Label();
+		instantiateHealthAndLabels();
 
 		monsterLayout.add(monsterBox1, 0, 0);
 		monsterLayout.add(monsterBox2, 0, 1);
@@ -264,26 +251,11 @@ public class MonsterGUI extends Application {
 
 
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
-			//Logic engine = new Logic(player1Team, player2Team);
 			@Override
 
 			public void handle(ActionEvent arg0) {
 				performMove(1);
-
-
-				/*if (engine.playerTurn == 1) {
-					team1Chosen.decreaseHealth(20);
-				} else {
-					team2Chosen.decreaseHealth(20);
-				}*/
-				//				performMove(1);
-				//				player1Team = engine.getTeam1();
-				//				player2Team = engine.getTeam2();
-
-				//updates
 				updateHpBars();
-				//engine.changeTurn();
-				//checks if it fainted/ needs to switch pokemon
 				checkFainted();
 
 			}
@@ -328,59 +300,19 @@ public class MonsterGUI extends Application {
 
 		// This is just a health bar ATM, haven't added the other things to this scene yet
 		battleScene = new Scene(battleLayout, 900, 600);
-
-
-		battleLayout.add(healthBarBack1, 0, 1);
-		battleLayout.add(healthBar1, 0, 1);
-
-		battleLayout.add(healthBarBack2, 2, 1);
-		battleLayout.add(healthBar2, 2, 1);
-		//add another health bar above the other sprite
-		battleLayout.add(nameLabel1, 0, 0);
-		battleLayout.add(levelLabel1, 1, 0);
-		battleLayout.add(HPLabel1, 0, 2);
-
-		battleLayout.add(nameLabel2, 2, 0);
-		battleLayout.add(levelLabel2, 3, 0);
-		battleLayout.add(HPLabel2, 2, 2);
-		//add the sprite images //Couldn't figure out how to do this - Alex
-		battleLayout.add(attackButton, 9, 1);
-		battleLayout.add(heavyButton, 8, 1);
-		battleLayout.add(healButton, 8, 2);
-		battleLayout.add(otherButton, 9, 2);
-		//add listeners to each of these buttons
-		//use the an int to decide each move the player chose
-		//performMove(int)
-
-		battleLayout.add(display, 0, 20);
-
-
-		//ok so this shows the image but idk how to make it change based off the pokemon. 
-		//bc the pokemon isnt chosen yet. maybe im being stupid bout it but LOL.
-		//battleLayout.add(updateImages(player1Team, 0), 0, 12);
-		//battleLayout.add(updateImages(player2Team, 0), 2, 12);
+		setUpBattleLayout(battleLayout, healthBarBack1, healthBarBack2);
 
 		player1Sprite = new ImageView(placeHolder);
 		player2Sprite = new ImageView(placeHolder);
 		
 		battleLayout.add(player1Sprite, 0, 12);	
 		battleLayout.add(player2Sprite, 2, 12);		
-		//	battleLayout.add(new ImageView(jolteon),0,12);		
-		//	battleLayout.add(new ImageView(raichu),0,12);
-		//	battleLayout.add(new ImageView(squirtle),0,12);
-
-
-		//battleLayout.add(new ImageView(charizard),2,12);
-
-		//battleLayout.add(new ImageView(nidoking),2,12);
-		//battleLayout.add(new ImageView(jolteon),2,12);
-		//battleLayout.add(new ImageView(raichu),2,12);
-		//	battleLayout.add(new ImageView(squirtle),2,12);
 
 
 		primaryStage.show();
 
 	}
+	
 	//checks if pokemon fainted
 	public void checkFainted() {
 		ArrayList<Monster> teamList;
@@ -483,13 +415,13 @@ public class MonsterGUI extends Application {
 	}
 
 	public void updateHpBars() {
-		healthBar1.setWidth((250*team1Chosen.healthBattle)/team1Chosen.maxHealthPoints);
-		HPLabel1.setText(team1Chosen.healthBattle + "/" + team1Chosen.maxHealthPoints);
+		healthBar1.setWidth((250*team1Chosen.getHealthBattle())/team1Chosen.getMaxHealthPoints());
+		healthPointsLabel1.setText(team1Chosen.getHealthBattle() + "/" + team1Chosen.getMaxHealthPoints());
 		levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
 		nameLabel1.setText("" + team1Chosen.getMonsterName());
 
-		healthBar2.setWidth((250*team2Chosen.healthBattle)/team2Chosen.maxHealthPoints);
-		HPLabel2.setText(team2Chosen.healthBattle + "/" + team2Chosen.maxHealthPoints);
+		healthBar2.setWidth((250*team2Chosen.getHealthBattle())/team2Chosen.getMaxHealthPoints());
+		healthPointsLabel2.setText(team2Chosen.getHealthBattle() + "/" + team2Chosen.getMaxHealthPoints());
 		levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
 		nameLabel2.setText("" +team2Chosen.getMonsterName());
 		
@@ -497,7 +429,7 @@ public class MonsterGUI extends Application {
 		player1Sprite.setImage(updateImages(team1Chosen));
 		player2Sprite.setImage(updateImages(team2Chosen));
 		
-		System.out.println(team1Chosen.healthBattle);
+		System.out.println(team1Chosen.getHealthBattle());
 		System.out.println(team1Chosen.getMonsterName());
 	}
 
@@ -559,6 +491,60 @@ public class MonsterGUI extends Application {
 
 	}
 	private Image updateImages(Monster monster) {
+		System.out.println(monster.getMonsterImagePath());
 		return new Image(monster.getMonsterImagePath());
+	}
+	private void setUpHealthBars() {
+		int healthPercent1 = (250*team1Chosen.getHealthBattle())/team1Chosen.getHealthBattle();
+		healthBar1.setWidth(healthPercent1);
+		healthBar1.setHeight(5);
+		healthBar1.setStroke(Color.BLACK);
+		healthBar1.setFill(Color.GREEN);
+
+		int healthPercent2 = (250*team2Chosen.getHealthBattle())/team2Chosen.getHealthBattle();
+		healthBar2.setWidth(healthPercent2);
+		healthBar2.setHeight(5);
+		healthBar2.setStroke(Color.BLACK);
+		healthBar2.setFill(Color.GREEN);
+
+		healthPointsLabel1.setText(team1Chosen.getHealthBattle() + "/" + team1Chosen.getMaxHealthPoints());
+		nameLabel1.setText("" + team1Chosen.getMonsterName());
+		levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
+
+		healthPointsLabel2.setText(team2Chosen.getHealthBattle() + "/" + team2Chosen.getMaxHealthPoints());
+		nameLabel2.setText("" + team2Chosen.getMonsterName());
+		levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
+	}
+	private void instantiateHealthAndLabels() {
+		healthBar1 = new Rectangle();
+		healthPointsLabel1 = new Label();
+		nameLabel1 = new Label();
+		levelLabel1 = new Label();
+
+		healthBar2 = new Rectangle();
+		healthPointsLabel2 = new Label();
+		nameLabel2 = new Label();
+		levelLabel2 = new Label();
+	}
+	private void setUpBattleLayout(GridPane battleLayout, Rectangle healthBarBack1, Rectangle healthBarBack2) {
+		battleLayout.add(healthBarBack1, 0, 1);
+		battleLayout.add(healthBar1, 0, 1);
+
+		battleLayout.add(healthBarBack2, 2, 1);
+		battleLayout.add(healthBar2, 2, 1);
+		battleLayout.add(nameLabel1, 0, 0);
+		battleLayout.add(levelLabel1, 1, 0);
+		battleLayout.add(healthPointsLabel1, 0, 2);
+
+		battleLayout.add(nameLabel2, 2, 0);
+		battleLayout.add(levelLabel2, 3, 0);
+		battleLayout.add(healthPointsLabel2, 2, 2);
+		//add the sprite images //Couldn't figure out how to do this - Alex
+		battleLayout.add(attackButton, 9, 1);
+		battleLayout.add(heavyButton, 8, 1);
+		battleLayout.add(healButton, 8, 2);
+		battleLayout.add(otherButton, 9, 2);
+
+		battleLayout.add(display, 0, 20);
 	}
 }

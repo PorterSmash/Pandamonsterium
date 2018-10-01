@@ -7,26 +7,84 @@ package Release1;
  * @version Fall 2018
  ***********************************************************************/
 public class Move {
-	/** how strong the move is*/
-	int attackPower;
+	/** How strong the move is. */
+	private int attackPower;
 	
-	/** the chance they will get an attack bonus*/
-	int critChance;
+	/** the chance they will get an attack bonus.*/
+	private int critChance;
 	
-	/** the chance they will land the attack*/
-	int hitChance;
-	
+	/** the chance they will land the attack.*/
+	private int hitChance;
+	/** Returns attack power.
+	 * 
+	 * @return attackPower
+	 */
+	public int getAttackPower() {
+		return attackPower;
+	}
+	/**
+	 * Sets attack power.
+	 * @param attackPower To set
+	 */
+	public void setAttackPower(final int attackPower) {
+		this.attackPower = attackPower;
+	}
+	/**
+	 * Returns critChance.
+	 * @return critChance
+	 */
+	public int getCritChance() {
+		return critChance;
+	}
+	/**
+	 * Sets critChance.
+	 * @param critChance Int to set
+	 */
+	public void setCritChance(final int critChance) {
+		this.critChance = critChance;
+	}
+	/**
+	 * Returns hitChance.
+	 * @return hitChance
+	 */
+	public int getHitChance() {
+		return hitChance;
+	}
+	/**
+	 * Sets hitChance.
+	 * @param hitChance Int to set
+	 */
+	public void setHitChance(final int hitChance) {
+		this.hitChance = hitChance;
+	}
+	/**
+	 * Returns moveTarget.
+	 * @return moveTarget
+	 */
+	public int getMoveTarget() {
+		return moveTarget;
+	}
+	/**
+	 * Sets move target.
+	 * @param moveTarget Int to set
+	 */
+	public void setMoveTarget(final int moveTarget) {
+		this.moveTarget = moveTarget;
+	}
+
+
 	/** move target?*/
-	int moveTarget;
+	private int moveTarget;
 	
 	/******************************************************************
-	 * Constructor that sets up the move's base stats
-	 * @param how strong the move's attack is
-	 * @param the chance the move has to get an attack bonus
-	 * @param the chance the move will land
-	 * @param mveTgt
+	 * Constructor that sets up the move's base stats.
+	 * @param mveTgt Who the damage is applied to 
+	 * @param atkPwr Strength of the move
+	 * @param crtChc Chance the move does double damage
+	 * @param htChc Chance the attack hits
 	 *****************************************************************/
-	public Move(int atkPwr, int crtChc, int htChc, int mveTgt) {
+	public Move(final int atkPwr, final int crtChc, 
+			final int htChc, final int mveTgt) {
 		attackPower = atkPwr;
 		critChance = crtChc;
 		hitChance = htChc;
@@ -35,8 +93,10 @@ public class Move {
 	
 	
 	/******************************************************************
-	 * Creates a string that returns each stat
+	 * Creates a string that returns each stat.
+	 * @return String that represents each stat.
 	 *****************************************************************/
+	@Override
 	public String toString() {
 		String toReturn = "";
 		toReturn += "Attack Power: " + this.attackPower;
