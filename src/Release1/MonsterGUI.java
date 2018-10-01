@@ -119,7 +119,7 @@ public class MonsterGUI extends Application {
 		// Monster Select Scene
 		GridPane monsterLayout = new GridPane();
 		FlowPane flowLayout = new FlowPane();
-		// GridPane in a FlowPane, because Gridpane is better but idk how to change background color
+		// GridPane in a FlowPane
 		flowLayout.setStyle("-fx-background-color: DAE6F3;");
 		flowLayout.getChildren().add(monsterLayout);
 
@@ -154,14 +154,14 @@ public class MonsterGUI extends Application {
 
 				String[] choices = {monster1, monster2, monster3};
 
-				if(choices[0] == null || choices[1] == null || choices[2] == null) {
+				if (choices[0] == null || choices[1] == null || choices[2] == null) {
 					System.out.println("You haven't chosen all monsters yet.");
 				}
 				else {
-					if(!(playerOnePicked)) {
+					if (!(playerOnePicked)) {
 						whichTeam.setText("Pick Team Two Monsters");
 
-						for(int i = 0; i < 3; i ++) {
+						for (int i = 0; i < 3; i ++) {
 							Monster monster = new Monster();
 							monster.monsterFactory(choices[i]);
 							player1Team.add(monster);
@@ -169,7 +169,7 @@ public class MonsterGUI extends Application {
 						playerOnePicked = true;
 					}
 					else {
-						for(int i = 0; i < 3; i ++) {
+						for (int i = 0; i < 3; i ++) {
 							Monster monster = new Monster();
 							monster.monsterFactory(choices[i]);
 							player2Team.add(monster);
@@ -177,7 +177,7 @@ public class MonsterGUI extends Application {
 						playerTwoPicked = true;
 					}
 				}
-				if(playerTwoPicked) {
+				if (playerTwoPicked) {
 
 					Monster m1 = new Monster();
 					Monster	m2 = new Monster();
@@ -327,7 +327,7 @@ public class MonsterGUI extends Application {
 			onFieldMon = team2Chosen;
 			teamNum = 2;
 		}
-		if(onFieldMon.getHealthBattle() <= 0) {
+		if (onFieldMon.getHealthBattle() <= 0) {
 
 			display.setText(onFieldMon.getMonsterName() + " Has Fainted");
 
@@ -355,14 +355,14 @@ public class MonsterGUI extends Application {
 								break;
 							}
 							int switchedMonsterIndex = 1;
-							for(int i = 0; i < teamList.size(); i++) {
-								if(teamList.get(i) == chosenMon) {
+							for (int i = 0; i < teamList.size(); i++) {
+								if (teamList.get(i) == chosenMon) {
 									switchedMonsterIndex = i;
 									//we may need to define a .equals() here, but it might still work
 								}
 							}
 							updateHpBars();
-							if(teamList == player1Team) {
+							if (teamList == player1Team) {
 							engine.setTeamsAndMons(player1Team, player2Team, switchedMonsterIndex, -1);
 							}
 							else {
@@ -443,14 +443,14 @@ public class MonsterGUI extends Application {
 		engine.setTeams(this.player1Team, this.player2Team);
 
 		ArrayList<Monster> team = new ArrayList<Monster>();
-		if(engine.getTurn() == 0) {
+		if (engine.getTurn() == 0) {
 			team = this.player1Team;
 		}
 		else {
 			team = this.player2Team;
 		}
-		for(Monster mon : team) {
-			if(mon.getOnField()) {
+		for (Monster mon : team) {
+			if (mon.getOnField()) {
 				onField = mon;
 			}
 		}
@@ -459,28 +459,28 @@ public class MonsterGUI extends Application {
 		switch(moveChoice) {
 		case 1:
 			engine.calculateDamage(onField.getMove1());
-			if(team == player1Team)
+			if (team == player1Team)
 				display.setText("Player 1 has attacked");
 			else
 				display.setText("Player 2 has attacked");
 			break;
 		case 2:
 			engine.calculateDamage(onField.getMove2());
-			if(team == player1Team)
+			if (team == player1Team)
 				display.setText("Player 1 has attacked");
 			else
 				display.setText("Player 2 has attacked");
 			break;
 		case 3:
 			engine.calculateDamage(onField.getMove3());
-			if(team == player1Team)
+			if (team == player1Team)
 				display.setText("Player 1 has healed");
 			else
 				display.setText("Player 2 has healed");
 			break;
 		case 4:
 			engine.calculateDamage(onField.getMove4());
-			if(team == player1Team)
+			if (team == player1Team)
 				display.setText("Player 1 performed move");
 			else
 				display.setText("Player 2 performed move");
