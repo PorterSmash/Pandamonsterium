@@ -42,7 +42,7 @@ Staryu
 95
 1
 staryu.png
-NidoKing
+Nidoking
 150
 8
 6

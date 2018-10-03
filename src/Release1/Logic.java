@@ -54,6 +54,42 @@ public class Logic {
 	}
 
 
+	private int calcDamage(Move moveCommitted) {
+		Monster target, attacker;
+		if (moveCommitted.getMoveTarget() == 0) {
+			target = player1Team.get(mon1);
+			attacker = player2Team.get(mon2);
+		} else {
+			target = player2Team.get(mon2);
+			attacker = player1Team.get(mon1);
+		}
+		int dmgNum = 0;
+
+		if (diceRoll(moveCommitted.getHitChance())) {
+			int dmgMultiplier = 1;
+			System.out.println("Move is a hit");
+			if (diceRoll(moveCommitted.getCritChance())) {
+				dmgMultiplier = 2;
+			}
+			dmgNum = ((moveCommitted.getAttackPower() + attacker.getAttackBattle()) * dmgMultiplier) - (target.getDefenseBattle() / 2);
+			if (dmgNum < 1) {
+				dmgNum = 1;
+			}
+		}
+
+		return dmgNum;
+	}
+
+	public void doMove(Move moveDone, int moveTarget) {
+		Monster target;
+		if (moveTarget == 0) {
+			target = player1Team.get(mon1);
+		} else {
+			target = player2Team.get(mon2);
+		}
+		target.decreaseHealth(calcDamage(moveDone));
+	}
+
 	/******************************************************************
 	 * Calculates the damage based on the move input. Can do a 
 	 * normal attack, heavy attack,
@@ -73,7 +109,7 @@ public class Logic {
 			opponentPlayerList = player2Team;
 			target1 = mon1;
 			target2 = mon2;
-	} else {
+		} else {
 			playerList = player2Team;
 			opponentPlayerList = player1Team;
 			target1 = mon2;
@@ -92,12 +128,12 @@ public class Logic {
 				playerList.get(target1).
 				decreaseHealth(moveCommitted.
 						getAttackPower() * critVal);
-			
+
 			} else {
 				System.out.println("Your attack missed");
 			}
-		
-	} else {
+
+		} else {
 			//monster damage is applied to is mon2
 			if (diceRoll(moveCommitted.getHitChance())) {
 				int critVal = 5;
@@ -108,11 +144,11 @@ public class Logic {
 				}
 				opponentPlayerList.get(target2).decreaseHealth(
 						(playerList.get(target1).
-						getAttackBattle() * critVal 
-						* ((10 - opponentPlayerList
-				.get(target2).getDefenseBattle()))) / 5);
-			
-	} else {
+								getAttackBattle() * critVal 
+								* ((10 - opponentPlayerList
+										.get(target2).getDefenseBattle()))) / 5);
+
+			} else {
 				System.out.println("Your attack missed");
 			}
 		}
@@ -140,9 +176,9 @@ public class Logic {
 	 *****************************************************************/
 	public void displayData() {
 		System.out.println("Char1 Health: " 
-	+ player1Team.get(mon1).getHealthBattle());
+				+ player1Team.get(mon1).getHealthBattle());
 		System.out.println("Char2 Health: " 
-	+ player2Team.get(mon2).getHealthBattle());
+				+ player2Team.get(mon2).getHealthBattle());
 		System.out.println("Last Move: " + lastMove.toString());
 
 	}
