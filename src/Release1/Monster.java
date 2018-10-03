@@ -38,9 +38,6 @@ import java.util.Scanner;
 	
 	/** what level the monster currently is.*/
 	private int monsterLevel;
-	
-	/** array list of the moves.*/
-	private ArrayList<Move> attackList;
  	
  	/** normal attack move.*/
 	private Move move1;
@@ -61,9 +58,6 @@ import java.util.Scanner;
 	
 	/** string that holds the monster name.*/
 	private String monsterName;
-	
-	/** holds the image of the monster.*/
-	private ImageIcon spriteImage;
  	
  	/** tells whether the monster is on field or not.*/
 	private boolean onField;
@@ -143,20 +137,6 @@ import java.util.Scanner;
  	 */
  	public void setSpeedBattle(final int speedBattle) {
 		this.speedBattle = speedBattle;
-	}
- 	/**
- 	 * 
- 	 * @return The list of moves a monster has
- 	 */
- 	public ArrayList<Move> getAttackList() {
-		return attackList;
-	}
- 	/**
- 	 * 
- 	 * @param attackList List to set
- 	 */
- 	public void setAttackList(final ArrayList<Move> attackList) {
-		this.attackList = attackList;
 	}
  	/**
  	 * 
@@ -244,20 +224,6 @@ import java.util.Scanner;
 	}
  	/**
  	 * 
- 	 * @return Sprite for the monster
- 	 */
- 	public ImageIcon getSpriteImage() {
-		return spriteImage;
-	}
- 	/**
- 	 * 
- 	 * @param spriteImage Image to represent monster
- 	 */
- 	public void setSpriteImage(final ImageIcon spriteImage) {
-		this.spriteImage = spriteImage;
-	}
- 	/**
- 	 * 
  	 * @return Max health stat
  	 */
  	public int getMaxHealthPoints() {
@@ -322,7 +288,6 @@ import java.util.Scanner;
 					defenseBattle = defensePoints;
 					speedBattle   = speedPoints;
 					
-					attackList = new ArrayList<Move>();
 					Move move1 = new Move(statArray[4], 
 						statArray[5], statArray[6],
 						statArray[7]); //light attack
@@ -389,18 +354,6 @@ import java.util.Scanner;
 			healthBattle = 0;
 		} else if (healthBattle > maxHealthPoints) {
 			healthBattle = maxHealthPoints;
-		}
-	}
- 	/**
- 	 * Returns a monsters move by index.
- 	 * @param atkNum Index of move
- 	 * @return Move that is returned
- 	 */
- 	public Move getMove(final int atkNum) {
-		if (atkNum >= 1 && atkNum <= 4) {
-			return attackList.get(atkNum);
-		} else {
-			return null;
 		}
 	}
  	/**
