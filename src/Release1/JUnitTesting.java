@@ -119,17 +119,64 @@ public class JUnitTesting {
 		assertEquals(testMonster.getSpeedBattle(), testMonster.getSpeedPoints());
 		assertEquals(testMonster.getHealthBattle(), testMonster.getMaxHealthPoints());
 	}
+	@Test
+	public void testLevelUP1() {
+		Monster testMonster = new Monster();
+		testMonster.setMaxHealthPoints(1);
+		testMonster.levelUp(1);
+		assertEquals(testMonster.getMaxHealthPoints(), 2);
+	}
+	@Test
+	public void testLevelUP2() {
+		Monster testMonster = new Monster();
+		testMonster.setDefensePoints(1);
+		testMonster.levelUp(1);
+		assertEquals(testMonster.getDefensePoints(), 2);
+	}
 	
-	
-	
+	@Test
+	public void testLevelUP3() {
+		Monster testMonster = new Monster();
+		testMonster.setAttackPoints(1);
+		testMonster.levelUp(1);
+		assertEquals(testMonster.getAttackPoints(), 2);
+	}
+	@Test
+	public void testLevelUP4() {
+		Monster testMonster = new Monster();
+		testMonster.setSpeedPoints(1);
+		testMonster.levelUp(1);
+		assertEquals(testMonster.getSpeedPoints(), 2);
+	}
+	@Test
+	public void testMonsterFactoryChar() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Charizard");
+		assertEquals(testMonster.getMaxHealthPoints(), 120);
+		assertEquals(testMonster.getAttackPoints(), 4);
+		assertEquals(testMonster.getDefensePoints(), 8);
+		assertEquals(testMonster.getSpeedPoints(), 6);
+	}
+	@Test
+	public void testMonsterFactoryStar() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Staryu");
+		assertEquals(testMonster.getMaxHealthPoints(), 100);
+		assertEquals(testMonster.getAttackPoints(), 6);
+		assertEquals(testMonster.getDefensePoints(), 6);
+		assertEquals(testMonster.getSpeedPoints(), 6);
+	}
 	/**
-	 * *********Monster Class*************
-	 * monsterFactory
-	 * level up
-	 * 	Case 1, 2, 3, 4
-	 *************************************/
-	/**
-	 * 
+	 * Monster Class is done
+	 * Begin Logic class
 	 */
-	
+	@Test
+	public void testLogic
+
+	/**
+	 * Change turn
+	 * specific constructor
+	 * dice roll (for 0 and 10)
+	 * set teams and mons
+	 */
 }
