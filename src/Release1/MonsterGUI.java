@@ -271,13 +271,22 @@ public class MonsterGUI extends Application {
 						player2Team = engine.getTeam2();
 						// TODO This should update the health bars before the pause, but it doesn't.
 						updateHpBars();
-						sleep(1000);
-						if (team2Chosen.getHealthBattle() != 0) {
+						//sleep(1000);
+						if (engine.getTurn() == 0) {
+							engine.changeTurn();
+						}
+						checkFainted(); // should check team 2
+						if (team2Chosen.getHealthBattle() > 0) {
 							engine.doMove(storedMoves[1], 0);
 							player1Team = engine.getTeam1();
 							player2Team = engine.getTeam2();
 							updateHpBars();
+
+							engine.changeTurn();
+
+							checkFainted(); // should check team 1
 						}
+
 						storedMoves[0] = null;
 						storedMoves[1] = null;
 					} else { // Team 2 is faster
@@ -287,20 +296,27 @@ public class MonsterGUI extends Application {
 						player2Team = engine.getTeam2();
 						// TODO This should update the health bars before the pause, but it doesn't.
 						updateHpBars();
-						sleep(1000);
+						if (engine.getTurn() == 1) {
+							engine.changeTurn();
+						}
+						checkFainted(); // should check team 1
+						//sleep(1000);
 						if (team1Chosen.getHealthBattle() != 0) {
 							engine.doMove(storedMoves[0], 1);
 							player1Team = engine.getTeam1();
 							player2Team = engine.getTeam2();
 							updateHpBars();
+								engine.changeTurn();
+							checkFainted();
 						}
+
 						storedMoves[0] = null;
 						storedMoves[1] = null;
 					}
 				}
 				// TODO This has the same effect as updating it multiple times above. Not sure what to do here.
 				//updateHpBars();
-				checkFainted();
+				//checkFainted();
 			}
 		});
 
@@ -631,15 +647,15 @@ public class MonsterGUI extends Application {
 
 		battleLayout.add(display, 0, 20);
 	}
-	
+
 	private void sleep(int milliseconds) {
 		try
 		{
-		    Thread.sleep(milliseconds);
+			Thread.sleep(milliseconds);
 		}
 		catch(InterruptedException ex)
 		{
-		    Thread.currentThread().interrupt();
+			Thread.currentThread().interrupt();
 		}
 	}
 }
