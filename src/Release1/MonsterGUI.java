@@ -1,6 +1,5 @@
 package Release1;
 
-
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -41,9 +40,6 @@ public class MonsterGUI extends Application {
 
 	/** Stage to be launched. */
 	private Stage stage;
-
-	/** Placeholder for a chosen monster. */
-	private Monster choose = null;
 
 	/** Placeholder for the monster from each chosen team. */
 	private Monster team1Chosen, team2Chosen = null;
@@ -196,7 +192,6 @@ public class MonsterGUI extends Application {
 					m3.monsterFactory(monster3);
 					team1Chosen = player1Team.get(0);
 					team2Chosen = player2Team.get(0);
-					choose = m1;
 
 					setUpHealthBars();
 
@@ -478,15 +473,15 @@ public class MonsterGUI extends Application {
 	 * Updates the HP bars for each monster.
 	 */
 	public void updateHpBars() {
-		healthBar1.setWidth((250 * team1Chosen.getHealthBattle())
-				/ team1Chosen.getMaxHealthPoints());
+		healthBar1.setWidth((250 * (double)team1Chosen.getHealthBattle())
+				/ (double)team1Chosen.getMaxHealthPoints());
 		healthPointsLabel1.setText(team1Chosen.getHealthBattle()
-				+ "/" + team1Chosen.getMaxHealthPoints());
+				+ "/" + (double)team1Chosen.getMaxHealthPoints());
 		levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
 		nameLabel1.setText("" + team1Chosen.getMonsterName());
 
-		healthBar2.setWidth((250 * team2Chosen.getHealthBattle())
-				/ team2Chosen.getMaxHealthPoints());
+		healthBar2.setWidth((250 * (double)team2Chosen.getHealthBattle())
+				/ (double)team2Chosen.getMaxHealthPoints());
 		healthPointsLabel2.setText(team2Chosen.getHealthBattle() 
 				+ "/" + team2Chosen.getMaxHealthPoints());
 		levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
@@ -523,7 +518,7 @@ public class MonsterGUI extends Application {
 		Monster onField = new Monster();
 		engine.setTeams(this.player1Team, this.player2Team);
 
-		ArrayList<Monster> team = new ArrayList<Monster>();
+		ArrayList<Monster> team;
 		if (engine.getTurn() == 0) {
 			team = this.player1Team;
 		} else {

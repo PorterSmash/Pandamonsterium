@@ -240,8 +240,8 @@ public class JUnitTesting {
 		team1.add(tester);
 		team2.add(tester);
 		testLogic.setTeamsAndMons(team1, team2, 0, 0);
-		assertEquals(testLogic.getMon1(), tester);
-		assertEquals(testLogic.getMon2(), tester);
+		assertEquals( testLogic.getTeam1().get(0), tester);
+		assertEquals(testLogic.getTeam2().get(0), tester);
 	}
 	/**
 	 * there may be a way to test doDamage but at the moment I can't be bothered to try - Alex P, 11:23pm 10/3/2018

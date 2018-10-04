@@ -259,7 +259,7 @@ import java.util.Scanner;
 		String fileName = "MonsterInfo.txt";
 		try {
 			//Reads each line in the file looking for monster name.
-			fileIn = new Scanner(new File(fileName));
+			fileIn = new Scanner(new File(fileName),"UTF-8");
 			String nextLine;
 			while (fileIn.hasNextLine()) {
 				nextLine = fileIn.nextLine();
