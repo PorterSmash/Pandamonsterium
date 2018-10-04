@@ -170,8 +170,6 @@ public class JUnitTesting {
 	 * Monster Class is done
 	 * Begin Logic class
 	 */
-	@Test
-	public void testLogic
 
 	/**
 	 * Change turn
