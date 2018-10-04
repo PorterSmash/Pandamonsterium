@@ -201,8 +201,7 @@ public class MonsterGUI extends Application {
 					setUpHealthBars();
 
 					engine.setTeamsAndMons(player1Team, 
-							player2Team, 0, 0); 
-					engine.startBattle(); 
+							player2Team, 0, 0);
 
 					primaryStage.setScene(battleScene);
 					updateHpBars();

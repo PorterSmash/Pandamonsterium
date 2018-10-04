@@ -53,8 +53,12 @@ public class Logic {
 
 	}
 
-
-	private int calcDamage(Move moveCommitted) {
+	/**
+	 * Calculates the damage to do for a given move.
+	 * @param moveCommitted Move to be done
+	 * @return int the damage to be applied
+	 */
+	private int calcDamage(final Move moveCommitted) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
 			target = player1Team.get(mon1);
@@ -71,16 +75,23 @@ public class Logic {
 			if (diceRoll(moveCommitted.getCritChance())) {
 				dmgMultiplier = 2;
 			}
-			dmgNum = ((moveCommitted.getAttackPower() + attacker.getAttackBattle()) * dmgMultiplier) - (target.getDefenseBattle() / 2);
+			dmgNum = ((moveCommitted.getAttackPower() 
+					+ attacker.getAttackBattle()) 
+					* dmgMultiplier) - (target.
+							getDefenseBattle() / 2);
 			if (dmgNum < 1) {
-				dmgNum = 1;
+				dmgNum = 1; //What about healing?
 			}
 		}
 
 		return dmgNum;
 	}
-
-	public void doMove(Move moveDone, int moveTarget) {
+	/**
+	 * Applies the damage to a monster.
+	 * @param moveDone Move to be committed
+	 * @param moveTarget Monster target of the move
+	 */
+	public void doMove(final Move moveDone, final int moveTarget) {
 		Monster target;
 		if (moveTarget == 0) {
 			target = player1Team.get(mon1);
@@ -144,9 +155,9 @@ public class Logic {
 				}
 				opponentPlayerList.get(target2).decreaseHealth(
 						(playerList.get(target1).
-								getAttackBattle() * critVal 
-								* ((10 - opponentPlayerList
-										.get(target2).getDefenseBattle()))) / 5);
+					getAttackBattle() * critVal 
+					* ((10 - opponentPlayerList
+			.get(target2).getDefenseBattle()))) / 5);
 
 			} else {
 				System.out.println("Your attack missed");
@@ -208,11 +219,11 @@ public class Logic {
 
 		if (team1Index == -1) {
 			this.mon2 = team2Index;
-		}
-		else if (team2Index == -1) {
+		
+	} else if (team2Index == -1) {
 			this.mon1 = team1Index;
-		}
-		else {
+		
+	} else {
 			this.mon1 = team1Index;
 			this.mon2 = team2Index;
 		}
@@ -252,13 +263,6 @@ public class Logic {
 		return player2Team;
 	}
 
-	/*****************************************************************
-	 * Starts the game by setting the intitial monsters on the field.
-	 *****************************************************************/
-	public void startBattle() {
-		player1Team.get(0).setOnField(true);
-		player2Team.get(0).setOnField(true);
-	}
 
 	/*****************************************************************
 	 * Gets you the monster on field for player 1.

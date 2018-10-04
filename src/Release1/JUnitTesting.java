@@ -1,6 +1,9 @@
 package Release1;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
 import org.junit.Test;
 
 public class JUnitTesting {
@@ -130,7 +133,7 @@ public class JUnitTesting {
 	public void testLevelUP2() {
 		Monster testMonster = new Monster();
 		testMonster.setDefensePoints(1);
-		testMonster.levelUp(1);
+		testMonster.levelUp(2);
 		assertEquals(testMonster.getDefensePoints(), 2);
 	}
 	
@@ -138,14 +141,14 @@ public class JUnitTesting {
 	public void testLevelUP3() {
 		Monster testMonster = new Monster();
 		testMonster.setAttackPoints(1);
-		testMonster.levelUp(1);
+		testMonster.levelUp(3);
 		assertEquals(testMonster.getAttackPoints(), 2);
 	}
 	@Test
 	public void testLevelUP4() {
 		Monster testMonster = new Monster();
 		testMonster.setSpeedPoints(1);
-		testMonster.levelUp(1);
+		testMonster.levelUp(4);
 		assertEquals(testMonster.getSpeedPoints(), 2);
 	}
 	@Test
@@ -166,15 +169,90 @@ public class JUnitTesting {
 		assertEquals(testMonster.getDefensePoints(), 6);
 		assertEquals(testMonster.getSpeedPoints(), 6);
 	}
+	@Test
+	public void testDecreaseHealth() {
+		Monster testMonster = new Monster();
+		testMonster.setHealthBattle(100);
+		testMonster.setMaxHealthPoints(100);
+		System.out.println(testMonster.getHealthBattle());
+		testMonster.decreaseHealth(10);
+		System.out.println(testMonster.getHealthBattle());
+		assertEquals(testMonster.getHealthBattle(), 90);
+	}
+	@Test
+	public void testDecreaseHealthKill() {
+		Monster testMonster = new Monster();
+		testMonster.setHealthBattle(100);
+		testMonster.decreaseHealth(101);
+		assertEquals(testMonster.getHealthBattle(), 0);
+	}
+	@Test
+	public void testDecreaseHealthOver() {
+		Monster testMonster = new Monster();
+		testMonster.setMaxHealthPoints(100);
+		testMonster.setHealthBattle(100);
+		testMonster.decreaseHealth(-1);
+		assertEquals(testMonster.getHealthBattle(), 100);
+	}
 	/**
 	 * Monster Class is done
 	 * Begin Logic class
 	 */
-
+	@Test
+	public void testChangeTurn() {
+		Logic testLogic = new Logic();
+		int turn = testLogic.getTurn();
+		testLogic.changeTurn();
+		assertNotEquals(turn, testLogic.getTurn());
+	}
+	@Test
+	public void testSpecificConstructor() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		Monster tester = new Monster();
+		tester.monsterFactory("Charizard");
+		team1.add(tester);
+		team2.add(tester);
+		testLogic.setTeamsAndMons(team1, team2, 0, 0);
+		Logic secondTest = new Logic(team1, team2);
+		assertEquals(secondTest.getTeam1(), testLogic.getTeam1());
+		assertEquals(secondTest.getTeam2(), testLogic.getTeam2());
+		assertEquals(secondTest.getMon1(), testLogic.getMon1());
+		assertEquals(secondTest.getMon2(), testLogic.getMon2());
+	}
+	@Test
+	public void testSetTeams() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		team1.add(new Monster());
+		testLogic.setTeams(team1, team1);
+		assertEquals(testLogic.getTeam1(), team1);
+		assertEquals(testLogic.getTeam2(), team1);
+	}
+	@Test
+	public void testGetMons() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		Monster tester = new Monster();
+		tester.monsterFactory("Charizard");
+		team1.add(tester);
+		team2.add(tester);
+		testLogic.setTeamsAndMons(team1, team2, 0, 0);
+		assertEquals(testLogic.getMon1(), tester);
+		assertEquals(testLogic.getMon2(), tester);
+	}
 	/**
-	 * Change turn
-	 * specific constructor
-	 * dice roll (for 0 and 10)
-	 * set teams and mons
+	 * there may be a way to test doDamage but at the moment I can't be bothered to try - Alex P, 11:23pm 10/3/2018
+	 */
+	/**
+	 * End Logic
+	 * Begin MonsterGUI
+	 */
+	/**Impossible to test MonsterGUI
+	 * End MonsterGUI
+	 * End all tests? (coverage as, see if I can get more)
+	 * 
 	 */
 }
