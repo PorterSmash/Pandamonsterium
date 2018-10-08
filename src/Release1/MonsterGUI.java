@@ -232,7 +232,7 @@ public class MonsterGUI extends Application {
 		healButton = new Button("Heal");
 		otherButton = new Button("Other");
 		
-		battleLog = new TextArea("Test");
+		battleLog = new TextArea();
 
 		// Pokemon HP bar
 		Rectangle healthBarBack1 = new Rectangle(250, 5);
@@ -273,9 +273,7 @@ public class MonsterGUI extends Application {
 					engine.doMove(storedMoves[0], 1);
 						player1Team = engine.getTeam1();
 						player2Team = engine.getTeam2();
-						// TODO This should update the health bars before the pause, but it doesn't.
 						updateHpBars();
-						//sleep(1000);
 						if (engine.getTurn() == 0) {
 							engine.changeTurn();
 						}
@@ -289,6 +287,8 @@ public class MonsterGUI extends Application {
 							engine.changeTurn();
 
 				checkFainted(); // should check team 1
+						} else {
+							engine.incTurnNum();
 						}
 
 						storedMoves[0] = null;
@@ -297,13 +297,11 @@ public class MonsterGUI extends Application {
 			engine.doMove(storedMoves[1], 0);
 						player1Team = engine.getTeam1();
 						player2Team = engine.getTeam2();
-				// TODO This should update the health bars before the pause, but it doesn't.
 						updateHpBars();
 						if (engine.getTurn() == 1) {
 							engine.changeTurn();
 						}
 				checkFainted(); // should check team 1
-						//sleep(1000);
 			if (team1Chosen.getHealthBattle() != 0) {
 					engine.doMove(storedMoves[0], 1);
 					player1Team = engine.getTeam1();
@@ -311,25 +309,77 @@ public class MonsterGUI extends Application {
 							updateHpBars();
 						engine.changeTurn();
 							checkFainted();
+						} else {
+							engine.incTurnNum();
 						}
 
 						storedMoves[0] = null;
 						storedMoves[1] = null;
 					}
 				}
-				// TODO This has the same effect as updating it multiple times above. Not sure what to do here.
-				//updateHpBars();
-				//checkFainted();
 			}
 		});
 
 		heavyButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void handle(final ActionEvent event) {
-				performMove(2);
-				updateHpBars();
-				checkFainted();
+			public void handle(final ActionEvent arg0) {
+				if (storedMoves[0] == null) {
+					storedMoves[0] = team1Chosen.getMove2();
+				} else if (storedMoves[1] == null) {
+					storedMoves[1] = team2Chosen.getMove2();
+					if (team1Chosen.getSpeedBattle() 
+					> team2Chosen.getSpeedBattle()) {
+	System.out.println("Player 1 attacked first. Speed: " 
+		 + team1Chosen.getSpeedBattle() + " vs. " 
+						+ team2Chosen.getSpeedBattle());
+					engine.doMove(storedMoves[0], 1);
+						player1Team = engine.getTeam1();
+						player2Team = engine.getTeam2();
+						updateHpBars();
+						if (engine.getTurn() == 0) {
+							engine.changeTurn();
+						}
+				checkFainted(); // should check team 2
+				if (team2Chosen.getHealthBattle() > 0) {
+					engine.doMove(storedMoves[1], 0);
+					player1Team = engine.getTeam1();
+					player2Team = engine.getTeam2();
+							updateHpBars();
+
+							engine.changeTurn();
+
+				checkFainted(); // should check team 1
+						} else {
+							engine.incTurnNum();
+						}
+
+						storedMoves[0] = null;
+						storedMoves[1] = null;
+					} else { // Team 2 is faster
+			engine.doMove(storedMoves[1], 0);
+						player1Team = engine.getTeam1();
+						player2Team = engine.getTeam2();
+						updateHpBars();
+						if (engine.getTurn() == 1) {
+							engine.changeTurn();
+						}
+				checkFainted(); // should check team 1
+			if (team1Chosen.getHealthBattle() != 0) {
+					engine.doMove(storedMoves[0], 1);
+					player1Team = engine.getTeam1();
+					player2Team = engine.getTeam2();
+							updateHpBars();
+						engine.changeTurn();
+							checkFainted();
+						} else {
+							engine.incTurnNum();
+						}
+
+						storedMoves[0] = null;
+						storedMoves[1] = null;
+					}
+				}
 			}
 		});
 
@@ -356,7 +406,7 @@ public class MonsterGUI extends Application {
 		//images 
 		Image placeHolder = new Image("titlePic.png");
 
-		battleScene = new Scene(battleLayout, 900, 600);
+		battleScene = new Scene(battleLayout, 1050, 720);
 		setUpBattleLayout(battleLayout, healthBarBack1, healthBarBack2);
 
 		player1Sprite = new ImageView(placeHolder);
@@ -387,7 +437,9 @@ public class MonsterGUI extends Application {
 			teamNum = 2;
 		}
 		if (onFieldMon.getHealthBattle() <= 0) {
-
+			engine.addBattleText(onFieldMon.getMonsterName() 
+					+ " Has Fainted\n");
+			updateHpBars();
 			display.setText(onFieldMon.getMonsterName() 
 					+ " Has Fainted");
 
@@ -418,6 +470,7 @@ public class MonsterGUI extends Application {
 							default:
 								break;
 							}
+					engine.addBattleText("Team " + (engine.getTurn() + 1) + " sent out " + chosenMon.getMonsterName() + "!\n");
 					int switchedMonsterIndex = 1;
 				for (int i = 0; i < teamList.size(); i++) {
 					if (teamList.get(i) == chosenMon) {
@@ -657,17 +710,5 @@ public class MonsterGUI extends Application {
 		battleLayout.add(battleLog, 0, 21);
 
 		battleLayout.add(display, 0, 20);
-	}
-	
-	/**
-	 * No sleep methods allowed.
-	 * @param milliseconds Sleep time
-	 */
-	private void sleep(final int milliseconds) {
-		try {
-			Thread.sleep(milliseconds);
-	} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
 	}
 }

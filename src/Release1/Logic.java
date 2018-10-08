@@ -32,7 +32,7 @@ public class Logic {
 	/** Text that shows previous turns in battle */
 	private String battleLogText;
 	
-	/** Turn number for the battle log to differentiate between turns */
+	/** Turn number for battle log to differentiate between turns */
 	private int turnNum = 1;
 
 	/******************************************************************
@@ -67,15 +67,12 @@ public class Logic {
 	 */
 	private int calcDamage(final Move moveCommitted) {
 		Monster target, attacker;
-		int teamNum;
 		if (moveCommitted.getMoveTarget() == 0) {
 			target = player1Team.get(mon1);
 			attacker = player2Team.get(mon2);
-			teamNum = 2;
 		} else {
 			target = player2Team.get(mon2);
 			attacker = player1Team.get(mon1);
-			teamNum = 1;
 		}
 		int dmgNum = 0;
 
@@ -89,9 +86,6 @@ public class Logic {
 					+ attacker.getAttackBattle()) 
 					* dmgMultiplier) - (target.
 							getDefenseBattle() / 2);
-			if (dmgNum < 1) {
-				dmgNum = 1; //What about healing?
-			}
 		}
 		return dmgNum;
 	}
@@ -117,10 +111,18 @@ public class Logic {
 		target.decreaseHealth(dmgDone);
 		
 		turnNum++;
+		String firstOrSecond;
+		if (turnNum % 2 == 0) {
+			firstOrSecond = "first";
+		} else {
+			firstOrSecond = "second";
+		}
+		
 		battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
 				getMonsterName() + " (Team " + teamNum + ") attacked "
 				+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
-				+ 1) + ") for " + dmgDone + " damage.\n" + battleLogText;
+				+ 1) + ") " + firstOrSecond + " for " + dmgDone
+						+ " damage.\n" + battleLogText;
 	}
 
 	/******************************************************************
@@ -309,7 +311,23 @@ public class Logic {
 		return playerTurn;
 	}
 
+	/*****************************************************************
+	 * Gets the text to update the battle log.
+	 * @return The battle log text.
+	 *****************************************************************/
 	public String getBattleText() {
 		return battleLogText;
+	}
+	
+	/*****************************************************************
+	 * Appends text to the battle log text.
+	 * @param battleText the text to add to the battle log
+	 *****************************************************************/
+	public void addBattleText(String battleText) {
+		battleLogText = battleText + battleLogText;
+	}
+	
+	public void incTurnNum() {
+		turnNum++;
 	}
 }
