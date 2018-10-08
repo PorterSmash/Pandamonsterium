@@ -11,6 +11,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -76,6 +77,9 @@ public class MonsterGUI extends Application {
 
 	/** Image for player 2s sprite.*/
 	private ImageView player2Sprite;
+	
+	/** Log to let the user know what just happened */
+	private TextArea battleLog;
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -227,6 +231,8 @@ public class MonsterGUI extends Application {
 		heavyButton = new Button("Heavy Attack");
 		healButton = new Button("Heal");
 		otherButton = new Button("Other");
+		
+		battleLog = new TextArea("Test");
 
 		// Pokemon HP bar
 		Rectangle healthBarBack1 = new Rectangle(250, 5);
@@ -288,9 +294,6 @@ public class MonsterGUI extends Application {
 						storedMoves[0] = null;
 						storedMoves[1] = null;
 					} else { // Team 2 is faster
-		System.out.println("Player 2 attacked first. Speed: " 
-			+ team1Chosen.getSpeedBattle() + " vs. " 
-			+ team2Chosen.getSpeedBattle());
 			engine.doMove(storedMoves[1], 0);
 						player1Team = engine.getTeam1();
 						player2Team = engine.getTeam2();
@@ -476,7 +479,7 @@ public class MonsterGUI extends Application {
 		healthBar1.setWidth((250 * (double)team1Chosen.getHealthBattle())
 				/ (double)team1Chosen.getMaxHealthPoints());
 		healthPointsLabel1.setText(team1Chosen.getHealthBattle()
-				+ "/" + (double)team1Chosen.getMaxHealthPoints());
+				+ "/" + team1Chosen.getMaxHealthPoints());
 		levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
 		nameLabel1.setText("" + team1Chosen.getMonsterName());
 
@@ -489,6 +492,8 @@ public class MonsterGUI extends Application {
 
 		player1Sprite.setImage(updateImages(team1Chosen));
 		player2Sprite.setImage(updateImages(team2Chosen));
+		
+		battleLog.setText(engine.getBattleText());
 	}
 
 	/**
@@ -648,6 +653,8 @@ public class MonsterGUI extends Application {
 		battleLayout.add(heavyButton, 8, 1);
 		battleLayout.add(healButton, 8, 2);
 		battleLayout.add(otherButton, 9, 2);
+		
+		battleLayout.add(battleLog, 0, 21);
 
 		battleLayout.add(display, 0, 20);
 	}

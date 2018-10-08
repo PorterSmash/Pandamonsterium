@@ -28,6 +28,12 @@ public class Logic {
 
 	/** shows whose turn it is.*/
 	private int playerTurn = 0;
+	
+	/** Text that shows previous turns in battle */
+	private String battleLogText;
+	
+	/** Turn number for the battle log to differentiate between turns */
+	private int turnNum = 1;
 
 	/******************************************************************
 	 * Constructor that creates an arraylist of monsters for player 1.
@@ -42,6 +48,7 @@ public class Logic {
 
 		player1Team = player1;
 		player2Team = player2;
+		battleLogText = "";
 	}
 
 
@@ -50,7 +57,7 @@ public class Logic {
 	 * Default constructor.
 	 *****************************************************************/
 	public Logic() {
-
+		battleLogText = "";
 	}
 
 	/**
@@ -60,12 +67,15 @@ public class Logic {
 	 */
 	private int calcDamage(final Move moveCommitted) {
 		Monster target, attacker;
+		int teamNum;
 		if (moveCommitted.getMoveTarget() == 0) {
 			target = player1Team.get(mon1);
 			attacker = player2Team.get(mon2);
+			teamNum = 2;
 		} else {
 			target = player2Team.get(mon2);
 			attacker = player1Team.get(mon1);
+			teamNum = 1;
 		}
 		int dmgNum = 0;
 
@@ -83,7 +93,6 @@ public class Logic {
 				dmgNum = 1; //What about healing?
 			}
 		}
-
 		return dmgNum;
 	}
 	/**
@@ -93,12 +102,25 @@ public class Logic {
 	 */
 	public void doMove(final Move moveDone, final int moveTarget) {
 		Monster target;
+		Monster attacker;
+		int teamNum;
 		if (moveTarget == 0) {
 			target = player1Team.get(mon1);
+			attacker = player2Team.get(mon2);
+			teamNum = 2;
 		} else {
 			target = player2Team.get(mon2);
+			attacker = player1Team.get(mon1);
+			teamNum = 1;
 		}
-		target.decreaseHealth(calcDamage(moveDone));
+		int dmgDone = calcDamage(moveDone);
+		target.decreaseHealth(dmgDone);
+		
+		turnNum++;
+		battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+				getMonsterName() + " (Team " + teamNum + ") attacked "
+				+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
+				+ 1) + ") for " + dmgDone + " damage.\n" + battleLogText;
 	}
 
 	/******************************************************************
@@ -287,4 +309,7 @@ public class Logic {
 		return playerTurn;
 	}
 
+	public String getBattleText() {
+		return battleLogText;
+	}
 }
