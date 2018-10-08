@@ -3,296 +3,330 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import javax.swing.ImageIcon;
-
-public class Monster implements MonsterInterface {
-	int maxHealthPoints;
-	int defensePoints;
-	int attackPoints;
-	int speedPoints;
+ import javax.swing.ImageIcon;
+ 
+ /*********************************************************************
+  * Monster class that holds all of the monsters statistics that 
+  * implements the monster interface.
+  * @author Michelle Vu, Alex Porter, and Justin Kaukonen 
+  * @version Fall 2018
+  ********************************************************************/
+ public class Monster {
+	/** the monsters max health points.*/
+	private int maxHealthPoints;
 	
-	int healthBattle;
-	int attackBattle;
-	int defenseBattle;
-	int speedBattle;
-
-	ArrayList<Move> attackList;
-	Move move1;
-	Move move2;
-	Move move3;
-	Move move4;
-
-	String monsterImagePath;
-	String soundFilePath;
-	String monsterName;
-
-
-	//ImageIcon spriteImage;
+	/** how much initial defense the monster has.*/
+	private int defensePoints;
+	
+	/** how strong the monster initially is.*/
+	private int attackPoints;
+	
+	/** how fast the monster initially is.*/
+	private int speedPoints;
+	
+	/** the monsters max health points during battle.*/
+	private int healthBattle;
+	
+	/** how strong the monster is during battle.*/
+	private int attackBattle;
+	
+	/** how much defense the monster has during battle. */
+	private int defenseBattle;
+	
+	/** how fast the monster is during battle.*/
+	private int speedBattle;
+	
+	/** what level the monster currently is.*/
+	private int monsterLevel;
+ 	
+ 	/** normal attack move.*/
+	private Move move1;
+	
+	/** heavy attack move.*/
+	private Move move2;
+	
+	/** heal move. */
+	private Move move3;
+	
+	/** other attack move.*/
+	private Move move4;
+	/** string that holds the name of image. */
+	private String monsterImagePath;
+ 	
+ 	/** string that holds the name of the sound file. */
+	private String soundFilePath;
+	
+	/** string that holds the monster name.*/
+	private String monsterName;
+ 	
+ 	/** tells whether the monster is on field or not.*/
 	private boolean onField;
 	
+	/**
+	 * This method is for release 2.
+	 * @return Level of the monster
+	 */
+	public final int getLevel() {
+		return monsterLevel;
+	}
+	/**
+	 * 
+	 * @return String name of monster
+	 */
 	public String getMonsterName() {
 		return monsterName;
 	}
-
-	public void setMonsterName(String monsterName) {
+	/**
+	 * 
+	 * @param monsterName Monster name to set
+	 */
+ 	public void setMonsterName(final String monsterName) {
 		this.monsterName = monsterName;
 	}
+ 	/**
+ 	 * @return Battle health of monster
+ 	 */
 	public int getHealthBattle() {
 		return healthBattle;
 	}
-
-	public void setHealthBattle(int healthBattle) {
+	/**
+	 * 
+	 * @param healthBattle Sets health of monster
+	 */
+ 	public void setHealthBattle(final int healthBattle) {
 		this.healthBattle = healthBattle;
 	}
-
-	public int getAttackBattle() {
+ 	/**
+ 	 * 
+ 	 * @return Attack battle stat of monster
+ 	 */
+ 	public int getAttackBattle() {
 		return attackBattle;
 	}
-
-	public void setAttackBattle(int attackBattle) {
+ 	/**
+ 	 * 
+ 	 * @param attackBattle Stat to set
+ 	 */
+ 	public void setAttackBattle(final int attackBattle) {
 		this.attackBattle = attackBattle;
 	}
-
-	public int getDefenseBattle() {
+ 	/**
+ 	 * 
+ 	 * @return Defense battle stat
+ 	 */
+ 	public int getDefenseBattle() {
 		return defenseBattle;
 	}
-
-	public void setDefenseBattle(int defenseBattle) {
+ 	/**
+ 	 * 
+ 	 * @param defenseBattle Stat to set
+ 	 */
+ 	public void setDefenseBattle(final int defenseBattle) {
 		this.defenseBattle = defenseBattle;
 	}
-
-	public int getSpeedBattle() {
+ 	/**
+ 	 * 
+ 	 * @return Speed battle stat
+ 	 */
+ 	public int getSpeedBattle() {
 		return speedBattle;
 	}
-
-	public void setSpeedBattle(int speedBattle) {
+ 	/**
+ 	 * 
+ 	 * @param speedBattle Stat to set
+ 	 */
+ 	public void setSpeedBattle(final int speedBattle) {
 		this.speedBattle = speedBattle;
 	}
-
-	public ArrayList<Move> getAttackList() {
-		return attackList;
-	}
-
-	public void setAttackList(ArrayList<Move> attackList) {
-		this.attackList = attackList;
-	}
-
-	public Move getMove1() {
+ 	/**
+ 	 * 
+ 	 * @return First move
+ 	 */
+ 	public Move getMove1() {
 		return move1;
 	}
-
-	public void setMove1(Move move1) {
+ 	/**
+ 	 * 
+ 	 * @param move1 First move to set
+ 	 */
+ 	public void setMove1(final Move move1) {
 		this.move1 = move1;
 	}
-
-	public Move getMove2() {
+ 	/**
+ 	 * 
+ 	 * @return Second move
+ 	 */
+ 	public Move getMove2() {
 		return move2;
 	}
-
-	public void setMove2(Move move2) {
+ 	/**
+ 	 * 
+ 	 * @param move2 Second move to set
+ 	 */
+ 	public void setMove2(final Move move2) {
 		this.move2 = move2;
 	}
-
-	public Move getMove3() {
+ 	/**
+ 	 * 
+ 	 * @return Third move
+ 	 */
+ 	public Move getMove3() {
 		return move3;
 	}
-
-	public void setMove3(Move move3) {
+ 	/**
+ 	 * 
+ 	 * @param move3 Third move to set
+ 	 */
+ 	public void setMove3(final Move move3) {
 		this.move3 = move3;
 	}
-
-	public Move getMove4() {
+ 	/**
+ 	 * 
+ 	 * @return Fourth move
+ 	 */
+ 	public Move getMove4() {
 		return move4;
 	}
-
-	public void setMove4(Move move4) {
+ 	/**
+ 	 * 
+ 	 * @param move4 Fourth move to set
+ 	 */
+ 	public void setMove4(final Move move4) {
 		this.move4 = move4;
 	}
-
-	public String getMonsterImagePath() {
+ 	/**
+ 	 * 
+ 	 * @return Image path of the monster
+ 	 */
+ 	public String getMonsterImagePath() {
 		return monsterImagePath;
 	}
-
-	public void setMonsterImagePath(String monsterImagePath) {
+ 	/**
+ 	 * 
+ 	 * @param monsterImagePath String for image path
+ 	 */
+ 	public void setMonsterImagePath(final String monsterImagePath) {
 		this.monsterImagePath = monsterImagePath;
 	}
-
-	public String getSoundFilePath() {
+ 	/**
+ 	 * 
+ 	 * @return sound file path
+ 	 */
+ 	public String getSoundFilePath() {
 		return soundFilePath;
 	}
-
-	public void setSoundFilePath(String soundFilePath) {
+ 	/**
+ 	 * 
+ 	 * @param soundFilePath Path for the sound file
+ 	 */
+ 	public void setSoundFilePath(final String soundFilePath) {
 		this.soundFilePath = soundFilePath;
 	}
-
-/*	public ImageIcon getSpriteImage() {
-		return spriteImage;
-	}
-
-	public void setSpriteImage(ImageIcon spriteImage) {
-		this.spriteImage = spriteImage;
-	}*/
-
-	public int getMaxHealthPoints() {
+ 	/**
+ 	 * 
+ 	 * @return Max health stat
+ 	 */
+ 	public int getMaxHealthPoints() {
 		return maxHealthPoints;
 	}
-
-	public int getDefensePoints() {
+ 	/**
+ 	 * 
+ 	 * @return Max defense points
+ 	 */
+ 	public int getDefensePoints() {
 		return defensePoints;
 	}
-
-	public int getAttackPoints() {
+ 	/**
+ 	 * 
+ 	 * @return Max attack points
+ 	 */
+ 	public int getAttackPoints() {
 		return attackPoints;
 	}
-
-	public int getSpeedPoints() {
+ 	/**
+ 	 * 
+ 	 * @return Max speed points
+ 	 */
+ 	public int getSpeedPoints() {
 		return speedPoints;
 	}
-
-	
-
-	public void monsterFactory(String monsterName) {
+ 	/**
+ 	 * Generates monsters by reading from a file.
+ 	 * @param monName String for monster to generate
+ 	 */
+	public void monsterFactory(final String monName) {
+		Scanner fileIn = null;
 		String fileName = "MonsterInfo.txt";
-		File monFile = new File(fileName);
-        Scanner scnr = null;
-        try {
-            scnr = new Scanner(monFile);
-            while (scnr.hasNextLine()) {
-                if (scnr.next().equals(monsterName)) {
-                	
-                    scnr.nextLine(); //skip past the monster name
-                    
-                    //there's got to be a better looking way to do this, but I can't think of anything at the moment
-                    this.maxHealthPoints = Integer.parseInt(scnr.nextLine());
-                    this.defensePoints = Integer.parseInt(scnr.nextLine());
-                    this.attackPoints = Integer.parseInt(scnr.nextLine());
-                    this.speedPoints = Integer.parseInt(scnr.nextLine());
-                    
-                    
-                    //there's got to be a cleaner way to do this but I can't think of it at the moment
-                    this.move1 = new Move(Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()));
-                    this.move2 = new Move(Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()));
-                    this.move3 = new Move(Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()));
-                    this.move4 = new Move(Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()), Integer.parseInt(scnr.nextLine()));
-                    
-                    this.monsterImagePath = scnr.nextLine();
-                    break;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("The file was not found");
-            e.printStackTrace();
-        } finally {
-            if (scnr != null) {
-                scnr.close();
-            }
-        }
-	}
-		/*if (monsterName.equals("Charizard")) {
-			this.monsterName = "Charizard";
-			setMaxHealthPoints(120);
-			setAttackPoints(4);
-			setDefensePoints(8);
-			setSpeedPoints(6);
-			
-			//when the monster is first created, we can set these to the values above
-			healthBattle  = maxHealthPoints;
-			int attackBattle  = 8;
-			int defenseBattle = 0;
-			int speedBattle   = 0;
-			
-			ArrayList<Move> attackList = new ArrayList<Move>();
-			Move move1 = new Move(5, 2, 95, 1); //light attack
-			Move move2 = new Move(7, 1, 75, 1); //heavy attack
-			Move move3 = new Move(-3, 1, 95, 0); //heal
-			Move move4 = new Move(0, 1, 95, 1); //block
-			return;
-		} else if (monsterName.equals("Staryu")) {
-			this.monsterName = "Staryu";
-			setMaxHealthPoints(100);
-			setAttackPoints(6);
-			setDefensePoints(6);
-			setSpeedPoints(6);
-			
-			//when the monster is first created, we can set these to the values above
-			healthBattle  = maxHealthPoints;
-			int attackBattle  = 8;
-			int defenseBattle = 0;
-			int speedBattle   = 0;
-			
-			ArrayList<Move> attackList = new ArrayList<Move>();
-			Move move1 = new Move(5, 2, 95, 1);
-			Move move2 = new Move(7, 1, 75, 1); 
-			Move move3 = new Move(-3, 1, 95, 0);
-			Move move4 = new Move(0, 1, 95, 1); //block
-			return;
-		} else if (monsterName.equals("Nidoking")) {
-			this.monsterName = "Nidoking";
-			setMaxHealthPoints(150);
-			setAttackPoints(8);
-			setDefensePoints(6);
-			setSpeedPoints(2);
-			
-			//when the monster is first created, we can set these to the values above
-			int healthBattle  = maxHealthPoints;
-			int attackBattle  = 8;
-			int defenseBattle = 0;
-			int speedBattle   = 0;
-			
-			ArrayList<Move> attackList = new ArrayList<Move>();
-			Move move1 = new Move(5, 2, 95, 1);
-			Move move2 = new Move(7, 1, 75, 1); 
-			Move move3 = new Move(-3, 1, 95, 0);
-			Move move4 = new Move(0, 1, 95, 1); //block
-			return;
-		} else if (monsterName.equals("Jolteon")) {
-			this.monsterName = "Jolteon";
-			setMaxHealthPoints(80);
-			setAttackPoints(6);
-			setDefensePoints(4);
-			setSpeedPoints(8);
-			
-			//when the monster is first created, we can set these to the values above
-			int healthBattle  = maxHealthPoints;
-			int attackBattle  = 8;
-			int defenseBattle = 0;
-			int speedBattle   = 0;
-			
-			ArrayList<Move> attackList = new ArrayList<Move>();
-			Move move1 = new Move(5, 2, 95, 1);
-			Move move2 = new Move(7, 1, 75, 1); 
-			Move move3 = new Move(-3, 1, 95, 0);
-			Move move4 = new Move(0, 1, 95, 1); //block
-			return;
-		} else if (monsterName.equals("Ferguson")) {
-			this.monsterName = "Ferguson";
-			setMaxHealthPoints(999);
-			setAttackPoints(999);
-			setDefensePoints(999);
-			setSpeedPoints(999);
-			
-			//when the monster is first created, we can set these to the values above
-			int healthBattle  = maxHealthPoints;
-			int attackBattle  = 999;
-			int defenseBattle = 999;
-			int speedBattle   = 999;
-			
-			ArrayList<Move> attackList = new ArrayList<Move>();
-			Move move1 = new Move(120, 20, 100, 1);
-			Move move2 = new Move(120, 20, 100, 1); 
-			Move move3 = new Move(120, 20, 100, 0);
-			Move move4 = new Move(120, 20, 100, 1); //block
-			return;
-		} else {
-			//do nothing?! let user know something failed
-			System.out.println("fail");
+		try {
+			//Reads each line in the file looking for monster name.
+			fileIn = new Scanner(new File(fileName),"UTF-8");
+			String nextLine;
+			while (fileIn.hasNextLine()) {
+				nextLine = fileIn.nextLine();
+				if (nextLine.equals(monName)) {
+		// Read the activity name, ON icon file path, and OFF file path.
+					monsterName = nextLine;
+					monsterLevel = 1;
+					
+					int[] statArray = new int[20];
+					for (int i = 0; i < 20; i++) {
+						statArray[i] = Integer.parseInt(
+				fileIn.nextLine());
+					}
+					
+					setMonsterImagePath(fileIn.nextLine());
+					
+					
+					setMaxHealthPoints(statArray[0]);
+					setAttackPoints(statArray[1]);
+					setDefensePoints(statArray[2]);
+					setSpeedPoints(statArray[3]);
+					
+		//when a monster is created, we set these to the values above
+					healthBattle  = maxHealthPoints;
+					attackBattle  = attackPoints;
+					defenseBattle = defensePoints;
+					speedBattle   = speedPoints;
+					
+					Move move1 = new Move(statArray[4], 
+						statArray[5], statArray[6],
+						statArray[7]); //light attack
+					Move move2 = new Move(statArray[8],
+							statArray[9], 
+						statArray[10],
+						statArray[11]); //heavy attack
+					Move move3 = new Move(statArray[12],
+						statArray[13], statArray[14],
+						statArray[15]); //heal
+					Move move4 = new Move(statArray[16],
+						statArray[17], 
+						statArray[18], 
+						statArray[19]); //block
+					
+					this.move1 = move1;
+					this.move2 = move2;
+					this.move3 = move3;
+					this.move4 = move4;
+					
+					
+					break;
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (fileIn != null) {
+				fileIn.close();
+			}
 		}
-	}*/
+	}
 	
-	//this level up method will be useless until release 2, because it's just pick a monster and fight atm
-	public void levelUp(int statID) {
-		switch(statID) {
+	/**
+	 * Will be used for release 2, this improves the monster.
+	 * @param statID Stat to be increased
+	 */
+	public void levelUp(final int statID) {
+		switch (statID) {
 		case 1:
 			maxHealthPoints += 1;
 			break;
@@ -306,53 +340,68 @@ public class Monster implements MonsterInterface {
 			speedPoints += 1;
 			break;
 		default:
-			System.out.println("Invalid stat ID was passed to levelUp method");
+			System.out.println("Invalid stat ID was "
+					+ "passed to levelUp method");
 		}
-
-	}
-
-	public void decreaseHealth(int healthDecNum) {
+ 	}
+	/**
+	 * Decreases the health of the monster.
+	 * @param healthDecNum Value to decrease by
+	 */
+ 	public void decreaseHealth(final int healthDecNum) {
 		healthBattle -= healthDecNum;
 		if (healthBattle <= 0) {
 			healthBattle = 0;
-			//faint ();
 		} else if (healthBattle > maxHealthPoints) {
 			healthBattle = maxHealthPoints;
 		}
 	}
-
-	public Move getMove(int atkNum) {
-		if (atkNum >= 1 && atkNum <= 4) {
-			return attackList.get(atkNum);
-		} else {
-			return null; //tes
-		}
-	}
-
-	public void setMaxHealthPoints(int maxHealthPoints) {
+ 	/**
+ 	 * Sets the max health points of the monster.
+ 	 * @param maxHealthPoints Value to set
+ 	 */
+ 	public void setMaxHealthPoints(final int maxHealthPoints) {
 		this.maxHealthPoints = maxHealthPoints;
-		// TODO also set battle hp, defense, attack, etc...
 	}
-
-	public void setDefensePoints(int defensePoints) {
+ 	/**
+ 	 * Set max defense points of the monster.
+ 	 * @param defensePoints Value to set
+ 	 */
+ 	public void setDefensePoints(final int defensePoints) {
 		this.defensePoints = defensePoints;
 	}
-
-	public void setAttackPoints(int attackPoints) {
+ 	/**
+ 	 * Set max attack of the monster.
+ 	 * @param attackPoints Value to set
+ 	 */
+ 	public void setAttackPoints(final int attackPoints) {
 		this.attackPoints = attackPoints;
 	}
-
-	public void setSpeedPoints(int speedPoints) {
+ 	/**
+ 	 *  Set max speed of the monster.
+ 	 * @param speedPoints Value to set
+ 	 */
+ 	public void setSpeedPoints(final int speedPoints) {
 		this.speedPoints = speedPoints;
 	}
-	
-	public void setOnField(boolean flag) {
+	/**
+	 * Set the monster to being on the field or not.
+	 * @param flag Bool to set
+	 */
+	public void setOnField(final boolean flag) {
 		onField = flag;
 	}
+	/**
+	 * Returns onField value.
+	 * @return Boolean onField
+	 */
 	public boolean getOnField() {
 		return onField;
 	}
 	
+	/**
+	 * Resets a monsters stats after they faint.
+	 */
 	public void resetStats() {
 		healthBattle = maxHealthPoints;
 		attackBattle = attackPoints;
