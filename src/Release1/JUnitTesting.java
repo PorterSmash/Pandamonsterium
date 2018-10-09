@@ -109,7 +109,7 @@ public class JUnitTesting {
 		assertEquals(testMonster.getOnField(), true);
 	}
 	@Test
-	public void testResetStats() {
+	public void testResetStats1() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Charizard");
 		testMonster.setAttackPoints(1);
@@ -118,8 +118,36 @@ public class JUnitTesting {
 		testMonster.setMaxHealthPoints(4);
 		testMonster.resetStats();
 		assertEquals(testMonster.getDefenseBattle(), testMonster.getDefensePoints());
+	}
+	@Test
+	public void testResetStats2() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Charizard");
+		testMonster.setAttackPoints(1);
+		testMonster.setDefensePoints(2);
+		testMonster.setSpeedPoints(3);
+		testMonster.setMaxHealthPoints(4);
+		testMonster.resetStats();
 		assertEquals(testMonster.getAttackBattle(), testMonster.getAttackPoints());
+	}
+	public void testResetStats3() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Charizard");
+		testMonster.setAttackPoints(1);
+		testMonster.setDefensePoints(2);
+		testMonster.setSpeedPoints(3);
+		testMonster.setMaxHealthPoints(4);
+		testMonster.resetStats();
 		assertEquals(testMonster.getSpeedBattle(), testMonster.getSpeedPoints());
+	}
+	public void testResetStats4() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Charizard");
+		testMonster.setAttackPoints(1);
+		testMonster.setDefensePoints(2);
+		testMonster.setSpeedPoints(3);
+		testMonster.setMaxHealthPoints(4);
+		testMonster.resetStats();
 		assertEquals(testMonster.getHealthBattle(), testMonster.getMaxHealthPoints());
 	}
 	@Test
@@ -152,31 +180,61 @@ public class JUnitTesting {
 		assertEquals(testMonster.getSpeedPoints(), 2);
 	}
 	@Test
-	public void testMonsterFactoryChar() {
+	public void testMonsterFactoryChar1() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Charizard");
 		assertEquals(testMonster.getMaxHealthPoints(), 120);
+	}
+	
+	@Test
+	public void testMonsterFactoryChar2() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Charizard");
 		assertEquals(testMonster.getAttackPoints(), 4);
+	}
+	@Test
+	public void testMonsterFactoryChar3() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Charizard");
 		assertEquals(testMonster.getDefensePoints(), 8);
+	}
+	@Test
+	public void testMonsterFactoryChar4() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Charizard");
 		assertEquals(testMonster.getSpeedPoints(), 6);
 	}
 	@Test
-	public void testMonsterFactoryStar() {
+	public void testMonsterFactoryStar1() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Staryu");
 		assertEquals(testMonster.getMaxHealthPoints(), 100);
+	}
+	@Test
+	public void testMonsterFactoryStar2() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Staryu");
 		assertEquals(testMonster.getAttackPoints(), 6);
+	}
+	@Test
+	public void testMonsterFactoryStar3() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Staryu");
 		assertEquals(testMonster.getDefensePoints(), 6);
+	}
+	@Test
+	public void testMonsterFactoryStar4() {
+		Monster testMonster = new Monster();
+		testMonster.monsterFactory("Staryu");
 		assertEquals(testMonster.getSpeedPoints(), 6);
 	}
+	
 	@Test
 	public void testDecreaseHealth() {
 		Monster testMonster = new Monster();
 		testMonster.setHealthBattle(100);
 		testMonster.setMaxHealthPoints(100);
-		System.out.println(testMonster.getHealthBattle());
 		testMonster.decreaseHealth(10);
-		System.out.println(testMonster.getHealthBattle());
 		assertEquals(testMonster.getHealthBattle(), 90);
 	}
 	@Test
@@ -206,7 +264,7 @@ public class JUnitTesting {
 		assertNotEquals(turn, testLogic.getTurn());
 	}
 	@Test
-	public void testSpecificConstructor() {
+	public void testSpecificConstructor1() {
 		Logic testLogic = new Logic();
 		ArrayList<Monster> team1 = new ArrayList<Monster>();
 		ArrayList<Monster> team2 = new ArrayList<Monster>();
@@ -217,21 +275,9 @@ public class JUnitTesting {
 		testLogic.setTeamsAndMons(team1, team2, 0, 0);
 		Logic secondTest = new Logic(team1, team2);
 		assertEquals(secondTest.getTeam1(), testLogic.getTeam1());
-		assertEquals(secondTest.getTeam2(), testLogic.getTeam2());
-		assertEquals(secondTest.getMon1(), testLogic.getMon1());
-		assertEquals(secondTest.getMon2(), testLogic.getMon2());
 	}
 	@Test
-	public void testSetTeams() {
-		Logic testLogic = new Logic();
-		ArrayList<Monster> team1 = new ArrayList<Monster>();
-		team1.add(new Monster());
-		testLogic.setTeams(team1, team1);
-		assertEquals(testLogic.getTeam1(), team1);
-		assertEquals(testLogic.getTeam2(), team1);
-	}
-	@Test
-	public void testGetMons() {
+	public void testSpecificConstructor2() {
 		Logic testLogic = new Logic();
 		ArrayList<Monster> team1 = new ArrayList<Monster>();
 		ArrayList<Monster> team2 = new ArrayList<Monster>();
@@ -240,9 +286,76 @@ public class JUnitTesting {
 		team1.add(tester);
 		team2.add(tester);
 		testLogic.setTeamsAndMons(team1, team2, 0, 0);
-		assertEquals( testLogic.getTeam1().get(0), tester);
-		assertEquals(testLogic.getTeam2().get(0), tester);
+		Logic secondTest = new Logic(team1, team2);
+		assertEquals(secondTest.getTeam2(), testLogic.getTeam2());
 	}
+	@Test
+	public void testSpecificConstructor3() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		Monster tester = new Monster();
+		tester.monsterFactory("Charizard");
+		team1.add(tester);
+		team2.add(tester);
+		testLogic.setTeamsAndMons(team1, team2, 0, 0);
+		Logic secondTest = new Logic(team1, team2);
+		assertEquals(secondTest.getMon1(), testLogic.getMon1());
+	}
+	@Test
+	public void testSpecificConstructor4() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		Monster tester = new Monster();
+		tester.monsterFactory("Charizard");
+		team1.add(tester);
+		team2.add(tester);
+		testLogic.setTeamsAndMons(team1, team2, 0, 0);
+		Logic secondTest = new Logic(team1, team2);
+		assertEquals(secondTest.getMon2(), testLogic.getMon2());
+	}
+	@Test
+	public void testSetTeams1() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		team1.add(new Monster());
+		testLogic.setTeams(team1, team1);
+		assertEquals(testLogic.getTeam1(), team1);
+	}
+	@Test
+	public void testSetTeams2() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		team1.add(new Monster());
+		testLogic.setTeams(team1, team1);
+		assertEquals(testLogic.getTeam2(), team1);
+	}
+	@Test
+	public void testGetMons1() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		Monster tester = new Monster();
+		tester.monsterFactory("Charizard");
+		team1.add(tester);
+		team2.add(tester);
+		testLogic.setTeamsAndMons(team1, team2, 0, 0);
+		assertEquals(testLogic.getMon1(), tester);
+	}
+	@Test
+	public void testGetMons2() {
+		Logic testLogic = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		Monster tester = new Monster();
+		tester.monsterFactory("Charizard");
+		team1.add(tester);
+		team2.add(tester);
+		testLogic.setTeamsAndMons(team1, team2, 0, 0);
+		assertEquals(testLogic.getMon2(), tester);
+	}
+	
 	/**
 	 * there may be a way to test doDamage but at the moment I can't be bothered to try - Alex P, 11:23pm 10/3/2018
 	 */
