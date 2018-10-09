@@ -28,10 +28,10 @@ public class Logic {
 
 	/** shows whose turn it is.*/
 	private int playerTurn = 0;
-	
+
 	/** Text that shows previous turns in battle */
 	private String battleLogText;
-	
+
 	/** Turn number for battle log to differentiate between turns */
 	private int turnNum = 1;
 
@@ -94,7 +94,7 @@ public class Logic {
 	 * @param moveDone Move to be committed
 	 * @param moveTarget Monster target of the move
 	 */
-	public void doMove(final Move moveDone, final int moveTarget) {
+	public void doMove(final Move moveDone, final int moveTarget,final int moveNum) {
 		Monster target;
 		Monster attacker;
 		int teamNum;
@@ -109,7 +109,7 @@ public class Logic {
 		}
 		int dmgDone = calcDamage(moveDone);
 		target.decreaseHealth(dmgDone);
-		
+
 		turnNum++;
 		String firstOrSecond;
 		if (turnNum % 2 == 0) {
@@ -117,12 +117,33 @@ public class Logic {
 		} else {
 			firstOrSecond = "second";
 		}
-		
-		battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
-				getMonsterName() + " (Team " + teamNum + ") attacked "
-				+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
-				+ 1) + ") " + firstOrSecond + " for " + dmgDone
-						+ " damage.\n" + battleLogText;
+		if(moveNum ==1) {
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+					getMonsterName() + " (Team " + teamNum + ") attacked "
+					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
+							+ 1) + ") " + firstOrSecond + " for " + dmgDone
+					+ " damage.\n" + battleLogText;
+		}
+		if(moveNum==2)
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+			getMonsterName() + " (Team " + teamNum + ") heavily attacked "
+			+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
+					+ 1) + ") " + firstOrSecond + " for " + dmgDone
+			+ " damage.\n" + battleLogText;
+
+		if(moveNum ==3) {
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+					getMonsterName() + " (Team " + teamNum + ") healed themselves "
+					+  "with " + Math.abs(dmgDone)
+					+ " health points.\n" + battleLogText;
+		}
+		if(moveNum==4) {
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+					getMonsterName() + " (Team " + teamNum + ") special attacked "
+					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
+							+ 1) + ") " + firstOrSecond + " for " + dmgDone
+					+ " damage.\n" + battleLogText;
+		}
 	}
 
 	/******************************************************************
@@ -179,9 +200,9 @@ public class Logic {
 				}
 				opponentPlayerList.get(target2).decreaseHealth(
 						(playerList.get(target1).
-					getAttackBattle() * critVal 
-					* ((10 - opponentPlayerList
-			.get(target2).getDefenseBattle()))) / 5);
+								getAttackBattle() * critVal 
+								* ((10 - opponentPlayerList
+										.get(target2).getDefenseBattle()))) / 5);
 
 			} else {
 				System.out.println("Your attack missed");
@@ -243,11 +264,11 @@ public class Logic {
 
 		if (team1Index == -1) {
 			this.mon2 = team2Index;
-		
-	} else if (team2Index == -1) {
+
+		} else if (team2Index == -1) {
 			this.mon1 = team1Index;
-		
-	} else {
+
+		} else {
 			this.mon1 = team1Index;
 			this.mon2 = team2Index;
 		}
@@ -318,7 +339,7 @@ public class Logic {
 	public String getBattleText() {
 		return battleLogText;
 	}
-	
+
 	/*****************************************************************
 	 * Appends text to the battle log text.
 	 * @param battleText the text to add to the battle log
@@ -326,7 +347,7 @@ public class Logic {
 	public void addBattleText(String battleText) {
 		battleLogText = battleText + battleLogText;
 	}
-	
+
 	public void incTurnNum() {
 		turnNum++;
 	}

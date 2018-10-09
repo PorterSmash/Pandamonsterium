@@ -41,6 +41,8 @@ public class MonsterGUI extends Application {
 
 	/** Stage to be launched. */
 	private Stage stage;
+	
+	private Move[] storedMoves;
 
 	/** Placeholder for the monster from each chosen team. */
 	private Monster team1Chosen, team2Chosen = null;
@@ -56,9 +58,6 @@ public class MonsterGUI extends Application {
 
 	/** Label for the monsters level.*/
 	private Label levelLabel1, levelLabel2;
-
-	/** Text that gets shown on screen.*/
-	private Text display;
 
 	/** Player one's team of monsters.*/
 	private ArrayList<Monster> player1Team = new ArrayList<Monster>();
@@ -77,7 +76,7 @@ public class MonsterGUI extends Application {
 
 	/** Image for player 2s sprite.*/
 	private ImageView player2Sprite;
-	
+
 	/** Log to let the user know what just happened */
 	private TextArea battleLog;
 	@Override
@@ -148,67 +147,67 @@ public class MonsterGUI extends Application {
 		// Chooses the monster, updates elements in the battle scene
 		chooseMonsterButton.setOnAction(
 				new EventHandler<ActionEvent>() {
-			private boolean playerOnePicked;
-			private boolean playerTwoPicked;
+					private boolean playerOnePicked;
+					private boolean playerTwoPicked;
 
-			@Override
-			public void handle(final ActionEvent arg0) {
-				String monster1 = monsterBox1.getValue();
-				String monster2 = monsterBox2.getValue();
-				String monster3 = monsterBox3.getValue();
+					@Override
+					public void handle(final ActionEvent arg0) {
+						String monster1 = monsterBox1.getValue();
+						String monster2 = monsterBox2.getValue();
+						String monster3 = monsterBox3.getValue();
 
-				String[] choices = {monster1, 
-						monster2, monster3};
+						String[] choices = {monster1, 
+								monster2, monster3};
 
-				if (choices[0] == null || choices[1] == null
-						|| choices[2] == null) {
-					System.out.println(
-							"Choose all monsters");
-				} else {
-					if (!(playerOnePicked)) {
-						whichTeam.setText(
-			"Pick Team Two Monsters");
+						if (choices[0] == null || choices[1] == null
+								|| choices[2] == null) {
+							System.out.println(
+									"Choose all monsters");
+						} else {
+							if (!(playerOnePicked)) {
+								whichTeam.setText(
+										"Pick Team Two Monsters");
 
-						for (int i = 0; i < 3; i++) {
-				Monster monster = new Monster();
-				monster.monsterFactory(choices[i]);
-				player1Team.add(monster);
+								for (int i = 0; i < 3; i++) {
+									Monster monster = new Monster();
+									monster.monsterFactory(choices[i]);
+									player1Team.add(monster);
+								}
+								playerOnePicked = true;
+
+							} else {
+								for (int i = 0; i < 3; i++) {
+									Monster monster = new Monster();
+									monster.monsterFactory(choices[i]);
+									player2Team.add(monster);
+								}
+								playerTwoPicked = true;
+							}
 						}
-						playerOnePicked = true;
+						if (playerTwoPicked) {
 
-					} else {
-						for (int i = 0; i < 3; i++) {
-				Monster monster = new Monster();
-				monster.monsterFactory(choices[i]);
-				player2Team.add(monster);
+							Monster m1 = new Monster();
+							Monster	m2 = new Monster();
+							Monster m3 = new Monster();
+
+							m1.monsterFactory(monster1);
+							m2.monsterFactory(monster2);
+							m3.monsterFactory(monster3);
+							team1Chosen = player1Team.get(0);
+							team2Chosen = player2Team.get(0);
+
+							setUpHealthBars();
+
+							engine.setTeamsAndMons(player1Team, 
+									player2Team, 0, 0);
+
+							primaryStage.setScene(battleScene);
+							updateHpBars();
 						}
-						playerTwoPicked = true;
 					}
-				}
-				if (playerTwoPicked) {
-
-					Monster m1 = new Monster();
-					Monster	m2 = new Monster();
-					Monster m3 = new Monster();
-
-					m1.monsterFactory(monster1);
-					m2.monsterFactory(monster2);
-					m3.monsterFactory(monster3);
-					team1Chosen = player1Team.get(0);
-					team2Chosen = player2Team.get(0);
-
-					setUpHealthBars();
-
-					engine.setTeamsAndMons(player1Team, 
-							player2Team, 0, 0);
-
-					primaryStage.setScene(battleScene);
-					updateHpBars();
-				}
-			}
 
 
-		});
+				});
 
 		instantiateHealthAndLabels();
 
@@ -231,7 +230,7 @@ public class MonsterGUI extends Application {
 		heavyButton = new Button("Heavy Attack");
 		healButton = new Button("Heal");
 		otherButton = new Button("Other");
-		
+
 		battleLog = new TextArea();
 
 		// Pokemon HP bar
@@ -243,9 +242,6 @@ public class MonsterGUI extends Application {
 		healthBarBack2.setStroke(Color.BLACK);
 		healthBarBack2.setFill(Color.RED);
 
-		//displays comments
-		display = new Text();
-		display.setText("Welcome to the Pandemonsterium Arena");
 
 		//for the fainted new stage
 		stage = new Stage();
@@ -255,68 +251,13 @@ public class MonsterGUI extends Application {
 		switchMonPane.setVgap(10);
 		pickPokemon = new Scene(switchMonPane);
 
-		Move[] storedMoves = new Move[2];
+		storedMoves = new Move[2];
 
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 
 			public void handle(final ActionEvent arg0) {
-				if (storedMoves[0] == null) {
-					storedMoves[0] = team1Chosen.getMove1();
-				} else if (storedMoves[1] == null) {
-					storedMoves[1] = team2Chosen.getMove1();
-					if (team1Chosen.getSpeedBattle() 
-					> team2Chosen.getSpeedBattle()) {
-	System.out.println("Player 1 attacked first. Speed: " 
-		 + team1Chosen.getSpeedBattle() + " vs. " 
-						+ team2Chosen.getSpeedBattle());
-					engine.doMove(storedMoves[0], 1);
-						player1Team = engine.getTeam1();
-						player2Team = engine.getTeam2();
-						updateHpBars();
-						if (engine.getTurn() == 0) {
-							engine.changeTurn();
-						}
-				checkFainted(); // should check team 2
-				if (team2Chosen.getHealthBattle() > 0) {
-					engine.doMove(storedMoves[1], 0);
-					player1Team = engine.getTeam1();
-					player2Team = engine.getTeam2();
-							updateHpBars();
-
-							engine.changeTurn();
-
-				checkFainted(); // should check team 1
-						} else {
-							engine.incTurnNum();
-						}
-
-						storedMoves[0] = null;
-						storedMoves[1] = null;
-					} else { // Team 2 is faster
-			engine.doMove(storedMoves[1], 0);
-						player1Team = engine.getTeam1();
-						player2Team = engine.getTeam2();
-						updateHpBars();
-						if (engine.getTurn() == 1) {
-							engine.changeTurn();
-						}
-				checkFainted(); // should check team 1
-			if (team1Chosen.getHealthBattle() != 0) {
-					engine.doMove(storedMoves[0], 1);
-					player1Team = engine.getTeam1();
-					player2Team = engine.getTeam2();
-							updateHpBars();
-						engine.changeTurn();
-							checkFainted();
-						} else {
-							engine.incTurnNum();
-						}
-
-						storedMoves[0] = null;
-						storedMoves[1] = null;
-					}
-				}
+				buttonMove(1);
 			}
 		});
 
@@ -324,72 +265,15 @@ public class MonsterGUI extends Application {
 
 			@Override
 			public void handle(final ActionEvent arg0) {
-				if (storedMoves[0] == null) {
-					storedMoves[0] = team1Chosen.getMove2();
-				} else if (storedMoves[1] == null) {
-					storedMoves[1] = team2Chosen.getMove2();
-					if (team1Chosen.getSpeedBattle() 
-					> team2Chosen.getSpeedBattle()) {
-	System.out.println("Player 1 attacked first. Speed: " 
-		 + team1Chosen.getSpeedBattle() + " vs. " 
-						+ team2Chosen.getSpeedBattle());
-					engine.doMove(storedMoves[0], 1);
-						player1Team = engine.getTeam1();
-						player2Team = engine.getTeam2();
-						updateHpBars();
-						if (engine.getTurn() == 0) {
-							engine.changeTurn();
-						}
-				checkFainted(); // should check team 2
-				if (team2Chosen.getHealthBattle() > 0) {
-					engine.doMove(storedMoves[1], 0);
-					player1Team = engine.getTeam1();
-					player2Team = engine.getTeam2();
-							updateHpBars();
-
-							engine.changeTurn();
-
-				checkFainted(); // should check team 1
-						} else {
-							engine.incTurnNum();
-						}
-
-						storedMoves[0] = null;
-						storedMoves[1] = null;
-					} else { // Team 2 is faster
-			engine.doMove(storedMoves[1], 0);
-						player1Team = engine.getTeam1();
-						player2Team = engine.getTeam2();
-						updateHpBars();
-						if (engine.getTurn() == 1) {
-							engine.changeTurn();
-						}
-				checkFainted(); // should check team 1
-			if (team1Chosen.getHealthBattle() != 0) {
-					engine.doMove(storedMoves[0], 1);
-					player1Team = engine.getTeam1();
-					player2Team = engine.getTeam2();
-							updateHpBars();
-						engine.changeTurn();
-							checkFainted();
-						} else {
-							engine.incTurnNum();
-						}
-
-						storedMoves[0] = null;
-						storedMoves[1] = null;
-					}
-				}
+				buttonMove(2);
 			}
-		});
+			});
 
 		healButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(final ActionEvent event) {
-				performMove(3);
-				updateHpBars();
-				checkFainted();
+				buttonMove(3);
 			}
 		});
 
@@ -397,16 +281,14 @@ public class MonsterGUI extends Application {
 
 			@Override
 			public void handle(final ActionEvent event) {
-				performMove(4);
-				updateHpBars();
-				checkFainted();
+				buttonMove(4);
 			}
 		});
 
 		//images 
 		Image placeHolder = new Image("titlePic.png");
 
-		battleScene = new Scene(battleLayout, 1050, 720);
+		battleScene = new Scene(battleLayout, 1200, 720);
 		setUpBattleLayout(battleLayout, healthBarBack1, healthBarBack2);
 
 		player1Sprite = new ImageView(placeHolder);
@@ -440,8 +322,7 @@ public class MonsterGUI extends Application {
 			engine.addBattleText(onFieldMon.getMonsterName() 
 					+ " Has Fainted\n");
 			updateHpBars();
-			display.setText(onFieldMon.getMonsterName() 
-					+ " Has Fainted");
+			
 
 			boolean hasMonstersLeft = false;
 			attackButton.setDisable(true);
@@ -455,45 +336,45 @@ public class MonsterGUI extends Application {
 					Button but = new Button("Pick " 
 							+ mon.getMonsterName());
 					but.setOnAction(new 
-					EventHandler<ActionEvent>() {
-				public void handle(final ActionEvent arg0) {
-					Monster chosenMon = null;
-					switch (engine.getTurn()) {
+							EventHandler<ActionEvent>() {
+						public void handle(final ActionEvent arg0) {
+							Monster chosenMon = null;
+							switch (engine.getTurn()) {
 							case 0:
-						team1Chosen = mon;
-						chosenMon = team1Chosen;
+								team1Chosen = mon;
+								chosenMon = team1Chosen;
 								break;
 							case 1:
-						team2Chosen = mon;
-					chosenMon = team2Chosen;
+								team2Chosen = mon;
+								chosenMon = team2Chosen;
 								break;
 							default:
 								break;
 							}
-					engine.addBattleText("Team " + (engine.getTurn() + 1) + " sent out " + chosenMon.getMonsterName() + "!\n");
-					int switchedMonsterIndex = 1;
-				for (int i = 0; i < teamList.size(); i++) {
-					if (teamList.get(i) == chosenMon) {
-						switchedMonsterIndex = i;
+							engine.addBattleText("Team " + (engine.getTurn() + 1) + " sent out " + chosenMon.getMonsterName() + "!\n");
+							int switchedMonsterIndex = 1;
+							for (int i = 0; i < teamList.size(); i++) {
+								if (teamList.get(i) == chosenMon) {
+									switchedMonsterIndex = i;
 								}
 							}
 							updateHpBars();
-					if (teamList == player1Team) {
-				engine.setTeamsAndMons(player1Team,
-					player2Team, switchedMonsterIndex, -1);
+							if (teamList == player1Team) {
+								engine.setTeamsAndMons(player1Team,
+										player2Team, switchedMonsterIndex, -1);
 
 							} else {
-					engine.setTeamsAndMons(player1Team,
-					player2Team, -1, switchedMonsterIndex);
+								engine.setTeamsAndMons(player1Team,
+										player2Team, -1, switchedMonsterIndex);
 							}
 
-				attackButton.setDisable(false);
-				heavyButton.setDisable(false);
-				healButton.setDisable(false);
-				otherButton.setDisable(false);
+							attackButton.setDisable(false);
+							heavyButton.setDisable(false);
+							healButton.setDisable(false);
+							otherButton.setDisable(false);
 
-				//chooseMon.getImagePath set on screen
-			switchMonPane.getChildren().clear();
+							//chooseMon.getImagePath set on screen
+							switchMonPane.getChildren().clear();
 							stage.close();
 						}
 					});
@@ -504,12 +385,12 @@ public class MonsterGUI extends Application {
 			if (!hasMonstersLeft) {
 				//game needs to end
 				Alert alert = new Alert(AlertType.INFORMATION);
-
-	alert.setTitle("Someone has run out of Pokemon!");
-	alert.setHeaderText("Player " + teamNum + " wins!");
 				int otherTeam = (teamNum + 1) % 2;
-				alert.setContentText("Player " + otherTeam 
-			+ " has run out of Pokemon, so the match is over!");
+				alert.setTitle("Someone has run out of Pokemon!");
+				alert.setHeaderText("Player " + teamNum + " wins!");
+				
+				alert.setContentText("Player " + otherTeam
+						+ " has run out of Pokemon, so the match is over!");
 
 				alert.showAndWait();
 
@@ -545,7 +426,7 @@ public class MonsterGUI extends Application {
 
 		player1Sprite.setImage(updateImages(team1Chosen));
 		player2Sprite.setImage(updateImages(team2Chosen));
-		
+
 		battleLog.setText(engine.getBattleText());
 	}
 
@@ -572,63 +453,47 @@ public class MonsterGUI extends Application {
 	 * Executes the move using the engine class.
 	 * @param moveChoice Move index to execute
 	 */
-	private void performMove(final int moveChoice) {
-		Monster onField = new Monster();
-		engine.setTeams(this.player1Team, this.player2Team);
-
-		ArrayList<Monster> team;
-		if (engine.getTurn() == 0) {
-			team = this.player1Team;
-		} else {
-			team = this.player2Team;
-		}
-		for (Monster mon : team) {
-			if (mon.getOnField()) {
-				onField = mon;
-			}
-		}
-		System.out.println(onField.getMonsterName());
-		System.out.println(onField.getMove1());
-		switch (moveChoice) {
-		case 1:
-			engine.calculateDamage(onField.getMove1());
-			if (team == player1Team) {
-				display.setText("Player 1 has attacked");
-			} else {
-				display.setText("Player 2 has attacked");
-			}
-			break;
-		case 2:
-			engine.calculateDamage(onField.getMove2());
-			if (team == player1Team) {
-				display.setText("Player 1 has attacked");
-			} else {
-				display.setText("Player 2 has attacked");
-			}
-			break;
-		case 3:
-			engine.calculateDamage(onField.getMove3());
-			if (team == player1Team) {
-				display.setText("Player 1 has healed");
-			} else {
-				display.setText("Player 2 has healed");
-			}
-			break;
-		case 4:
-			engine.calculateDamage(onField.getMove4());
-			if (team == player1Team) {
-				display.setText("Player 1 performed move");
-			}	else {
-				display.setText("Player 2 performed move");
-			}
-			break;
-		default:
-			break;
-		}
-		this.player1Team = engine.getTeam1();
-		this.player2Team = engine.getTeam2();
-
-	}
+//	private void performMove(final int moveChoice) {
+//		Monster onField = new Monster();
+//		engine.setTeams(this.player1Team, this.player2Team);
+//
+//		ArrayList<Monster> team;
+//		if (engine.getTurn() == 0) {
+//			team = this.player1Team;
+//		} else {
+//			team = this.player2Team;
+//		}
+//		for (Monster mon : team) {
+//			if (mon.getOnField()) {
+//				onField = mon;
+//			}
+//		}
+//		System.out.println(onField.getMonsterName());
+//		System.out.println(onField.getMove1());
+//		switch (moveChoice) {
+//		case 1:
+//			engine.calculateDamage(onField.getMove1());
+//			
+//			break;
+//		case 2:
+//			engine.calculateDamage(onField.getMove2());
+//			
+//			break;
+//		case 3:
+//			engine.calculateDamage(onField.getMove3());
+//			
+//			break;
+//		case 4:
+//			engine.calculateDamage(onField.getMove4());
+//			
+//			break;
+//		default:
+//			break;
+//		}
+//		this.player1Team = engine.getTeam1();
+//		this.player2Team = engine.getTeam2();
+//
+//	}
 
 	/**
 	 * Updates the sprites on screen when one is replaced.
@@ -636,7 +501,6 @@ public class MonsterGUI extends Application {
 	 * @return Image the image of the monster
 	 */
 	private Image updateImages(final Monster monster) {
-		System.out.println(monster.getMonsterImagePath());
 		return new Image(monster.getMonsterImagePath());
 	}
 	/**
@@ -706,9 +570,84 @@ public class MonsterGUI extends Application {
 		battleLayout.add(heavyButton, 8, 1);
 		battleLayout.add(healButton, 8, 2);
 		battleLayout.add(otherButton, 9, 2);
-		
+
 		battleLayout.add(battleLog, 0, 21);
 
-		battleLayout.add(display, 0, 20);
+	}
+	
+	
+	private void buttonMove(int move) {
+		
+		if (storedMoves[0] == null) {
+			if(move ==1) 
+				storedMoves[0] = team1Chosen.getMove1();
+			else if(move==2)
+				storedMoves[0] = team1Chosen.getMove2();
+			else if(move==3)
+				storedMoves[0] = team1Chosen.getMove3();
+			else
+				storedMoves[0] = team1Chosen.getMove4();
+		} else if (storedMoves[1] == null) {
+			if(move ==1) 
+				storedMoves[1] = team2Chosen.getMove1();
+			else if(move==2)
+				storedMoves[1] = team2Chosen.getMove2();
+			else if(move==3)
+				storedMoves[1] = team2Chosen.getMove3();
+			else
+				storedMoves[1] = team2Chosen.getMove4();
+			if (team1Chosen.getSpeedBattle() 
+					> team2Chosen.getSpeedBattle()) {
+				System.out.println("Player 1 attacked first. Speed: " 
+						+ team1Chosen.getSpeedBattle() + " vs. " 
+						+ team2Chosen.getSpeedBattle());
+				engine.doMove(storedMoves[0], 1,move);
+				player1Team = engine.getTeam1();
+				player2Team = engine.getTeam2();
+				updateHpBars();
+				if (engine.getTurn() == 0) {
+					engine.changeTurn();
+				}
+				checkFainted(); // should check team 2
+				if (team2Chosen.getHealthBattle() > 0) {
+					engine.doMove(storedMoves[1], 0, move);
+					player1Team = engine.getTeam1();
+					player2Team = engine.getTeam2();
+					updateHpBars();
+
+					engine.changeTurn();
+
+					checkFainted(); // should check team 1
+				} else {
+					engine.incTurnNum();
+				}
+
+				storedMoves[0] = null;
+				storedMoves[1] = null;
+			} else { // Team 2 is faster
+				engine.doMove(storedMoves[1], 0,move);
+				player1Team = engine.getTeam1();
+				player2Team = engine.getTeam2();
+				updateHpBars();
+				if (engine.getTurn() == 1) {
+					engine.changeTurn();
+				}
+				checkFainted(); // should check team 1
+				if (team1Chosen.getHealthBattle() != 0) {
+					engine.doMove(storedMoves[0], 1,move);
+					player1Team = engine.getTeam1();
+					player2Team = engine.getTeam2();
+					updateHpBars();
+					engine.changeTurn();
+					checkFainted();
+				} else {
+					engine.incTurnNum();
+				}
+
+				storedMoves[0] = null;
+				storedMoves[1] = null;
+			}
+		}
+	
 	}
 }
