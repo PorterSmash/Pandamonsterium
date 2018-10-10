@@ -392,14 +392,14 @@ public class MonsterGUI extends Application {
 				int winner = 0;
 				int loser = 0;
 				boolean playerOneWin = false;
-				
-				
+
+
 				for (Monster mon : player1Team) {
 					if (mon.getHealthBattle() > 0) {
 						playerOneWin = true;
 					}
 				}
-				
+
 				if(playerOneWin) {
 					winner = 1;
 					loser =2; 
@@ -407,8 +407,8 @@ public class MonsterGUI extends Application {
 					winner = 2;
 					loser = 1;
 				}
-				
-					
+
+
 				alert.setTitle("Someone has run out of Pokemon!");
 				alert.setHeaderText("Player " + winner + " wins!");
 
@@ -624,7 +624,10 @@ public class MonsterGUI extends Application {
 				System.out.println("Player 1 attacked first. Speed: " 
 						+ team1Chosen.getSpeedBattle() + " vs. " 
 						+ team2Chosen.getSpeedBattle());
-				engine.doMove(storedMoves[0], 1, p1Move);
+				if(p1Move ==3)
+					engine.doMove(storedMoves[0], 0, p1Move);
+				if(p1Move !=3)
+					engine.doMove(storedMoves[0], 1, p1Move);
 				player1Team = engine.getTeam1();
 				player2Team = engine.getTeam2();
 				updateHpBars();
@@ -633,7 +636,10 @@ public class MonsterGUI extends Application {
 				}
 				checkFainted(); // should check team 2
 				if (team2Chosen.getHealthBattle() > 0) {
-					engine.doMove(storedMoves[1], 0, move);
+					if(move==3) 
+						engine.doMove(storedMoves[1], 1, move);
+					if(move !=3)
+						engine.doMove(storedMoves[1], 0, move);
 					player1Team = engine.getTeam1();
 					player2Team = engine.getTeam2();
 					updateHpBars();
@@ -644,13 +650,16 @@ public class MonsterGUI extends Application {
 				} else {
 					engine.incTurnNum();
 				}
-
+				p1Move = 0;
 				storedMoves[0] = null;
 				storedMoves[1] = null;
 
 
 			} else { // Team 2 is faster
-				engine.doMove(storedMoves[1], 0,move);
+				if(move==3)
+					engine.doMove(storedMoves[1], 1, move);
+				if(move !=3)
+					engine.doMove(storedMoves[1], 0, move);
 				player1Team = engine.getTeam1();
 				player2Team = engine.getTeam2();
 				updateHpBars();
@@ -658,8 +667,11 @@ public class MonsterGUI extends Application {
 					engine.changeTurn();
 				}
 				checkFainted(); // should check team 1
-				if (team1Chosen.getHealthBattle() != 0) {
-					engine.doMove(storedMoves[0], 1,p1Move);
+				if (team1Chosen.getHealthBattle() > 0) {
+					if(p1Move==3)
+						engine.doMove(storedMoves[0], 0, p1Move);
+					if(p1Move !=3)
+						engine.doMove(storedMoves[0], 1, p1Move);
 					player1Team = engine.getTeam1();
 					player2Team = engine.getTeam2();
 					updateHpBars();
@@ -668,7 +680,8 @@ public class MonsterGUI extends Application {
 				} else {
 					engine.incTurnNum();
 				}
-
+				
+				p1Move = 0;
 				storedMoves[0] = null;
 				storedMoves[1] = null;
 
