@@ -117,35 +117,36 @@ public class Logic {
 		} else {
 			firstOrSecond = "second";
 		}
-		if(moveNum ==1) {
-			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+		if(moveNum ==1) { 
+			battleLogText += "(Turn " + (turnNum / 2) + ") " + attacker.
 					getMonsterName() + " (Team " + teamNum + ") attacked "
 					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
 							+ 1) + ") " + firstOrSecond + " for " + dmgDone
-					+ " damage.\n" + battleLogText;
+					+ " damage.\n";
 		}
 		if(moveNum==2)
-			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+			battleLogText += "(Turn " + (turnNum / 2) + ") " + attacker.
 			getMonsterName() + " (Team " + teamNum + ") heavily attacked "
 			+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
 					+ 1) + ") " + firstOrSecond + " for " + dmgDone
-			+ " damage.\n" + battleLogText;
+			+ " damage.\n" ;
 
 		if(moveNum ==3) {
-			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+			battleLogText += "(Turn " + (turnNum / 2) + ") " + attacker.
 					getMonsterName() + " (Team " + teamNum + ") healed themselves "
 					+  "with " + Math.abs(dmgDone)
-					+ " health points.\n" + battleLogText;
+					+ " health points.\n";
 		}
 		if(moveNum==4) {
-			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+			battleLogText += "(Turn " + (turnNum / 2) + ") " + attacker.
 					getMonsterName() + " (Team " + teamNum + ") special attacked "
 					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
 							+ 1) + ") " + firstOrSecond + " for " + dmgDone
-					+ " damage.\n" + battleLogText;
+					+ " damage.\n";
 		}
+		
 	}
-
+	
 	/******************************************************************
 	 * Calculates the damage based on the move input. Can do a 
 	 * normal attack, heavy attack,
@@ -347,6 +348,15 @@ public class Logic {
 	public void addBattleText(String battleText) {
 		battleLogText = battleText + battleLogText;
 	}
+	
+
+
+
+	public void setBattleLogText(String battleLogText) {
+		this.battleLogText = battleLogText;
+	}
+
+
 
 	public void incTurnNum() {
 		turnNum++;
