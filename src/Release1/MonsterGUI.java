@@ -391,12 +391,11 @@ public class MonsterGUI extends Application {
 			}
 			if (!hasMonstersLeft) {
 				//game needs to end
-				Alert alert = new Alert(AlertType.INFORMATION);
+				Alert alert = new Alert(AlertType.CONFIRMATION);
 				
 				int winner = 0;
 				int loser = 0;
 				boolean playerOneWin = false;
-				
 				
 				for (Monster mon : player1Team) {
 					if (mon.getHealthBattle() > 0) {
@@ -412,32 +411,43 @@ public class MonsterGUI extends Application {
 					loser = 1;
 				}
 				
-					
+				
 				alert.setTitle("Someone has run out of Pokemon!");
 				alert.setHeaderText("Player " + winner + " wins!");
 
 				alert.setContentText("Player " + loser
 						+ " has run out of Pokemon, so the match is over!");
 
+				ButtonType restart = new ButtonType("Restart");
+				ButtonType cancel = new ButtonType("Cancel");
+				alert.getButtonTypes().clear();
+				alert.getButtonTypes().addAll(restart,cancel);
+				Optional<ButtonType>option = alert.showAndWait();
+
+				
+				
 				//return to main menu, or exit program
 				attackButton.setDisable(true);
 				heavyButton.setDisable(true);
 				healButton.setDisable(true);
 				otherButton.setDisable(true);
-				
-				Optional<ButtonType> result = alert.showAndWait();
-				if(!result.isPresent()) {
+			
+				if(!option.isPresent()) {
 					// alert is exited, no button has been pressed.
 					System.out.println("Quit");
 					resetEverything();
 					mainStage.setScene(titleScene);
 				}
 				    
-				else if(result.get() == ButtonType.OK) {
+				else if(option.get() == restart) {
 					//okay button is pressed
 					System.out.println("OK");
 					resetEverything();
 					mainStage.setScene(titleScene);
+				}
+				else if(option.get() ==cancel) {
+					mainStage.close();
+					stage.close();
 				}
 			} else {
 				stage.setScene(pickPokemon);
@@ -498,52 +508,7 @@ public class MonsterGUI extends Application {
 		//engine.doDamage(dmgNum, moveTarget);
 	}
 
-	/**
-	 * Executes the move using the engine class.
-	 * @param moveChoice Move index to execute
-	 */
-	//	private void performMove(final int moveChoice) {
-	//		Monster onField = new Monster();
-	//		engine.setTeams(this.player1Team, this.player2Team);
-	//
-	//		ArrayList<Monster> team;
-	//		if (engine.getTurn() == 0) {
-	//			team = this.player1Team;
-	//		} else {
-	//			team = this.player2Team;
-	//		}
-	//		for (Monster mon : team) {
-	//			if (mon.getOnField()) {
-	//				onField = mon;
-	//			}
-	//		}
-	//		System.out.println(onField.getMonsterName());
-	//		System.out.println(onField.getMove1());
-	//		switch (moveChoice) {
-	//		case 1:
-	//			engine.calculateDamage(onField.getMove1());
-	//			
-	//			break;
-	//		case 2:
-	//			engine.calculateDamage(onField.getMove2());
-	//			
-	//			break;
-	//		case 3:
-	//			engine.calculateDamage(onField.getMove3());
-	//			
-	//			break;
-	//		case 4:
-	//			engine.calculateDamage(onField.getMove4());
-	//			
-	//			break;
-	//		default:
-	//			break;
-	//		}
-	//		this.player1Team = engine.getTeam1();
-	//		this.player2Team = engine.getTeam2();
-	//
-	//	}
-
+	
 	/**
 	 * Updates the sprites on screen when one is replaced.
 	 * @param monster Monster with image to replace current
