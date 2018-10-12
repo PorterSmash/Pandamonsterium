@@ -98,39 +98,19 @@ public class Logic {
 		Monster target;
 		Monster attacker;
 		int teamNum;
-		if(moveNum!=3) {
-			if (moveTarget == 0) {
-				target = player1Team.get(mon1);
-				attacker = player2Team.get(mon2);
-				teamNum = 2;
-				
-			} else {
-				
-				target = player2Team.get(mon2);
-				attacker = player1Team.get(mon1);
-				teamNum = 1;
-			}
-		}else {
-			if (moveTarget == 0) {
-				moveDone.setMoveTarget(0);
-				target = player1Team.get(mon1);
-				attacker = player1Team.get(mon1);
-				teamNum = 1;
-			} else {
-				
-				target = player2Team.get(mon2);
-				attacker = player2Team.get(mon2);
-				teamNum = 2;
-				moveDone.setMoveTarget(0);
-			}
+		if (moveTarget == 0) {
+			target = player1Team.get(mon1);
+			attacker = player2Team.get(mon2);
+			teamNum = 2;
+		} else {
+			target = player2Team.get(mon2);
+			attacker = player1Team.get(mon1);
+			teamNum = 1;
 		}
-		
 		int dmgDone = calcDamage(moveDone);
-		System.out.println(dmgDone + " " + target.getMonsterName());
 		target.decreaseHealth(dmgDone);
 
 		turnNum++;
-		
 		String firstOrSecond;
 		if (turnNum % 2 == 0) {
 			firstOrSecond = "first";
@@ -138,35 +118,35 @@ public class Logic {
 			firstOrSecond = "second";
 		}
 		if(moveNum ==1) { 
-			battleLogText += "(Turn " + (turnNum / 2) + ") " + attacker.
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
 					getMonsterName() + " (Team " + teamNum + ") attacked "
 					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
 							+ 1) + ") " + firstOrSecond + " for " + dmgDone
-					+ " damage.\n";
+					+ " damage.\n" + battleLogText;
 		}
 		if(moveNum==2)
-			battleLogText += "(Turn " + (turnNum / 2) + ") " + attacker.
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
 			getMonsterName() + " (Team " + teamNum + ") heavily attacked "
 			+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
 					+ 1) + ") " + firstOrSecond + " for " + dmgDone
-			+ " damage.\n" ;
+			+ " damage.\n" + battleLogText;
 
 		if(moveNum ==3) {
-			battleLogText += "(Turn " + (turnNum / 2) + ") " + attacker.
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
 					getMonsterName() + " (Team " + teamNum + ") healed themselves "
 					+  "with " + Math.abs(dmgDone)
-					+ " health points.\n";
+					+ " health points.\n" + battleLogText;
 		}
-		if(moveNum ==4) {
-			battleLogText += "(Turn " + (turnNum / 2) + ") " + attacker.
+		if(moveNum==4) {
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
 					getMonsterName() + " (Team " + teamNum + ") special attacked "
 					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
 							+ 1) + ") " + firstOrSecond + " for " + dmgDone
-					+ " damage.\n";
+					+ " damage.\n" + battleLogText;
 		}
-
+		
 	}
-
+	
 	/******************************************************************
 	 * Calculates the damage based on the move input. Can do a 
 	 * normal attack, heavy attack,
@@ -368,6 +348,9 @@ public class Logic {
 	public void addBattleText(String battleText) {
 		battleLogText = battleText + battleLogText;
 	}
+	
+
+
 
 	public void setBattleLogText(String battleLogText) {
 		this.battleLogText = battleLogText;
