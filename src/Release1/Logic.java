@@ -154,11 +154,11 @@ public class Logic {
 	 *****************************************************************/
 	public void calculateDamage(final Move moveCommitted) {
 		lastMove = moveCommitted;
-		ArrayList<Monster> playerList = 
-				new ArrayList<Monster>(); 
+		
+		ArrayList<Monster> playerList;
 		//the following three vars make in turn neutral
-		ArrayList<Monster> opponentPlayerList = 
-				new ArrayList<Monster>();
+		
+		ArrayList<Monster> opponentPlayerList;
 		int target1; //refers to a defending target(healing)
 		int target2; //refers to an attacking target
 		if (playerTurn == 0) {
@@ -349,14 +349,6 @@ public class Logic {
 		battleLogText = battleText + battleLogText;
 	}
 	
-
-
-
-	public void setBattleLogText(String battleLogText) {
-		this.battleLogText = battleLogText;
-	}
-
-
 
 	public void incTurnNum() {
 		turnNum++;

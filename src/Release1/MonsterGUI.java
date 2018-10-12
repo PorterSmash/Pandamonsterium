@@ -46,7 +46,7 @@ public class MonsterGUI extends Application {
 	private Stage stage;
 
 	private Stage mainStage;
-	
+
 	private Move[] storedMoves;
 
 	/** Placeholder for the monster from each chosen team. */
@@ -188,7 +188,7 @@ public class MonsterGUI extends Application {
 									monster.monsterFactory(choices[i]);
 									player2Team.add(monster);
 								}
-								
+
 								team1Chosen = player1Team.get(0);
 								team2Chosen = player2Team.get(0);
 
@@ -208,7 +208,7 @@ public class MonsterGUI extends Application {
 								otherButton.setDisable(false);
 							}
 						}
-						
+
 					}
 
 
@@ -263,7 +263,7 @@ public class MonsterGUI extends Application {
 
 			public void handle(final ActionEvent arg0) {
 				buttonMove(1);
-				
+
 			}
 		});
 
@@ -345,7 +345,7 @@ public class MonsterGUI extends Application {
 					but.setOnAction(new 
 							EventHandler<ActionEvent>() {
 						public void handle(final ActionEvent arg0) {
-							Monster chosenMon = null;
+							Monster chosenMon=null;
 							switch (engine.getTurn()) {
 							case 0:
 								team1Chosen = mon;
@@ -358,7 +358,8 @@ public class MonsterGUI extends Application {
 							default:
 								break;
 							}
-							engine.addBattleText("Team " + (engine.getTurn() + 1) + " sent out " + chosenMon.getMonsterName() + "!\n");
+							if(chosenMon!=null)
+								engine.addBattleText("Team " + (engine.getTurn() + 1) + " sent out " + chosenMon.getMonsterName() + "!\n");
 							int switchedMonsterIndex = 1;
 							for (int i = 0; i < teamList.size(); i++) {
 								if (teamList.get(i) == chosenMon) {
@@ -392,17 +393,17 @@ public class MonsterGUI extends Application {
 			if (!hasMonstersLeft) {
 				//game needs to end
 				Alert alert = new Alert(AlertType.CONFIRMATION);
-				
+
 				int winner = 0;
 				int loser = 0;
 				boolean playerOneWin = false;
-				
+
 				for (Monster mon : player1Team) {
 					if (mon.getHealthBattle() > 0) {
 						playerOneWin = true;
 					}
 				}
-				
+
 				if(playerOneWin) {
 					winner = 1;
 					loser =2; 
@@ -410,8 +411,8 @@ public class MonsterGUI extends Application {
 					winner = 2;
 					loser = 1;
 				}
-				
-				
+
+
 				alert.setTitle("Someone has run out of Pokemon!");
 				alert.setHeaderText("Player " + winner + " wins!");
 
@@ -424,21 +425,21 @@ public class MonsterGUI extends Application {
 				alert.getButtonTypes().addAll(restart,cancel);
 				Optional<ButtonType>option = alert.showAndWait();
 
-				
-				
+
+
 				//return to main menu, or exit program
 				attackButton.setDisable(true);
 				heavyButton.setDisable(true);
 				healButton.setDisable(true);
 				otherButton.setDisable(true);
-			
+
 				if(!option.isPresent()) {
 					// alert is exited, no button has been pressed.
 					System.out.println("Quit");
 					resetEverything();
 					mainStage.setScene(titleScene);
 				}
-				    
+
 				else if(option.get() == restart) {
 					//okay button is pressed
 					System.out.println("OK");
@@ -455,7 +456,10 @@ public class MonsterGUI extends Application {
 			}
 		}
 	}
-	
+
+	/*
+	 * Resets the monsters and logic for a new game 
+	 */
 	private void resetEverything() {
 		// TODO update text files for levels
 		// reset monsters
@@ -464,7 +468,7 @@ public class MonsterGUI extends Application {
 		// reset engine
 		engine = new Logic();
 	}
-	
+
 	/**
 	 * Updates the HP bars for each monster.
 	 */
@@ -508,7 +512,7 @@ public class MonsterGUI extends Application {
 		//engine.doDamage(dmgNum, moveTarget);
 	}
 
-	
+
 	/**
 	 * Updates the sprites on screen when one is replaced.
 	 * @param monster Monster with image to replace current
@@ -589,8 +593,14 @@ public class MonsterGUI extends Application {
 
 	}
 
+	/**
+	 * Executes the move that is pressed depending how many
+	 * moves are stored. Uses the move class
+	 * @param move indicates which move has been pressed
+	 */
 	private void buttonMove(int move) {
-
+		//checks if player one has gone. if they havent
+		//it will store it into p1move.
 		if (storedMoves[0] == null) {
 			p1Move = move;
 			if(move ==1) 
@@ -602,6 +612,8 @@ public class MonsterGUI extends Application {
 			else
 				storedMoves[0] = team1Chosen.getMove4();
 		} else if (storedMoves[1] == null) {
+			//if player one has a move already it will take 
+			//move and give it to team 2
 			if(move ==1) 
 				storedMoves[1] = team2Chosen.getMove1();
 			else if(move==2)
@@ -610,11 +622,15 @@ public class MonsterGUI extends Application {
 				storedMoves[1] = team2Chosen.getMove3();
 			else
 				storedMoves[1] = team2Chosen.getMove4();
+
+			//checks which team has a faster monster
+			//who will attack first
 			if (team1Chosen.getSpeedBattle() 
 					> team2Chosen.getSpeedBattle()) {
 				System.out.println("Player 1 attacked first. Speed: " 
 						+ team1Chosen.getSpeedBattle() + " vs. " 
 						+ team2Chosen.getSpeedBattle());
+
 				engine.doMove(storedMoves[0], 1, p1Move);
 				player1Team = engine.getTeam1();
 				player2Team = engine.getTeam2();
@@ -635,7 +651,7 @@ public class MonsterGUI extends Application {
 				} else {
 					engine.incTurnNum();
 				}
-
+				//clears stored moves for the next attack
 				storedMoves[0] = null;
 				storedMoves[1] = null;
 
@@ -660,6 +676,7 @@ public class MonsterGUI extends Application {
 					engine.incTurnNum();
 				}
 
+				//clears stored moves for the next attack
 				storedMoves[0] = null;
 				storedMoves[1] = null;
 
