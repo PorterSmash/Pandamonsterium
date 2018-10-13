@@ -1,13 +1,13 @@
 package Release1;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Scanner;
- import javax.swing.ImageIcon;
+//import javax.swing.ImageIcon;
  
  /*********************************************************************
-  * Monster class that holds all of the monsters statistics that 
-  * implements the monster interface.
+  * Monster class that holds all of the monsters statistics and 
+  * represents and in game monster.
   * @author Michelle Vu, Alex Porter, and Justin Kaukonen 
   * @version Fall 2018
   ********************************************************************/
@@ -259,7 +259,7 @@ import java.util.Scanner;
 		String fileName = "MonsterInfo.txt";
 		try {
 			//Reads each line in the file looking for monster name.
-			fileIn = new Scanner(new File(fileName),"UTF-8");
+			fileIn = new Scanner(new File(fileName),"UTF-8");		
 			String nextLine;
 			while (fileIn.hasNextLine()) {
 				nextLine = fileIn.nextLine();
@@ -306,9 +306,7 @@ import java.util.Scanner;
 					this.move1 = move1;
 					this.move2 = move2;
 					this.move3 = move3;
-					this.move4 = move4;
-					
-					
+					this.move4 = move4;	
 					break;
 				}
 			}
