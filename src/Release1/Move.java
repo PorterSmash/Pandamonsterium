@@ -15,67 +15,74 @@ public class Move {
 	
 	/** the chance they will land the attack.*/
 	private int hitChance;
-	/** Returns attack power.
-	 * 
+	
+	/** who the target is (enemy)*/
+	private int moveTarget;
+	
+	/******************************************************************
+	 * Returns attack power.
 	 * @return attackPower
-	 */
+	 *****************************************************************/
 	public int getAttackPower() {
 		return attackPower;
 	}
-	/**
+	
+	/******************************************************************
 	 * Sets attack power.
 	 * @param attackPower To set
-	 */
+	 *****************************************************************/
 	public void setAttackPower(final int attackPower) {
 		this.attackPower = attackPower;
 	}
-	/**
+	
+	/******************************************************************
 	 * Returns critChance.
 	 * @return critChance
-	 */
+	 *****************************************************************/
 	public int getCritChance() {
 		return critChance;
 	}
-	/**
+	
+	/******************************************************************
 	 * Sets critChance.
 	 * @param critChance Int to set
-	 */
+	 *****************************************************************/
 	public void setCritChance(final int critChance) {
 		this.critChance = critChance;
 	}
-	/**
+	
+	/******************************************************************
 	 * Returns hitChance.
 	 * @return hitChance
-	 */
+	 *****************************************************************/
 	public int getHitChance() {
 		return hitChance;
 	}
-	/**
+	
+	/******************************************************************
 	 * Sets hitChance.
 	 * @param hitChance Int to set
-	 */
+	 *****************************************************************/
 	public void setHitChance(final int hitChance) {
 		this.hitChance = hitChance;
 	}
-	/**
+	
+	/******************************************************************
 	 * Returns moveTarget.
 	 * @return moveTarget
-	 */
+	 *****************************************************************/
 	public int getMoveTarget() {
 		return moveTarget;
 	}
-	/**
+	
+	/******************************************************************
 	 * Sets move target.
 	 * @param moveTarget Int to set
-	 */
+	 *****************************************************************/
 	public void setMoveTarget(final int moveTarget) {
 		this.moveTarget = moveTarget;
 	}
 
-
-	/** move target?*/
-	private int moveTarget;
-	
 	/******************************************************************
 	 * Constructor that sets up the move's base stats.
 	 * @param mveTgt Who the damage is applied to 
@@ -90,7 +97,6 @@ public class Move {
 		hitChance = htChc;
 		moveTarget = mveTgt;
 	}
-	
 	
 	/******************************************************************
 	 * Creates a string that returns each stat.

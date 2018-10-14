@@ -62,198 +62,274 @@ import java.util.Scanner;
  	/** tells whether the monster is on field or not.*/
 	private boolean onField;
 	
-	/**
+	/******************************************************************
 	 * This method is for release 2.
 	 * @return Level of the monster
-	 */
+	 *****************************************************************/
 	public final int getLevel() {
 		return monsterLevel;
 	}
-	/**
-	 * 
+	
+	/******************************************************************
+	 * Returns the Monsters name in string.
 	 * @return String name of monster
-	 */
+	 *****************************************************************/
 	public String getMonsterName() {
 		return monsterName;
 	}
-	/**
-	 * 
+	
+	/******************************************************************
+	 * Sets the monster name depending on the parameter.
 	 * @param monsterName Monster name to set
-	 */
+	 *****************************************************************/
  	public void setMonsterName(final String monsterName) {
 		this.monsterName = monsterName;
 	}
- 	/**
+ 	
+ 	/******************************************************************
+ 	 * Gets the health of monster during battle.
  	 * @return Battle health of monster
- 	 */
+ 	 ******************************************************************/
 	public int getHealthBattle() {
 		return healthBattle;
 	}
-	/**
-	 * 
+	
+	/******************************************************************
+	 * Sets the health of the monster during battle.
 	 * @param healthBattle Sets health of monster
-	 */
+	 *****************************************************************/
  	public void setHealthBattle(final int healthBattle) {
 		this.healthBattle = healthBattle;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Gets the monster's attack stat during battle.
  	 * @return Attack battle stat of monster
- 	 */
+ 	 *****************************************************************/
  	public int getAttackBattle() {
 		return attackBattle;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Sets the monster's attack stat during battle.
  	 * @param attackBattle Stat to set
- 	 */
+ 	 *****************************************************************/
  	public void setAttackBattle(final int attackBattle) {
 		this.attackBattle = attackBattle;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Returns the monster's defense stat during battle.
  	 * @return Defense battle stat
- 	 */
+ 	 ******************************************************************/
  	public int getDefenseBattle() {
 		return defenseBattle;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Sets the monster's defense stat during battle.
  	 * @param defenseBattle Stat to set
- 	 */
+ 	 *****************************************************************/
  	public void setDefenseBattle(final int defenseBattle) {
 		this.defenseBattle = defenseBattle;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Returns the monster's speed stat during battle
  	 * @return Speed battle stat
- 	 */
+ 	 ******************************************************************/
  	public int getSpeedBattle() {
 		return speedBattle;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Set the monster's speed stat during battle.
  	 * @param speedBattle Stat to set
- 	 */
+ 	 *****************************************************************/
  	public void setSpeedBattle(final int speedBattle) {
 		this.speedBattle = speedBattle;
 	}
- 	/**
- 	 * 
- 	 * @return First move
- 	 */
+ 	
+ 	/******************************************************************
+ 	 * Returns the first move of the monster (normal attack).
+ 	 * @return First move which is normal attack
+ 	 *****************************************************************/
  	public Move getMove1() {
 		return move1;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Sets the first move, which is normal attack.
  	 * @param move1 First move to set
- 	 */
+ 	 *****************************************************************/
  	public void setMove1(final Move move1) {
 		this.move1 = move1;
 	}
- 	/**
- 	 * 
- 	 * @return Second move
- 	 */
+ 	
+ 	/******************************************************************
+ 	 * Returns the second move of the monster (Heavy Attack).
+ 	 * @return Second move which is heavy attack.
+ 	 *****************************************************************/
  	public Move getMove2() {
 		return move2;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Sets the second move, which is heavy attack.
  	 * @param move2 Second move to set
- 	 */
+ 	 *****************************************************************/
  	public void setMove2(final Move move2) {
 		this.move2 = move2;
 	}
- 	/**
- 	 * 
- 	 * @return Third move
- 	 */
+ 	
+ 	/******************************************************************
+ 	 * Returns the third move of the monster (Heal)
+ 	 * @return Third move which is heal
+ 	 ******************************************************************/
  	public Move getMove3() {
 		return move3;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Sets the third move, which is heal.
  	 * @param move3 Third move to set
- 	 */
+ 	 *****************************************************************/
  	public void setMove3(final Move move3) {
 		this.move3 = move3;
 	}
- 	/**
- 	 * 
- 	 * @return Fourth move
- 	 */
+ 	
+ 	/******************************************************************
+ 	 * Returns the fourth move of the monster (Special Attack).
+ 	 * @return Fourth move which is special attack.
+ 	 *****************************************************************/
  	public Move getMove4() {
 		return move4;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Sets the fourth move, which is special attack.
  	 * @param move4 Fourth move to set
- 	 */
+ 	 *****************************************************************/
  	public void setMove4(final Move move4) {
 		this.move4 = move4;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Returns the image path in png form.
  	 * @return Image path of the monster
- 	 */
+ 	 *****************************************************************/
  	public String getMonsterImagePath() {
 		return monsterImagePath;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Sets the image path in png form.
  	 * @param monsterImagePath String for image path
- 	 */
+ 	 *****************************************************************/
  	public void setMonsterImagePath(final String monsterImagePath) {
 		this.monsterImagePath = monsterImagePath;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Returns the sound file path for the monster
  	 * @return sound file path
- 	 */
+ 	 *****************************************************************/
  	public String getSoundFilePath() {
 		return soundFilePath;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Sets the sound file path for the monster
  	 * @param soundFilePath Path for the sound file
- 	 */
+ 	 *****************************************************************/
  	public void setSoundFilePath(final String soundFilePath) {
 		this.soundFilePath = soundFilePath;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Returns the max health the monster has.
  	 * @return Max health stat
- 	 */
+ 	 *****************************************************************/
  	public int getMaxHealthPoints() {
 		return maxHealthPoints;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Returns the max defense points the monster has.
  	 * @return Max defense points
- 	 */
+ 	 *****************************************************************/
  	public int getDefensePoints() {
 		return defensePoints;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Returns the max attack points the monster has.
  	 * @return Max attack points
- 	 */
+ 	 *****************************************************************/
  	public int getAttackPoints() {
 		return attackPoints;
 	}
- 	/**
- 	 * 
+ 	
+ 	/******************************************************************
+ 	 * Returns the max speed points the monster has.
  	 * @return Max speed points
- 	 */
+ 	 *****************************************************************/
  	public int getSpeedPoints() {
 		return speedPoints;
 	}
- 	/**
+ 	
+	/******************************************************************
+ 	 * Sets the max health points of the monster.
+ 	 * @param maxHealthPoints Value to set
+ 	 *****************************************************************/
+ 	public void setMaxHealthPoints(final int maxHealthPoints) {
+		this.maxHealthPoints = maxHealthPoints;
+	}
+ 	
+ 	/******************************************************************
+ 	 * Set max defense points of the monster.
+ 	 * @param defensePoints Value to set
+ 	 *****************************************************************/
+ 	public void setDefensePoints(final int defensePoints) {
+		this.defensePoints = defensePoints;
+	}
+ 	
+ 	/******************************************************************
+ 	 * Set max attack of the monster.
+ 	 * @param attackPoints Value to set
+ 	 *****************************************************************/
+ 	public void setAttackPoints(final int attackPoints) {
+		this.attackPoints = attackPoints;
+	}
+ 	
+ 	/******************************************************************
+ 	 *  Set max speed of the monster.
+ 	 * @param speedPoints Value to set
+ 	 *****************************************************************/
+ 	public void setSpeedPoints(final int speedPoints) {
+		this.speedPoints = speedPoints;
+	}
+ 	
+	/******************************************************************
+	 * Set the monster to being on the field or not.
+	 * @param flag Bool to set
+	 *****************************************************************/
+	public void setOnField(final boolean flag) {
+		onField = flag;
+	}
+	
+	/******************************************************************
+	 * Returns onField value, aka whether the monster is on field.
+	 * @return Boolean onField
+	 *****************************************************************/
+	public boolean getOnField() {
+		return onField;
+	}
+	
+ 	/******************************************************************
  	 * Generates monsters by reading from a file.
  	 * @param monName String for monster to generate
- 	 */
+ 	 *****************************************************************/
 	public void monsterFactory(final String monName) {
 		Scanner fileIn = null;
 		String fileName = "MonsterInfo.txt";
@@ -275,8 +351,6 @@ import java.util.Scanner;
 					}
 					
 					setMonsterImagePath(fileIn.nextLine());
-					
-					
 					setMaxHealthPoints(statArray[0]);
 					setAttackPoints(statArray[1]);
 					setDefensePoints(statArray[2]);
@@ -319,10 +393,10 @@ import java.util.Scanner;
 		}
 	}
 	
-	/**
+	/******************************************************************
 	 * Will be used for release 2, this improves the monster.
 	 * @param statID Stat to be increased
-	 */
+	 *****************************************************************/
 	public void levelUp(final int statID) {
 		switch (statID) {
 		case 1:
@@ -342,10 +416,11 @@ import java.util.Scanner;
 					+ "passed to levelUp method");
 		}
  	}
-	/**
+	
+	/******************************************************************
 	 * Decreases the health of the monster.
 	 * @param healthDecNum Value to decrease by
-	 */
+	 *****************************************************************/
  	public void decreaseHealth(final int healthDecNum) {
 		healthBattle -= healthDecNum;
 		if (healthBattle <= 0) {
@@ -354,52 +429,10 @@ import java.util.Scanner;
 			healthBattle = maxHealthPoints;
 		}
 	}
- 	/**
- 	 * Sets the max health points of the monster.
- 	 * @param maxHealthPoints Value to set
- 	 */
- 	public void setMaxHealthPoints(final int maxHealthPoints) {
-		this.maxHealthPoints = maxHealthPoints;
-	}
- 	/**
- 	 * Set max defense points of the monster.
- 	 * @param defensePoints Value to set
- 	 */
- 	public void setDefensePoints(final int defensePoints) {
-		this.defensePoints = defensePoints;
-	}
- 	/**
- 	 * Set max attack of the monster.
- 	 * @param attackPoints Value to set
- 	 */
- 	public void setAttackPoints(final int attackPoints) {
-		this.attackPoints = attackPoints;
-	}
- 	/**
- 	 *  Set max speed of the monster.
- 	 * @param speedPoints Value to set
- 	 */
- 	public void setSpeedPoints(final int speedPoints) {
-		this.speedPoints = speedPoints;
-	}
-	/**
-	 * Set the monster to being on the field or not.
-	 * @param flag Bool to set
-	 */
-	public void setOnField(final boolean flag) {
-		onField = flag;
-	}
-	/**
-	 * Returns onField value.
-	 * @return Boolean onField
-	 */
-	public boolean getOnField() {
-		return onField;
-	}
-	
-	/**
+ 	
+	/******************************************************************
 	 * Resets a monsters stats after they faint.
-	 */
+	 *****************************************************************/
 	public void resetStats() {
 		healthBattle = maxHealthPoints;
 		attackBattle = attackPoints;

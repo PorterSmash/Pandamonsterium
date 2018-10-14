@@ -2,7 +2,6 @@ package Release1;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,16 +24,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
 import javafx.stage.Stage;
-/**
+
+/**********************************************************************
  * This class displays the monster battle to the user.
  * It uses javafx elements to display a launch screen, monster
  * choice menu, and a battle screen. The screen updates as the
  * logic class does the bulk of the calculations.
  * @author Michelle Vu, Justin Kaukonen, Alex Porter
  *
- */
+ *********************************************************************/
 public class MonsterGUI extends Application {
 	/** Declares the three needed scenes.*/
 	private Scene titleScene, monsterScene, battleScene, pickPokemon;
@@ -89,6 +88,11 @@ public class MonsterGUI extends Application {
 
 	/** Log to let the user know what just happened. */
 	private TextArea battleLog;
+	/******************************************************************
+	 * Override method for javafx. Starts the game with the stage
+	 * and runs the scenes.
+	 * @param Stage the primary stage used for the game. 
+	 *****************************************************************/
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -209,10 +213,7 @@ public class MonsterGUI extends Application {
 					otherButton.setDisable(false);
 							}
 						}
-
 					}
-
-
 				});
 
 		instantiateHealthAndLabels();
@@ -261,15 +262,12 @@ public class MonsterGUI extends Application {
 
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-
 			public void handle(final ActionEvent arg0) {
 				buttonMove(1);
-
 			}
 		});
 
 		heavyButton.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(final ActionEvent arg0) {
 				buttonMove(2);
@@ -277,7 +275,6 @@ public class MonsterGUI extends Application {
 		});
 
 		healButton.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(final ActionEvent event) {
 				buttonMove(3);
@@ -285,7 +282,6 @@ public class MonsterGUI extends Application {
 		});
 
 		otherButton.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(final ActionEvent event) {
 				buttonMove(4);
@@ -304,16 +300,15 @@ public class MonsterGUI extends Application {
 		battleLayout.add(player1Sprite, 0, 12);	
 		battleLayout.add(player2Sprite, 2, 12);		
 
-
 		mainStage = primaryStage;
 		primaryStage.show();
 
 	}
 
-	/**
+	/******************************************************************
 	 * Checks if a monster fainted (0 health).
-	 */
-	public void checkFainted() {
+	 *****************************************************************/
+	 public void checkFainted() {
 		ArrayList<Monster> teamList;
 		Monster onFieldMon;
 		int teamNum = 0;
@@ -462,9 +457,9 @@ public class MonsterGUI extends Application {
 		}
 	}
 
-	/**
-	 * Resets the monsters and everthing else for a new game.
-	 */
+	/******************************************************************
+	 * Resets the monsters and everything else for a new game.
+	 *****************************************************************/
 	private void resetEverything() {
 		// TODO update text files for levels
 		// reset monsters
@@ -474,9 +469,9 @@ public class MonsterGUI extends Application {
 		engine = new Logic();
 	}
 
-	/**
+	/******************************************************************
 	 * Updates the HP bars for each monster.
-	 */
+	 *****************************************************************/
 	public void updateBattleScene() {
 		healthBar1.setWidth((250 
 		* (double) team1Chosen.getHealthBattle())
@@ -500,37 +495,26 @@ public class MonsterGUI extends Application {
 		battleLog.setText(engine.getBattleText());
 	}
 
-	/**
+	/******************************************************************
 	 * Launches the program.
 	 * @param args String input, unused
-	 */
+	 *****************************************************************/
 	public static void main(final String[] args) {
 		launch(args);
 	}
-	/**
-	 * Does this even do anything? I don't know
-	 * @param moveToDo Move that needs to be committed
-	 * @param moveTarget the target of the move
-	 */
-	public void doMove(final Move moveToDo, 
-			final int moveTarget) {
-		engine.setTeams(this.player1Team, this.player2Team);
-		// int dmgNum = engine.calculateDamage(moveToDo);
-		//engine.doDamage(dmgNum, moveTarget);
-	}
 
-
-	/**
+	/******************************************************************
 	 * Updates the sprites on screen when one is replaced.
 	 * @param monster Monster with image to replace current
 	 * @return Image the image of the monster
-	 */
+	 *****************************************************************/
 	private Image updateImages(final Monster monster) {
 		return new Image(monster.getMonsterImagePath());
 	}
-	/**
+	
+	/******************************************************************
 	 * Helper method creates health bars.
-	 */
+	 *****************************************************************/
 	private void setUpHealthBars() {
 		int healthPercent1 = (250 * team1Chosen.getHealthBattle())
 				/ team1Chosen.getHealthBattle();
@@ -556,9 +540,10 @@ public class MonsterGUI extends Application {
 		nameLabel2.setText("" + team2Chosen.getMonsterName());
 		levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
 	}
-	/**
-	 * Helper method creates labels and health bar rects.
-	 */
+	
+	/******************************************************************
+	 * Helper method creates labels and health bar rectangles.
+	 *****************************************************************/
 	private void instantiateHealthAndLabels() {
 		healthBar1 = new Rectangle();
 		healthPointsLabel1 = new Label();
@@ -570,12 +555,13 @@ public class MonsterGUI extends Application {
 		nameLabel2 = new Label();
 		levelLabel2 = new Label();
 	}
-	/**
+	
+	/******************************************************************
 	 * Sets up the battleLayout GridLayout.
 	 * @param battleLayout Layout to set up
 	 * @param healthBarBack1 Back of one health bar
 	 * @param healthBarBack2 Back of second health bar
-	 */
+	 *****************************************************************/
 	private void setUpBattleLayout(final GridPane battleLayout, 
 			final Rectangle healthBarBack1, 
 			final Rectangle healthBarBack2) {
@@ -600,11 +586,11 @@ public class MonsterGUI extends Application {
 
 	}
 
-	/**
+	/******************************************************************
 	 * Executes the move that is pressed depending how many
 	 * moves are stored. Uses the move class
 	 * @param move indicates which move has been pressed
-	 */
+	 *****************************************************************/
 	private void buttonMove(final int move) {
 		//checks if player one has gone. if they havent
 		//it will store it into p1move.
@@ -689,9 +675,7 @@ public class MonsterGUI extends Application {
 				//clears stored moves for the next attack
 				storedMoves[0] = null;
 				storedMoves[1] = null;
-
 			}
 		}
-
 	}
 }

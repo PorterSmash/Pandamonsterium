@@ -51,20 +51,119 @@ public class Logic {
 		battleLogText = "";
 	}
 
-
-
 	/******************************************************************
 	 * Default constructor.
 	 *****************************************************************/
 	public Logic() {
 		battleLogText = "";
 	}
+	
+	/******************************************************************
+	 * Sets up the teams with the initial monsters and sets up their
+	 * first monster.
+	 * @param team1 array list of monsters for team 1
+	 * @param team2 array list of monsters for team 2
+	 * @param team1Index picks which monster in team 1 is on field
+	 * @param team2Index picks which monster in team 2 is on field
+	 *****************************************************************/
+	public void setTeamsAndMons(final ArrayList<Monster> team1, 
+			final ArrayList<Monster> team2, 
+			final int team1Index, final int team2Index) {
+		player1Team = team1;
+		player2Team = team2;
 
-	/**
+		if (team1Index == -1) {
+			this.mon2 = team2Index;
+
+		} else if (team2Index == -1) {
+			this.mon1 = team1Index;
+
+		} else {
+			this.mon1 = team1Index;
+			this.mon2 = team2Index;
+		}
+
+		player1Team.get(mon1).setOnField(true);
+		player2Team.get(mon2).setOnField(true);
+		//this is so that the GUI and engine can pass the teams
+		//back and forth and remain updated
+		//that way you also don't need to create a new engine 
+		//object every time you do a calculation
+	}
+	
+	/*****************************************************************
+	 * Sets the teams in the engine to stay updated.
+	 * @param team1 To set for team one
+	 * @param team2 To set for team two
+	 ****************************************************************/
+	public void setTeams(final ArrayList<Monster> team1, 
+			final ArrayList<Monster> team2) {
+		player1Team = team1;
+		player2Team = team2;
+	}
+
+	/*****************************************************************
+	 * Gets the array list of monsters for team 1.
+	 * @return array list of monsters for team 1
+	 *****************************************************************/
+	public ArrayList<Monster> getTeam1() {
+		return player1Team;
+	}
+
+
+	/*****************************************************************
+	 * Gets the array list of monsters for team 2.
+	 * @return array list of monsters for team 2
+	 *****************************************************************/
+	public ArrayList<Monster> getTeam2() {
+		return player2Team;
+	}
+
+	/*****************************************************************
+	 * Gets you the monster on field for player 1.
+	 * @return int for which monster is on field
+	 *****************************************************************/
+	public int getMon1() {
+		return mon1;
+	}
+	
+	/*****************************************************************
+	 * Gets you the monster on field for player 2.
+	 * @return int for which monster is on field
+	 *****************************************************************/
+	public int getMon2() {
+		return mon2;
+	}
+
+	/*****************************************************************
+	 * Gets which turn it is.
+	 * @return which player's turn it is
+	 *****************************************************************/
+	public int getTurn() {
+		return playerTurn;
+	}
+
+	/*****************************************************************
+	 * Gets the text to update the battle log.
+	 * @return The battle log text.
+	 *****************************************************************/
+	public String getBattleText() {
+		return battleLogText;
+	}
+
+	/*****************************************************************
+	 * Appends text to the battle log text.
+	 * @param battleText the text to add to the battle log
+	 *****************************************************************/
+	public void addBattleText(final String battleText) {
+		battleLogText = battleText + battleLogText;
+	}
+	
+	/*****************************************************************
 	 * Calculates the damage to do for a given move.
 	 * @param moveCommitted Move to be done
 	 * @return int the damage to be applied
-	 */
+	 ****************************************************************/
 	private int calcDamage(final Move moveCommitted) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
@@ -89,12 +188,13 @@ public class Logic {
 		}
 		return dmgNum;
 	}
-	/**
+	
+	/*****************************************************************
 	 * Applies the damage to a monster.
 	 * @param moveDone Move to be committed
 	 * @param moveTarget Monster target of the move
 	 * @param moveNum Index of move performed
-	 */
+	 ****************************************************************/
 	public void doMove(final Move moveDone, 
 			final int moveTarget, final int moveNum) {
 		Monster target;
@@ -228,9 +328,20 @@ public class Logic {
 		int roll = rand.nextInt(11);
 		return roll <= chance;	
 	}
+	
+	/******************************************************************
+	 * Changes the turn to switch each player.
+	 *****************************************************************/
+	public void changeTurn() {
+		playerTurn = (playerTurn + 1) % 2;
+	}
 
-
-
+	/*****************************************************************
+	 * Increments the number of turns.
+	 ****************************************************************/
+	public void incTurnNum() {
+		turnNum++;
+	}
 	/******************************************************************
 	 * a little helper method to use while debugging.
 	 *****************************************************************/
@@ -240,122 +351,5 @@ public class Logic {
 		System.out.println("Char2 Health: " 
 				+ player2Team.get(mon2).getHealthBattle());
 		System.out.println("Last Move: " + lastMove.toString());
-
-	}
-
-
-	/******************************************************************
-	 * Changes the turn to switch each player.
-	 *****************************************************************/
-	public void changeTurn() {
-		playerTurn = (playerTurn + 1) % 2;
-	}
-
-
-	/******************************************************************
-	 * Sets up the teams with the initial monsters and sets up their
-	 * first monster.
-	 * @param team1 array list of monsters for team 1
-	 * @param team2 array list of monsters for team 2
-	 * @param team1Index picks which monster in team 1 is on field
-	 * @param team2Index picks which monster in team 2 is on field
-	 *****************************************************************/
-	public void setTeamsAndMons(final ArrayList<Monster> team1, 
-			final ArrayList<Monster> team2, 
-			final int team1Index, final int team2Index) {
-		player1Team = team1;
-		player2Team = team2;
-
-		if (team1Index == -1) {
-			this.mon2 = team2Index;
-
-		} else if (team2Index == -1) {
-			this.mon1 = team1Index;
-
-		} else {
-			this.mon1 = team1Index;
-			this.mon2 = team2Index;
-		}
-
-		player1Team.get(mon1).setOnField(true);
-		player2Team.get(mon2).setOnField(true);
-		//this is so that the GUI and engine can pass the teams
-		//back and forth and remain updated
-		//that way you also don't need to create a new engine 
-		//object every time you do a calculation
-	}
-	/**
-	 * Sets the teams in the engine to stay updated.
-	 * @param team1 To set for team one
-	 * @param team2 To set for team two
-	 */
-	public void setTeams(final ArrayList<Monster> team1, 
-			final ArrayList<Monster> team2) {
-		player1Team = team1;
-		player2Team = team2;
-	}
-
-	/*****************************************************************
-	 * Gets the array list of monsters for team 1.
-	 * @return array list of monsters for team 1
-	 *****************************************************************/
-	public ArrayList<Monster> getTeam1() {
-		return player1Team;
-	}
-
-
-	/*****************************************************************
-	 * Gets the array list of monsters for team 2.
-	 * @return array list of monsters for team 2
-	 *****************************************************************/
-	public ArrayList<Monster> getTeam2() {
-		return player2Team;
-	}
-
-
-	/*****************************************************************
-	 * Gets you the monster on field for player 1.
-	 * @return int for which monster is on field
-	 *****************************************************************/
-	public int getMon1() {
-		return mon1;
-	}
-	/*****************************************************************
-	 * Gets you the monster on field for player 2.
-	 * @return int for which monster is on field
-	 *****************************************************************/
-	public int getMon2() {
-		return mon2;
-	}
-
-	/*****************************************************************
-	 * Gets which turn it is.
-	 * @return which player's turn it is
-	 *****************************************************************/
-	public int getTurn() {
-		return playerTurn;
-	}
-
-	/*****************************************************************
-	 * Gets the text to update the battle log.
-	 * @return The battle log text.
-	 *****************************************************************/
-	public String getBattleText() {
-		return battleLogText;
-	}
-
-	/*****************************************************************
-	 * Appends text to the battle log text.
-	 * @param battleText the text to add to the battle log
-	 *****************************************************************/
-	public void addBattleText(final String battleText) {
-		battleLogText = battleText + battleLogText;
-	}
-	
-	/**
-	 * Increments the number of turns.
-	 */
-	public void incTurnNum() {
-		turnNum++;
 	}
 }
