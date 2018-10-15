@@ -504,7 +504,6 @@ public class JUnitTesting {
 		//this is a read only value
 		Logic testEngine = new Logic();
 		testEngine.incTurnNum();
-		testEngine.displayData();
 	}
 	@Test
 	public void testMoveAttack() {
