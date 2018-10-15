@@ -8,6 +8,20 @@ import org.junit.Test;
 
 public class JUnitTesting {
 	@Test
+	public void testMonsterLevel() {
+		Monster testMonster = new Monster();
+		assertEquals(testMonster.getLevel(), 0);
+	}
+	
+	@Test
+	public void testInvalidLevelUp() {
+		Monster testMonster = new Monster();
+		testMonster.levelUp(10);
+		System.out.println("The above line should read that an invalid stat ID "
+				+ "was passed to the method");
+	}
+	
+	@Test
 	public void testSetMove1() {
 		Monster testMonster = new Monster();
 		Move testMove = new Move(1,1,1,1);
@@ -332,6 +346,29 @@ public class JUnitTesting {
 		assertEquals(testLogic.getTeam2(), team1);
 	}
 	@Test
+	public void testSetTeamsAndMons1() {
+		Logic testEngine = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		Monster tester = new Monster();
+		team1.add(tester);
+		team2.add(tester);
+		testEngine.setTeamsAndMons(team1, team2, -1, 0);
+	}
+	@Test
+	public void testSetTeamsAndMons2() {
+		Logic testEngine = new Logic();
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		Monster tester = new Monster();
+		team1.add(tester);
+		team2.add(tester);
+		testEngine.setTeamsAndMons(team1, team2, 0, -1);
+	}
+	/**
+	 * 
+	 */
+	@Test
 	public void testGetMons1() {
 		Logic testLogic = new Logic();
 		ArrayList<Monster> team1 = new ArrayList<Monster>();
@@ -341,7 +378,8 @@ public class JUnitTesting {
 		team1.add(tester);
 		team2.add(tester);
 		testLogic.setTeamsAndMons(team1, team2, 0, 0);
-		assertEquals(testLogic.getMon1(), tester);
+		System.out.println(testLogic.getMon1());
+		assertEquals(testLogic.getMon1(), 0);
 	}
 	@Test
 	public void testGetMons2() {
@@ -353,19 +391,142 @@ public class JUnitTesting {
 		team1.add(tester);
 		team2.add(tester);
 		testLogic.setTeamsAndMons(team1, team2, 0, 0);
-		assertEquals(testLogic.getMon2(), tester);
+		assertEquals(testLogic.getMon2(), 0);
 	}
-	
+	@Test
+	public void testDoMove1() {
+		Logic testEngine = new Logic();
+		Monster target = new Monster();
+		Monster attacker = new Monster();
+		target.monsterFactory("Charizard");
+		attacker.monsterFactory("Jolteon");
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		team1.add(target);
+		team2.add(attacker);
+		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		Move testMove = attacker.getMove1();
+		testMove.setCritChance(0);
+		testMove.setHitChance(10);
+		testEngine.doMove(testMove, 1, 1);
+		assertEquals(testEngine.getBattleText(), 
+	"(Turn 1) Charizard (Team 1) attacked Jolteon "
+	+ "(Team 2) first for 7 damage.\n");
+	}
+	@Test
+	public void testDoMove2() {
+		Logic testEngine = new Logic();
+		Monster target = new Monster();
+		Monster attacker = new Monster();
+		target.monsterFactory("Charizard");
+		attacker.monsterFactory("Jolteon");
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		team1.add(target);
+		team2.add(attacker);
+		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		Move testMove = attacker.getMove2();
+		testMove.setCritChance(0);
+		testMove.setHitChance(10);
+		testEngine.doMove(testMove, 1, 2);
+		assertEquals(testEngine.getBattleText(), "(Turn 1) Charizard (Team 1) "
+	+ "heavily attacked Jolteon (Team 2) first for 9 damage.\n");
+	}
+	@Test
+	public void testDoMove3() {
+		Logic testEngine = new Logic();
+		Monster target = new Monster();
+		Monster attacker = new Monster();
+		target.monsterFactory("Charizard");
+		attacker.monsterFactory("Jolteon");
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		team1.add(target);
+		team2.add(attacker);
+		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		Move testMove = attacker.getMove1();
+		attacker.setMove3(testMove);
+		testMove.setCritChance(0);
+		testMove.setHitChance(10);
+		testEngine.doMove(testMove, 1, 3);
+		assertEquals(testEngine.getBattleText(), 
+	"(Turn 1) Charizard (Team 1) healed "
+	+ "themselves with 7 health points.\n");
+	}
+	@Test
+	public void testDoMove4() {
+		Logic testEngine = new Logic();
+		Monster target = new Monster();
+		Monster attacker = new Monster();
+		target.monsterFactory("Charizard");
+		attacker.monsterFactory("Jolteon");
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		team1.add(target);
+		team2.add(attacker);
+		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		Move testMove = attacker.getMove4();
+		testMove.setCritChance(0);
+		testMove.setHitChance(10);
+		testEngine.doMove(testMove, 1, 4);
+		assertEquals(testEngine.getBattleText(), 
+	"(Turn 1) Charizard (Team 1) special attacked "
+	+ "Jolteon (Team 2) first for 2 damage.\n");
+	}
+	@Test
+	public void testMoveTarget0() {
+		Logic testEngine = new Logic();
+		Monster target = new Monster();
+		Monster attacker = new Monster();
+		target.monsterFactory("Charizard");
+		attacker.monsterFactory("Jolteon");
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		team1.add(target);
+		team2.add(attacker);
+		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		Move testMove = attacker.getMove1();
+		testMove.setMoveTarget(0);
+		testMove.setCritChance(0);
+		testMove.setHitChance(10);
+		testEngine.doMove(testMove, 0, 1);
+		assertEquals(testEngine.getBattleText(), "(Turn 1) Jolteon (Team 2) "
+				+ "attacked Charizard (Team 1) first for 7 damage.\n");
+	}
+	@Test
+	public void testBattleText() {
+		Logic testEngine = new Logic();
+		testEngine.addBattleText("Test");
+		assertEquals("Test", testEngine.getBattleText());
+	}
+	@Test
+	public void testTurnNumber() {
+		//this is a read only value
+		Logic testEngine = new Logic();
+		testEngine.incTurnNum();
+		testEngine.displayData();
+	}
+	@Test
+	public void testMoveAttack() {
+		Move testMove = new Move(1, 1, 1, 1);
+		testMove.setAttackPower(0);
+		assertEquals(testMove.getAttackPower(), 0);
+	}
+	@Test
+	public void testMoveTarget() {
+		Move testMove = new Move(1, 1, 1, 1);
+		testMove.setMoveTarget(0);
+		assertEquals(testMove.getMoveTarget(), 0);
+	}
+	@Test
+	public void testToString() {
+		Move testMove = new Move(1, 1, 1, 1);
+		assertEquals(testMove.toString(), "Attack Power: 1\n" + 
+				"Crit Chance: 1\n" + 
+				"Hit Chance: 1\n" + 
+				" Move Target: 1");
+	}
 	/**
-	 * there may be a way to test doDamage but at the moment I can't be bothered to try - Alex P, 11:23pm 10/3/2018
-	 */
-	/**
-	 * End Logic
-	 * Begin MonsterGUI
-	 */
-	/**Impossible to test MonsterGUI
-	 * End MonsterGUI
-	 * End all tests? (coverage as, see if I can get more)
 	 * 
 	 */
 }
