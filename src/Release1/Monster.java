@@ -1,4 +1,4 @@
-package Release1;
+package release.One;
 import java.io.File;
 import java.io.FileNotFoundException;
 //import java.util.ArrayList;
@@ -135,7 +135,7 @@ import java.util.Scanner;
 	}
  	
  	/******************************************************************
- 	 * Returns the monster's speed stat during battle
+ 	 * Returns the monster's speed stat during battle.
  	 * @return Speed battle stat
  	 ******************************************************************/
  	public int getSpeedBattle() {
@@ -183,7 +183,7 @@ import java.util.Scanner;
 	}
  	
  	/******************************************************************
- 	 * Returns the third move of the monster (Heal)
+ 	 * Returns the third move of the monster (Heal).
  	 * @return Third move which is heal
  	 ******************************************************************/
  	public Move getMove3() {
@@ -231,7 +231,7 @@ import java.util.Scanner;
 	}
  	
  	/******************************************************************
- 	 * Returns the sound file path for the monster
+ 	 * Returns the sound file path for the monster.
  	 * @return sound file path
  	 *****************************************************************/
  	public String getSoundFilePath() {
@@ -239,7 +239,7 @@ import java.util.Scanner;
 	}
  	
  	/******************************************************************
- 	 * Sets the sound file path for the monster
+ 	 * Sets the sound file path for the monster.
  	 * @param soundFilePath Path for the sound file
  	 *****************************************************************/
  	public void setSoundFilePath(final String soundFilePath) {
@@ -335,7 +335,8 @@ import java.util.Scanner;
 		String fileName = "MonsterInfo.txt";
 		try {
 			//Reads each line in the file looking for monster name.
-			fileIn = new Scanner(new File(fileName),"UTF-8");		
+			fileIn = new Scanner(
+					new File(fileName), "UTF-8");		
 			String nextLine;
 			while (fileIn.hasNextLine()) {
 				nextLine = fileIn.nextLine();

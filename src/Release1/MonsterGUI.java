@@ -1,4 +1,4 @@
-package Release1;
+package release.One;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -91,7 +91,6 @@ public class MonsterGUI extends Application {
 	/******************************************************************
 	 * Override method for javafx. Starts the game with the stage
 	 * and runs the scenes.
-	 * @param Stage the primary stage used for the game. 
 	 *****************************************************************/
 	@Override
 	public void start(final Stage primaryStage) throws Exception {

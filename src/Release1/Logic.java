@@ -1,4 +1,4 @@
-package Release1;
+package release.One;
 
 import java.util.ArrayList;
 import java.util.Random;

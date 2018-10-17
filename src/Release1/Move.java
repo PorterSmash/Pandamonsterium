@@ -1,4 +1,4 @@
-package Release1;
+package release.One;
 
 /**********************************************************************
  * Move holds the four types of moves the monsters can 
@@ -16,7 +16,7 @@ public class Move {
 	/** the chance they will land the attack.*/
 	private int hitChance;
 	
-	/** who the target is (enemy)*/
+	/** who the target is (enemy). */
 	private int moveTarget;
 	
 	/******************************************************************
