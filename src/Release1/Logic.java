@@ -1,4 +1,4 @@
-package release.One;
+package Release1;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -41,15 +41,15 @@ public class Logic {
 	 * @param player1 array list of player one's monsters
 	 * @param player2 array list of player two's monsters
 	 *****************************************************************/
-	Logic(final ArrayList<Monster> player1, 
-			final ArrayList<Monster> player2) {
-		this.mon1 = 0;
-		this.mon2 = 0;
-
-		player1Team = player1;
-		player2Team = player2;
-		battleLogText = "";
-	}
+//	Logic(final ArrayList<Monster> player1, 
+//			final ArrayList<Monster> player2) {
+//		this.mon1 = 0; 
+//		this.mon2 = 0;
+//
+//		player1Team = player1;
+//		player2Team = player2;
+//		battleLogText = "";
+//	}
 
 	/******************************************************************
 	 * Default constructor.
@@ -96,11 +96,11 @@ public class Logic {
 	 * @param team1 To set for team one
 	 * @param team2 To set for team two
 	 ****************************************************************/
-	public void setTeams(final ArrayList<Monster> team1, 
-			final ArrayList<Monster> team2) {
-		player1Team = team1;
-		player2Team = team2;
-	}
+//	public void setTeams(final ArrayList<Monster> team1, 
+//			final ArrayList<Monster> team2) {
+//		player1Team = team1;
+//		player2Team = team2;
+//	}
 
 	/*****************************************************************
 	 * Gets the array list of monsters for team 1.
@@ -164,7 +164,7 @@ public class Logic {
 	 * @param moveCommitted Move to be done
 	 * @return int the damage to be applied
 	 ****************************************************************/
-	private int calcDamage(final Move moveCommitted) {
+	private int calcDamage(final Move moveCommitted,int move) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
 			target = player1Team.get(mon1);
@@ -174,10 +174,10 @@ public class Logic {
 			attacker = player1Team.get(mon1);
 		}
 		int dmgNum = 0;
-
+		if(move !=3) {
 		if (diceRoll(moveCommitted.getHitChance())) {
 			int dmgMultiplier = 1;
-			System.out.println("Move is a hit");
+			
 			if (diceRoll(moveCommitted.getCritChance())) {
 				dmgMultiplier = 2;
 			}
@@ -185,6 +185,10 @@ public class Logic {
 					+ attacker.getAttackBattle()) 
 					* dmgMultiplier) - (target.
 							getDefenseBattle() / 2);
+		
+		}
+		}else {
+			dmgNum = moveCommitted.getAttackPower();
 		}
 		return dmgNum;
 	}
@@ -209,7 +213,7 @@ public class Logic {
 			attacker = player1Team.get(mon1);
 			teamNum = 1;
 		}
-		int dmgDone = calcDamage(moveDone);
+		int dmgDone = calcDamage(moveDone,moveNum);
 		target.decreaseHealth(dmgDone);
 
 		turnNum++;
@@ -251,72 +255,6 @@ public class Logic {
 	}
 	
 	/******************************************************************
-	 * Calculates the damage based on the move input. Can do a 
-	 * normal attack, heavy attack,
-	 * @param moveCommitted move committed from the move class
-	 *****************************************************************/
-	public void calculateDamage(final Move moveCommitted) {
-		lastMove = moveCommitted;
-		
-		ArrayList<Monster> playerList;
-		//the following three vars make in turn neutral
-		
-		ArrayList<Monster> opponentPlayerList;
-		int target1; //refers to a defending target(healing)
-		int target2; //refers to an attacking target
-		if (playerTurn == 0) {
-			playerList = player1Team;
-			opponentPlayerList = player2Team;
-			target1 = mon1;
-			target2 = mon2;
-		} else {
-			playerList = player2Team;
-			opponentPlayerList = player1Team;
-			target1 = mon2;
-			target2 = mon1;
-		}
-		if (moveCommitted.getMoveTarget() == 0) {
-			//monster damage is applied to is monster 1
-			System.out.println("Healing");
-			if (diceRoll(moveCommitted.getHitChance())) {
-				int critVal = 5;
-				System.out.println("Move is a hit");
-				if (diceRoll(moveCommitted.getCritChance())) {
-					System.out.println("Move is a crit");
-					critVal = 10;
-				}
-				playerList.get(target1).
-				decreaseHealth(moveCommitted.
-						getAttackPower() * critVal);
-
-			} else {
-				System.out.println("Your attack missed");
-			}
-
-		} else {
-			//monster damage is applied to is mon2
-			if (diceRoll(moveCommitted.getHitChance())) {
-				int critVal = 5;
-				System.out.println("Move is a hit");
-				if (diceRoll(moveCommitted.getCritChance())) {
-					System.out.println("Move is a crit");
-					critVal = 10;
-				}
-				opponentPlayerList.get(target2).decreaseHealth(
-						(playerList.get(target1).
-				getAttackBattle() * critVal 
-			* ((10 - opponentPlayerList
-			.get(target2).getDefenseBattle()))) / 5);
-
-			} else {
-				System.out.println("Your attack missed");
-			}
-		}
-		changeTurn();
-		displayData();
-	}
-
-	/******************************************************************
 	 * Randomly chooses a number to determine the chance of certain
 	 * moves. Having the roll be less than the chance will allow 
 	 * the move to hit, or be critical.
@@ -341,15 +279,5 @@ public class Logic {
 	 ****************************************************************/
 	public void incTurnNum() {
 		turnNum++;
-	}
-	/******************************************************************
-	 * a little helper method to use while debugging.
-	 *****************************************************************/
-	public void displayData() {
-		System.out.println("Char1 Health: " 
-				+ player1Team.get(mon1).getHealthBattle());
-		System.out.println("Char2 Health: " 
-				+ player2Team.get(mon2).getHealthBattle());
-		System.out.println("Last Move: " + lastMove.toString());
 	}
 }
