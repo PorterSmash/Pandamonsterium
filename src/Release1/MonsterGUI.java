@@ -1,4 +1,4 @@
-package release.One;
+package Release1;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -88,9 +88,13 @@ public class MonsterGUI extends Application {
 
 	/** Log to let the user know what just happened. */
 	private TextArea battleLog;
+	
+	/** Announces what team. */
+	private Text whichTeam;
 	/******************************************************************
 	 * Override method for javafx. Starts the game with the stage
 	 * and runs the scenes.
+	 * @param Stage the primary stage used for the game. 
 	 *****************************************************************/
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
@@ -155,7 +159,7 @@ public class MonsterGUI extends Application {
 		// Choose monster button (goes to next scene)
 		Button chooseMonsterButton = new Button("Choose your Monster");
 
-		Text whichTeam = new Text("Pick Team One Monsters");
+		whichTeam = new Text("Pick Team One Monsters");
 
 		// Chooses the monster, updates elements in the battle scene
 		chooseMonsterButton.setOnAction(
@@ -461,6 +465,8 @@ public class MonsterGUI extends Application {
 	 *****************************************************************/
 	private void resetEverything() {
 		// TODO update text files for levels
+		whichTeam.setText(
+				"Pick Team One Monsters");
 		// reset monsters
 		player1Team = new ArrayList<Monster>();
 		player2Team = new ArrayList<Monster>();
@@ -641,7 +647,7 @@ public class MonsterGUI extends Application {
 
 					engine.changeTurn();
 
-					checkFainted(); // should check team 1
+					checkFainted(); // should check team 1 
 				} else {
 					engine.incTurnNum();
 				}
