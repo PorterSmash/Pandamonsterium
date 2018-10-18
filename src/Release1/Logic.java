@@ -23,9 +23,6 @@ public class Logic {
 	/** current monster on field for player two's team.*/
 	private int mon2;
 
-	/** holds last move performed.*/
-	private Move lastMove;
-
 	/** shows whose turn it is.*/
 	private int playerTurn = 0;
 
@@ -41,15 +38,15 @@ public class Logic {
 	 * @param player1 array list of player one's monsters
 	 * @param player2 array list of player two's monsters
 	 *****************************************************************/
-//	Logic(final ArrayList<Monster> player1, 
-//			final ArrayList<Monster> player2) {
-//		this.mon1 = 0; 
-//		this.mon2 = 0;
-//
-//		player1Team = player1;
-//		player2Team = player2;
-//		battleLogText = "";
-//	}
+	Logic(final ArrayList<Monster> player1, 
+			final ArrayList<Monster> player2) {
+		this.mon1 = 0; 
+		this.mon2 = 0;
+
+		player1Team = player1;
+		player2Team = player2;
+		battleLogText = "";
+	}
 
 	/******************************************************************
 	 * Default constructor.
@@ -96,11 +93,11 @@ public class Logic {
 	 * @param team1 To set for team one
 	 * @param team2 To set for team two
 	 ****************************************************************/
-//	public void setTeams(final ArrayList<Monster> team1, 
-//			final ArrayList<Monster> team2) {
-//		player1Team = team1;
-//		player2Team = team2;
-//	}
+	public void setTeams(final ArrayList<Monster> team1, 
+			final ArrayList<Monster> team2) {
+		player1Team = team1;
+		player2Team = team2;
+	}
 
 	/*****************************************************************
 	 * Gets the array list of monsters for team 1.
