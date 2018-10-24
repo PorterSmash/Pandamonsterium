@@ -578,6 +578,7 @@ public class JUnitTesting {
 		team1.add(target);
 		team2.add(attacker);
 		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		attacker.getMove2().setCritChance(0);
 		Move testMove = attacker.getMove2();
 		testMove.setCritChance(0);
 		testMove.setHitChance(10);
