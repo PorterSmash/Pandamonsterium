@@ -159,9 +159,10 @@ public class Logic {
 	/*****************************************************************
 	 * Calculates the damage to do for a given move.
 	 * @param moveCommitted Move to be done
+	 * @param move Int that represents move to be done
 	 * @return int the damage to be applied
 	 ****************************************************************/
-	private int calcDamage(final Move moveCommitted,int move) {
+	private int calcDamage(final Move moveCommitted, final int move) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
 			target = player1Team.get(mon1);
@@ -171,7 +172,7 @@ public class Logic {
 			attacker = player1Team.get(mon1);
 		}
 		int dmgNum = 0;
-		if(move !=3) {
+		if (move != 3) {
 		if (diceRoll(moveCommitted.getHitChance())) {
 			int dmgMultiplier = 1;
 			
@@ -184,7 +185,7 @@ public class Logic {
 							getDefenseBattle() / 2);
 		
 		}
-		}else {
+		} else  {
 			dmgNum = moveCommitted.getAttackPower();
 		}
 		return dmgNum;
@@ -210,7 +211,7 @@ public class Logic {
 			attacker = player1Team.get(mon1);
 			teamNum = 1;
 		}
-		int dmgDone = calcDamage(moveDone,moveNum);
+		int dmgDone = calcDamage(moveDone, moveNum);
 		target.decreaseHealth(dmgDone);
 
 		turnNum++;
