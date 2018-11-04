@@ -31,7 +31,15 @@ public class Logic {
 
 	/** Turn number for battle log to differentiate between turns. */
 	private int turnNum = 1;
-
+	
+	/** Coins the player has to purchase items. */
+	private int coins = 0;
+	
+	/** The list of items the player currently owns. */
+	private ArrayList<String> itemList = new ArrayList<String>();
+	
+	/** Used in conjunction with the silf scarf item. */
+	private boolean silkFlag = false;
 	/******************************************************************
 	 * Constructor that creates an arraylist of monsters for player 1.
 	 * and player 2
@@ -98,6 +106,13 @@ public class Logic {
 		player1Team = team1;
 		player2Team = team2;
 	}
+	 /****************************************************************
+	  * Sets the silkFlag boolean.
+	  * @param flag Bool to set
+	  ***************************************************************/
+	public void setSilkFlag(final boolean flag) {
+		silkFlag = flag;
+	}
 
 	/*****************************************************************
 	 * Gets the array list of monsters for team 1.
@@ -141,6 +156,13 @@ public class Logic {
 	}
 
 	/*****************************************************************
+	 * Returns the value of the silk scarf boolean
+	 * @return Boolean value of silk scarf
+	 *****************************************************************/
+	public boolean getSilk() {
+		return silkFlag;
+	}
+	/*****************************************************************
 	 * Gets the text to update the battle log.
 	 * @return The battle log text.
 	 *****************************************************************/
@@ -170,7 +192,12 @@ public class Logic {
 		} else {
 			target = player2Team.get(mon2);
 			attacker = player1Team.get(mon1);
+			if (itemList.contains("d")) {
+				moveCommitted.setHitChance(
+				moveCommitted.getHitChance() / 2);
+			}
 		}
+		
 		int dmgNum = 0;
 		if (move != 3) {
 		if (diceRoll(moveCommitted.getHitChance())) {
@@ -178,6 +205,9 @@ public class Logic {
 			
 			if (diceRoll(moveCommitted.getCritChance())) {
 				dmgMultiplier = 2;
+				if (itemList.contains("cc") && attacker == player2Team.get(mon2)) {
+					dmgMultiplier = 1;
+				}
 			}
 			dmgNum = ((moveCommitted.getAttackPower() 
 					+ attacker.getAttackBattle()) 
@@ -187,6 +217,9 @@ public class Logic {
 		}
 		} else  {
 			dmgNum = moveCommitted.getAttackPower();
+		}
+		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
+			dmgNum = 0;
 		}
 		return dmgNum;
 	}
@@ -212,6 +245,14 @@ public class Logic {
 			teamNum = 1;
 		}
 		int dmgDone = calcDamage(moveDone, moveNum);
+		if (itemList.contains("ss") && !silkFlag
+			&& dmgDone > target.getHealthBattle()
+			&& teamNum == 2) {
+			dmgDone = target.getHealthBattle() + 1;
+			silkFlag = true;
+			//eventually this will need to get reset 
+			//after a battle is finished
+		}
 		target.decreaseHealth(dmgDone);
 
 		turnNum++;
@@ -277,5 +318,49 @@ public class Logic {
 	 ****************************************************************/
 	public void incTurnNum() {
 		turnNum++;
+	}
+	/*****************************************************************
+	 * Gives the player an item(String) for a price.
+	 * @param price Price of the item
+	 ****************************************************************/
+	public void itemShop(final int price) {
+		if(price > coins) {
+			System.out.println("You do not have enough cois to purchase that");
+			//This if clause is unrealistic. In reality we would have some buttons 
+			//that would only appear if coins is large enough, or the buttons
+			//would just send a message or something if you don't have enough
+		}
+		switch(price) {
+		case 100:
+			itemList.add("hb");
+			//add a health boost to the monster, like 30 hp or something
+			//for each monster in player team, healthMax += 30.
+			break;
+		case 200:
+			itemList.add("something");
+			break;
+		case 300:
+			itemList.add("d");
+			//Dodger, enemy moves miss twice as often.
+			break;
+		case 400:
+			itemList.add("ss");
+			//modeled after the silk scarf, a monster can only be killed
+			//after it is brought to 1 hp. So a killshot brings the monster to 1 hp,
+			//and teh next killshot actually kills it. <maybe too ambitious>
+			break;
+		case 500:
+			itemList.add("cc");
+			//enemy monster crit chance is now 0, always. <takes two lines of code>
+			break;
+		case 3000000:
+			itemList.add("gm");
+			//god mode, all enemy hit chances are now 0.
+		default:
+			break;
+		}
+		//As of right now, if you buy all the items in the shop you become super OP. 
+		//I'm ok with this.
+		
 	}
 }
