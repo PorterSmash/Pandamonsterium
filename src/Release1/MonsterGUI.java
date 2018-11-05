@@ -1,7 +1,10 @@
 package Release1;
 
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -55,6 +59,12 @@ public class MonsterGUI extends Application {
 
 	/** holds player ones move. */
 	private int p1Move;
+	
+	/** holds the audio sound for punches*/
+	private AudioClip punchSound = new AudioClip(new File("punch.wav").toURI().toString());
+	
+	/** holds the audio sound for healing*/
+	private AudioClip healSound = new AudioClip(new File("heal.wav").toURI().toString());
 
 	/**Health bars displays. */
 	private Rectangle healthBar1, healthBar2;
@@ -407,7 +417,7 @@ public class MonsterGUI extends Application {
 					}
 				}
 
-				if (playerOneWin) {
+				if (playerOneWin) { 
 					winner = 1;
 					loser = 2; 
 				} else {
@@ -436,7 +446,7 @@ public class MonsterGUI extends Application {
 				healButton.setDisable(true);
 				otherButton.setDisable(true);
 
-				if (!option.isPresent()) {
+				if (!option.isPresent()) { 
 		// alert is exited, no button has been pressed.
 					System.out.println("Quit");
 					resetEverything();
@@ -599,6 +609,8 @@ public class MonsterGUI extends Application {
 	private void buttonMove(final int move) {
 		//checks if player one has gone. if they havent
 		//it will store it into p1move.
+		
+		
 		if (storedMoves[0] == null) {
 			p1Move = move;
 			if (move == 1)  {
@@ -632,6 +644,13 @@ public class MonsterGUI extends Application {
 						+ team2Chosen.getSpeedBattle());
 
 				engine.doMove(storedMoves[0], 1, p1Move);
+				if(p1Move==3) {
+					healSound.setPriority(0);
+					healSound.play();
+				}else {
+					punchSound.setPriority(0);
+					punchSound.play();
+				}
 				player1Team = engine.getTeam1();
 				player2Team = engine.getTeam2();
 				updateBattleScene();
@@ -641,6 +660,13 @@ public class MonsterGUI extends Application {
 				checkFainted(); // should check team 2
 				if (team2Chosen.getHealthBattle() > 0) {
 					engine.doMove(storedMoves[1], 0, move);
+					if(move==3) {
+						healSound.setPriority(1);
+						healSound.play();
+					}else {
+						punchSound.setPriority(1);
+						punchSound.play();
+					}
 					player1Team = engine.getTeam1();
 					player2Team = engine.getTeam2();
 					updateBattleScene();
@@ -658,6 +684,13 @@ public class MonsterGUI extends Application {
 
 			} else { // Team 2 is faster
 				engine.doMove(storedMoves[1], 0, move);
+				if(move==3) {
+					healSound.setPriority(0);
+					healSound.play();
+				}else {
+					punchSound.setPriority(0);
+					punchSound.play();
+				}
 				player1Team = engine.getTeam1();
 				player2Team = engine.getTeam2();
 				updateBattleScene();
@@ -668,6 +701,13 @@ public class MonsterGUI extends Application {
 				if (team1Chosen.getHealthBattle() != 0) {
 					engine.doMove(storedMoves[0], 1, 
 							p1Move);
+					if(p1Move==3) {
+						healSound.setPriority(1);
+						healSound.play();
+					}else {
+						punchSound.setPriority(1);
+						punchSound.play();
+					}
 					player1Team = engine.getTeam1();
 					player2Team = engine.getTeam2();
 					updateBattleScene();
@@ -676,7 +716,7 @@ public class MonsterGUI extends Application {
 				} else {
 					engine.incTurnNum();
 				}
-
+			
 				//clears stored moves for the next attack
 				storedMoves[0] = null;
 				storedMoves[1] = null;
