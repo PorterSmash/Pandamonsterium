@@ -1,4 +1,4 @@
-package release.One;
+package Release1;
 import java.io.File;
 import java.io.FileNotFoundException;
 //import java.util.ArrayList;
@@ -392,6 +392,10 @@ import java.util.Scanner;
 				fileIn.close();
 			}
 		}
+		monsterLevel = (maxHealthPoints / 10)
+				+ defensePoints 
+				+ attackPoints
+				+ speedPoints;
 	}
 	
 	/******************************************************************
@@ -401,7 +405,7 @@ import java.util.Scanner;
 	public void levelUp(final int statID) {
 		switch (statID) {
 		case 1:
-			maxHealthPoints += 1;
+			maxHealthPoints += 10;
 			break;
 		case 2:
 			defensePoints += 1;
@@ -416,6 +420,7 @@ import java.util.Scanner;
 			System.out.println("Invalid stat ID was "
 					+ "passed to levelUp method");
 		}
+		monsterLevel += 1;
  	}
 	
 	/******************************************************************
@@ -439,5 +444,16 @@ import java.util.Scanner;
 		attackBattle = attackPoints;
 		speedBattle = speedPoints;
 		defenseBattle = defensePoints;
+	}
+	/**
+	 * Sets all the stats in the monster to 0
+	 */
+	public void setAllZero() {
+		maxHealthPoints = 0;
+		attackPoints = 0;
+		speedPoints = 0;
+		defensePoints = 0;
+		monsterLevel = 0;
+		resetStats();
 	}
 }

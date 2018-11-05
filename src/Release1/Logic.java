@@ -319,6 +319,7 @@ public class Logic {
 	public void incTurnNum() {
 		turnNum++;
 	}
+	
 	/*****************************************************************
 	 * Gives the player an item(String) for a price.
 	 * @param price Price of the item
@@ -362,5 +363,50 @@ public class Logic {
 		//As of right now, if you buy all the items in the shop you become super OP. 
 		//I'm ok with this.
 		
+	}
+	/*****************************************************************
+	 * Generates a team of monsters to battle against the player when they
+	 * are playing alone.
+	 * @param levelID amount of stats that the enemy team has
+	 * CHANGE THE INT PARAMETER LATER TO A STRING SO THAT THE LEVEL IS NOT DETERMINED JUST BY A NUMBER
+	 * Note, levelId will be at least 4, more likely 10 sum(allStatValues) basically
+	 *****************************************************************/
+	public void generateEnemyTeam(final int levelID) {
+		/**My current idea is to make a team of three monsters, and then 
+		have each monster start with 1 for the 4 stat values. Then
+		the system randomly chooses a number between 1-3 inclusive(let's say "a"), and then 
+		a number from 0-3 inclusive. ("b") So "a" is the amount of stat points
+		to attribute to statID (b). So for each monster in the team, we call
+		levelup(b) * a times. Also we generate the monsters randomly. So pick 3 numbers 1-6
+		and then those are the monsters we run with.
+		*/
+		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
+		Random rnd = new Random();
+		String[] monsterList = {"Charizard", "Staryu", "Nidoking", "Jolteon", "Squirtle", "Raichu"};
+		for(int i = 0; i < 3; i ++) {
+			Monster computerMonster = new Monster();
+			computerMonster.monsterFactory(monsterList[rnd.nextInt(7)]);
+			computerMonster.setAllZero();
+			initializeComputerMonster(singleMonsterStats, computerMonster);
+			player2Team.add(computerMonster);
+		}
+	}
+	/**
+	 * RAndomizes and sets the stats of the monster
+	 * @param compMonster
+	 */
+	private void initializeComputerMonster(final int monsterLevel, final Monster compMonster) {
+		int runningTotal = monsterLevel;
+		Random rnd = new Random();
+		int statVal = rnd.nextInt(2) + 1; //from 1-3
+		int statID = rnd.nextInt(3) + 1; //from 1-4
+		for(int i = statVal; i >= 0; i--) {
+			if(runningTotal == 0) {
+				break;
+			}
+			compMonster.levelUp(statID);
+			runningTotal -= 1;
+		}
+		//this will go unti lall the stats are attributed
 	}
 }
