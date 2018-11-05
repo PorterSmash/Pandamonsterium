@@ -1,4 +1,4 @@
-package Release1;
+package release.One;
 
 
 import java.io.File;
@@ -9,7 +9,9 @@ import java.util.Optional;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -23,6 +25,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -73,9 +77,9 @@ public class MonsterGUI extends Application {
 
 	private static Media defaultBgm = new Media(new File("defaultBGM.mp3").toURI().toString());
 
-	private static Media normBattleBgm = new Media(new File("normBattle.wav").toURI().toString());
+	private static Media normBattleBgm = new Media(new File("normBattle.mp3").toURI().toString());
 		
-//	private static Media bossBattleBgm = new Media(new File("bossBattle.wav").toURI().toString());
+	private static Media bossBattleBgm = new Media(new File("bossBattle.wav").toURI().toString());
 	
 	private static MediaPlayer defaultPlayer,normPlayer,bossPlayer;
 
@@ -123,42 +127,55 @@ public class MonsterGUI extends Application {
 	public void start(final Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Pandemon(ster)ium");
-		BorderPane titleLayout = new BorderPane();
+		GridPane startLayout = new GridPane();
 
-		//instead of canvas, just do a text. less code?
 		Image titleImage = new Image("titlePic.png");
 		Text titleText = new Text("Pandemonsterium");
 		titleText.setFont(Font.font("Verdana", FontWeight.BOLD, 50));
 		titleText.setFill(Color.RED);
 
 		// Start button
-		Button button = new Button("Start");
+		Button button = new Button("2-player game");
 		button.setPrefWidth(100);
 		button.setPrefHeight(50);
 		button.setOnAction(e -> primaryStage.setScene(monsterScene));
 
-
-		titleLayout.setTop(titleText);
-		titleLayout.setBottom(button);
+		Button buttonCPU = new Button("Player Vs. CPU");
+		buttonCPU.setPrefWidth(100);
+		buttonCPU.setPrefHeight(50);
+		buttonCPU.setOnAction(e -> primaryStage.setScene(monsterScene));
 
 		ImageView titleImage1 = new ImageView(titleImage);
-		titleLayout.setCenter(titleImage1);
 		titleImage1.setFitHeight(300);
 		titleImage1.setFitWidth(300);
-		BorderPane.setMargin(button, new Insets(100, 50, 50, 350));
-		BorderPane.setMargin(titleText, new Insets(10, 50, 50, 150));
+		
+		//startLayout.setGridLinesVisible(true);
 
-		titleScene = new Scene(titleLayout, 800, 600);
+		VBox root = new VBox();
+		root.getChildren().add(startLayout);
+		root.setAlignment(Pos.CENTER);
+		HBox root2 = new HBox();
+		root2.getChildren().add(root);
+		root2.setAlignment(Pos.CENTER);
+		titleScene = new Scene(root2, 800, 650);
+		startLayout.add(titleText, 0, 0);
+		GridPane.setHalignment(titleText, HPos.CENTER);
+		GridPane.setMargin(titleText, new Insets(10, 10, 10, 10));
+		startLayout.add(titleImage1, 0, 1);
+		GridPane.setHalignment(titleImage1, HPos.CENTER);
+		GridPane.setMargin(titleImage1, new Insets(10, 10, 10, 10));
+		startLayout.add(button, 0, 2);
+		GridPane.setHalignment(button, HPos.CENTER);
+		GridPane.setMargin(button, new Insets(10, 10, 10, 10));
+		startLayout.add(buttonCPU, 0, 3);
+		GridPane.setHalignment(buttonCPU, HPos.CENTER);
+		GridPane.setMargin(buttonCPU, new Insets(10, 10, 10, 10));
 		primaryStage.setScene(titleScene);
 
 		backgroundMusic("default");
 
 		// Monster Select Scene
 		GridPane monsterLayout = new GridPane();
-		FlowPane flowLayout = new FlowPane();
-		// GridPane in a FlowPane
-		flowLayout.setStyle("-fx-background-color: DAE6F3;");
-		flowLayout.getChildren().add(monsterLayout);
 
 		// Choose monster choiceboxes
 		ChoiceBox<String> monsterBox1 = new ChoiceBox<>();
@@ -248,11 +265,23 @@ public class MonsterGUI extends Application {
 		instantiateHealthAndLabels();
 
 		monsterLayout.add(monsterBox1, 0, 0);
+		GridPane.setHalignment(monsterBox1, HPos.CENTER);
 		monsterLayout.add(monsterBox2, 0, 1);
+		GridPane.setHalignment(monsterBox2, HPos.CENTER);
 		monsterLayout.add(monsterBox3, 0, 2);
+		GridPane.setHalignment(monsterBox3, HPos.CENTER);
 		monsterLayout.add(chooseMonsterButton, 0, 3);
-		monsterLayout.add(whichTeam, 4, 6);
-		monsterScene = new Scene(flowLayout, 400, 600);
+		GridPane.setHalignment(chooseMonsterButton, HPos.CENTER);
+		monsterLayout.add(whichTeam, 0, 4);
+		GridPane.setHalignment(whichTeam, HPos.CENTER);
+		
+		VBox root3 = new VBox();
+		root3.getChildren().add(monsterLayout);
+		root3.setAlignment(Pos.CENTER);
+		HBox root4 = new HBox();
+		root4.getChildren().add(root3);
+		root4.setAlignment(Pos.CENTER);
+		monsterScene = new Scene(root4, 250, 150);
 
 		// Battle scene
 
@@ -320,7 +349,7 @@ public class MonsterGUI extends Application {
 		//images 
 		Image placeHolder = new Image("titlePic.png");
 
-		battleScene = new Scene(battleLayout, 1200, 720);
+		battleScene = new Scene(battleLayout, 770, 625);
 		setUpBattleLayout(battleLayout, healthBarBack1, healthBarBack2);
 
 		player1Sprite = new ImageView(placeHolder);
@@ -611,10 +640,28 @@ public class MonsterGUI extends Application {
 		battleLayout.add(nameLabel2, 2, 0);
 		battleLayout.add(levelLabel2, 3, 0);
 		battleLayout.add(healthPointsLabel2, 2, 2);
-		battleLayout.add(attackButton, 9, 1);
-		battleLayout.add(heavyButton, 8, 1);
-		battleLayout.add(healButton, 8, 2);
-		battleLayout.add(otherButton, 9, 2);
+		GridPane actionButtons = new GridPane();
+		actionButtons.add(attackButton, 0, 0);
+		GridPane.setHalignment(attackButton, HPos.CENTER);
+		GridPane.setMargin(attackButton, new Insets(10, 10, 10, 10));
+		attackButton.setPrefSize(100, 20);
+		
+		actionButtons.add(heavyButton, 1, 0);
+		GridPane.setHalignment(heavyButton, HPos.CENTER);
+		GridPane.setMargin(heavyButton, new Insets(10, 10, 10, 10));
+		heavyButton.setPrefSize(100, 20);
+		
+		actionButtons.add(healButton, 0, 1);
+		GridPane.setHalignment(healButton, HPos.CENTER);
+		GridPane.setMargin(healButton, new Insets(10, 10, 10, 10));
+		healButton.setPrefSize(100, 20);
+		
+		actionButtons.add(otherButton, 1, 1);
+		GridPane.setHalignment(otherButton, HPos.CENTER);
+		GridPane.setMargin(otherButton, new Insets(10, 10, 10, 10));
+		otherButton.setPrefSize(100, 20);
+		
+		battleLayout.add(actionButtons, 2, 21);
 
 		battleLayout.add(battleLog, 0, 21);
 

@@ -1,4 +1,4 @@
-package Release1;
+package release.One;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -383,30 +383,32 @@ public class Logic {
 		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
 		Random rnd = new Random();
 		String[] monsterList = {"Charizard", "Staryu", "Nidoking", "Jolteon", "Squirtle", "Raichu"};
-		for(int i = 0; i < 3; i ++) {
+		for(int i = 0; i < 2; i ++) { // generate 2 normal monsters
 			Monster computerMonster = new Monster();
-			computerMonster.monsterFactory(monsterList[rnd.nextInt(7)]);
-			computerMonster.setAllZero();
-			initializeComputerMonster(singleMonsterStats, computerMonster);
-			player2Team.add(computerMonster);
+			computerMonster.monsterFactory(monsterList[rnd.nextInt(7)]); // auto-assigns info other than stats to monster
+			computerMonster.setAllZero(); // sets all stats to 0
+			initializeComputerMonster(singleMonsterStats, computerMonster); // loops through, adding stats
+			player2Team.add(computerMonster); // adds monster to enemy team, repeat
 		}
+		// generate boss monster
+		Monster computerMonster = new Monster();
+		computerMonster.monsterFactory(monsterList[rnd.nextInt(7)]); // auto-assigns info other than stats to monster
+		computerMonster.setAllZero(); // sets all stats to 0
+		initializeComputerMonster((int)(singleMonsterStats * 1.5), computerMonster); // loops through, adding stats, more powerful (times 1.5)
+		player2Team.add(computerMonster); // adds monster to enemy team, repeat
+		
 	}
 	/**
 	 * RAndomizes and sets the stats of the monster
 	 * @param compMonster
 	 */
 	private void initializeComputerMonster(final int monsterLevel, final Monster compMonster) {
-		int runningTotal = monsterLevel;
 		Random rnd = new Random();
-		int statVal = rnd.nextInt(2) + 1; //from 1-3
-		int statID = rnd.nextInt(3) + 1; //from 1-4
-		for(int i = statVal; i >= 0; i--) {
-			if(runningTotal == 0) {
-				break;
-			}
-			compMonster.levelUp(statID);
-			runningTotal -= 1;
+		compMonster.setMaxHealthPoints(60); // start HP at 60, since everything was set to zero, and having a monster with 0hp would be bad
+		int totalLoops = monsterLevel + (rnd.nextInt(5) - 2) + 18; // Mon will be +- 2 levels from the entered monster level (variation), all mons start with 18 stat points at level 1
+		for (int i = 0; i < totalLoops; i++) { // Levels up 1 stat per level + the initial 18 stat points, randomly distributed
+			compMonster.levelUp(rnd.nextInt(4) + 1);
 		}
-		//this will go unti lall the stats are attributed
 	}
+	
 }
