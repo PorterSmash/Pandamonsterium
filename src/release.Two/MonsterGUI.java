@@ -298,6 +298,7 @@ public class MonsterGUI extends Application {
 							heavyButton.setDisable(false);
 							healButton.setDisable(false);
 							otherButton.setDisable(false);
+							isCPUGame = false;
 						}
 					}
 				});

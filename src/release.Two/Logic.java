@@ -221,8 +221,13 @@ public class Logic {
 		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
 			dmgNum = 0;
 		}
-		return dmgNum;
-	}
+		// Initial part adds between 0% and 50% damage to the attack, but it always subtracts 25%, 
+		// so it can be anywhere between -25% and 25% damage. Gives some difference to attacks so 
+		// it's not both mons doing the same damage every time.
+
+		Random rdn = new Random();
+		return dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
+		}
 	
 	/*****************************************************************
 	 * Applies the damage to a monster.
