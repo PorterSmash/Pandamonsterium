@@ -1,7 +1,12 @@
 package release.Two;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 /**********************************************************************
  * Logic class that manipulates the monsters from the monster class.
  * through damage and switches the monster
@@ -156,7 +161,7 @@ public class Logic {
 	}
 
 	/*****************************************************************
-	 * Returns the value of the silk scarf boolean
+	 * Returns the value of the silk scarf boolean.
 	 * @return Boolean value of silk scarf
 	 *****************************************************************/
 	public boolean getSilk() {
@@ -171,14 +176,14 @@ public class Logic {
 	}
 	
 	/**
-	 * Sets the value of the coins
+	 * Sets the value of the coins.
 	 * @param toSet Coin value to set
 	 */
-	public void setCoins(int toSet) {
+	public void setCoins(final int toSet) {
 		coins = toSet;
 	}
 	/**
-	 * Returns the number of coins the player has
+	 * Returns the number of coins the player has.
 	 * @return The number of coins
 	 */
 	public int getCoins() {
@@ -220,22 +225,21 @@ public class Logic {
 			
 			if (diceRoll(moveCommitted.getCritChance())) {
 				dmgMultiplier = 2;
-				if (itemList.contains("cc") && attacker == player2Team.get(mon2)) {
+				if (itemList.contains("cc") 
+				&& attacker == player2Team.get(mon2)) {
 					dmgMultiplier = 1;
 				}
 			}
-			dmgNum = ((moveCommitted.getAttackPower() 
-					+ attacker.getAttackBattle()) 
-					* dmgMultiplier) - (target.
-							getDefenseBattle() / 2);
-		
-		}
-		} else  {
 			Random rnd = new Random();
 			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
 			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
+		
 		}
-		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
+		} else  {
+			dmgNum = moveCommitted.getAttackPower();
+		}
+		if (itemList.contains("gm") 
+		&& attacker == player2Team.get(mon2)) {
 			dmgNum = 0;
 		}
 		// Initial part adds between 0% and 50% damage to the attack, but it always subtracts 25%, 
@@ -347,13 +351,13 @@ public class Logic {
 	 * @param price Price of the item
 	 ****************************************************************/
 	public void itemShop(final int price) {
-		if(price > coins) {
+		if (price > coins) {
 			System.out.println("You do not have enough cois to purchase that");
 			//This if clause is unrealistic. In reality we would have some buttons 
 			//that would only appear if coins is large enough, or the buttons
 			//would just send a message or something if you don't have enough
 		}
-		switch(price) {
+		switch (price) {
 		case 100:
 			itemList.add("hb");
 			//add a health boost to the monster, like 30 hp or something
@@ -421,10 +425,103 @@ public class Logic {
 		
 	}
 	/**
-	 * RAndomizes and sets the stats of the monster
-	 * @param compMonster
+	 * Creates a text file that contains all necessary information
+	 * to continue with an already played game. This is only useful
+	 * in a single player context.
 	 */
-	private void initializeComputerMonster(final int monsterLevel, final Monster compMonster) {
+	public void saveGame() {
+		/*Creates a txt file on the players desktop that contains
+		all teh information needed to continue with a game. This includes:
+		- Monsters and monster levels
+		- Items held
+		- coins in the coin bank
+		*/
+		String fileName = this.toString();
+		try {
+			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+			for (Monster mon : player1Team) {
+				writer.println(mon.getMonsterName());
+				writer.println(mon.getMaxHealthPoints());
+				writer.println(mon.getAttackPoints());
+				writer.println(mon.getDefensePoints());
+				writer.println(mon.getSpeedPoints());
+			}
+			for (String item : itemList) {
+				writer.print(item + ",");
+			}
+			writer.println("Items done.");
+			writer.println(this.coins);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Reads in information from a data file and continues a game.
+	 * @param fileName
+	 */
+	public void loadGame(final String fileName) {
+		Scanner fileIn = null;
+		try {
+			fileIn = new Scanner(
+					new File(fileName), "UTF-8");	
+			player1Team.clear();
+			String currentLine = fileIn.nextLine();
+			Monster readMonster = new Monster();
+			readMonster(fileIn, currentLine, readMonster);
+			player1Team.add(readMonster);
+			currentLine = fileIn.nextLine();
+			readMonster(fileIn, currentLine, readMonster);
+			currentLine = fileIn.nextLine();
+			readMonster(fileIn, currentLine, readMonster);
+			currentLine = fileIn.nextLine();
+			if (!currentLine.equals(",")) {
+				String[] items = currentLine.split(",");
+				for (int i = 0; i < items.length; i++) {
+					itemList.add(items[i]);
+				}
+				currentLine = fileIn.nextLine();
+		} else {
+				currentLine = fileIn.nextLine();
+			}
+			currentLine = fileIn.nextLine();
+			coins = Integer.parseInt(currentLine);	
+			
+			
+	} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		
+} finally {
+			if (fileIn != null) {
+			fileIn.close();
+			}
+		}
+		
+	}
+
+	private void readMonster(final Scanner fileIn, String currentLine, final Monster firstMon) {
+		firstMon.monsterFactory(currentLine);
+		currentLine = fileIn.nextLine();
+		firstMon.setMaxHealthPoints(
+				Integer.parseInt(currentLine));
+		currentLine = fileIn.nextLine();
+		firstMon.setAttackPoints(Integer.parseInt(currentLine));
+		currentLine = fileIn.nextLine();
+		firstMon.setDefensePoints(
+				Integer.parseInt(currentLine));
+		currentLine = fileIn.nextLine();
+		firstMon.setSpeedPoints(Integer.parseInt(currentLine));
+	}
+	/**
+	 * RAndomizes and sets the stats of the monster.
+	 * @param compMonster Monster being created
+	 * @param monsterLevel Level of the monster
+	 */
+	private void initializeComputerMonster(final int monsterLevel, 
+			final Monster compMonster) {
 		Random rnd = new Random();
 		compMonster.setMaxHealthPoints(60); // start HP at 60, since everything was set to zero, and having a monster with 0hp would be bad
 		//System.out.println(compMonster.getAttackPoints() + " " + compMonster.getDefensePoints() + " " + compMonster.getSpeedPoints() + " " + compMonster.getMaxHealthPoints());

@@ -456,4 +456,13 @@ import java.util.Scanner;
 		monsterLevel = 0;
 		resetStats();
 	}
+	/**
+	 * Set the monster's level
+	 */
+	public void resetMonsterLevel() {
+		monsterLevel = (maxHealthPoints / 10)
+				+ defensePoints 
+				+ attackPoints
+				+ speedPoints - 27;
+	}
 }
