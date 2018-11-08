@@ -4,6 +4,8 @@ package release.Two;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Random;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -664,8 +666,122 @@ public class MonsterGUI extends Application {
 		//checks if player one has gone. if they havent
 		//it will store it into p1move.
 
+		System.out.println(isCPUGame);
+		if (!isCPUGame) {
+			if (storedMoves[0] == null) {
+				p1Move = move;
+				if (move == 1)  {
+					storedMoves[0] = team1Chosen.getMove1();
+				} else if (move == 2) {
+					storedMoves[0] = team1Chosen.getMove2();
+				} else if (move == 3) {
+					storedMoves[0] = team1Chosen.getMove3();
+				} else {
+					storedMoves[0] = team1Chosen.getMove4();
+				}
+			} else if (storedMoves[1] == null) {
+				//if player one has a move already it will take 
+				//move and give it to team 2
+				if (move == 1)  {
+					storedMoves[1] = team2Chosen.getMove1();
+				}	else if (move == 2) {
+					storedMoves[1] = team2Chosen.getMove2();
+				}	else if (move == 3) {
+					storedMoves[1] = team2Chosen.getMove3();
+				}	else {
+					storedMoves[1] = team2Chosen.getMove4();
+				}
 
-		if (storedMoves[0] == null) {
+
+				//checks which team has a faster monster
+				//who will attack first
+				if (team1Chosen.getSpeedBattle() 
+						> team2Chosen.getSpeedBattle()) {
+					System.out.println("Player 1 attacked first. Speed: " 
+							+ team1Chosen.getSpeedBattle() + " vs. " 
+							+ team2Chosen.getSpeedBattle());
+
+					engine.doMove(storedMoves[0], 1, p1Move);
+					if(p1Move==3) {
+						healSound.setPriority(0);
+						healSound.play();
+					}else {
+						punchSound.setPriority(0);
+						punchSound.play();
+					}
+					player1Team = engine.getTeam1();
+					player2Team = engine.getTeam2();
+					updateBattleScene();
+					if (engine.getTurn() == 0) {
+						engine.changeTurn();
+					}
+					checkFainted(); // should check team 2
+					if (team2Chosen.getHealthBattle() > 0) {
+						engine.doMove(storedMoves[1], 0, move);
+						if(move==3) {
+							healSound.setPriority(1);
+							healSound.play();
+						}else {
+							punchSound.setPriority(1);
+							punchSound.play();
+						}
+						player1Team = engine.getTeam1();
+						player2Team = engine.getTeam2();
+						updateBattleScene();
+
+						engine.changeTurn();
+
+						checkFainted(); // should check team 1 
+					} else {
+						engine.incTurnNum();
+					}
+					//clears stored moves for the next attack
+					storedMoves[0] = null;
+					storedMoves[1] = null;
+
+
+				} else { // Team 2 is faster
+					engine.doMove(storedMoves[1], 0, move);
+					if (move == 3) {
+						healSound.setPriority(0);
+						healSound.play();
+					} else  {
+						punchSound.setPriority(0);
+						punchSound.play();
+					}
+					player1Team = engine.getTeam1();
+					player2Team = engine.getTeam2();
+					updateBattleScene();
+					if (engine.getTurn() == 1) {
+						engine.changeTurn();
+					}
+					checkFainted(); // should check team 1
+					if (team1Chosen.getHealthBattle() != 0) {
+						engine.doMove(storedMoves[0], 1, 
+								p1Move);
+						if (p1Move == 3)  {
+							healSound.setPriority(1);
+							healSound.play();
+						} else  {
+							punchSound.setPriority(1);
+							punchSound.play();
+						}
+						player1Team = engine.getTeam1();
+						player2Team = engine.getTeam2();
+						updateBattleScene();
+						engine.changeTurn();
+						checkFainted();
+					} else {
+						engine.incTurnNum();
+					}
+
+					//clears stored moves for the next attack
+					storedMoves[0] = null;
+					storedMoves[1] = null;
+				}
+			}
+		} else { // This IS a CPU game, add P1's move, and randomly select P2's
+			System.out.println("CompGame");
 			p1Move = move;
 			if (move == 1)  {
 				storedMoves[0] = team1Chosen.getMove1();
@@ -676,18 +792,7 @@ public class MonsterGUI extends Application {
 			} else {
 				storedMoves[0] = team1Chosen.getMove4();
 			}
-		} else if (storedMoves[1] == null) {
-			//if player one has a move already it will take 
-			//move and give it to team 2
-			if (move == 1)  {
-				storedMoves[1] = team2Chosen.getMove1();
-			}	else if (move == 2) {
-				storedMoves[1] = team2Chosen.getMove2();
-			}	else if (move == 3) {
-				storedMoves[1] = team2Chosen.getMove3();
-			}	else {
-				storedMoves[1] = team2Chosen.getMove4();
-			}
+			storedMoves[1] = M_m_m_monsterSmash(team2Chosen);
 
 			//checks which team has a faster monster
 			//who will attack first
@@ -777,6 +882,18 @@ public class MonsterGUI extends Application {
 			}
 		}
 	}
+	private Move M_m_m_monsterSmash(Monster enemyMon) {
+		Random rnd = new Random();
+		int moveChoice = rnd.nextInt(100);
+		if (moveChoice < 39) {
+			return enemyMon.getMove1();
+		} else if (moveChoice < 79) {
+			return enemyMon.getMove2();
+		} else {
+			return enemyMon.getMove3();
+		}
+	}
+	
 	private void replaceFaintedMonster(ArrayList<Monster> teamList, Monster mon) {
 		Monster chosenMon = null;
 		switch (engine.getTurn()) {

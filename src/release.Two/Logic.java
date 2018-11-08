@@ -231,7 +231,9 @@ public class Logic {
 		
 		}
 		} else  {
-			dmgNum = moveCommitted.getAttackPower();
+			Random rnd = new Random();
+			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
+			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
 		}
 		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
 			dmgNum = 0;
