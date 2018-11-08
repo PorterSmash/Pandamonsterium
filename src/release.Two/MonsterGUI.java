@@ -2,10 +2,8 @@ package release.Two;
 
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.Optional;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -77,7 +75,7 @@ public class MonsterGUI extends Application {
 
 	private static Media defaultBgm = new Media(new File("defaultBGM.mp3").toURI().toString());
 
-	private static Media normBattleBgm = new Media(new File("normBattle.mp3").toURI().toString());
+	private static Media normBattleBgm = new Media(new File("normBattle.wav").toURI().toString());
 		
 	private static Media bossBattleBgm = new Media(new File("bossBattle.wav").toURI().toString());
 	
@@ -122,6 +120,7 @@ public class MonsterGUI extends Application {
 	/** Announces what team. */
 	private Text whichTeam;
 	
+	/** Determines if it is a CPU game. */
 	private boolean isCPUGame;
 	/******************************************************************
 	 * Override method for javafx. Starts the game with the stage
@@ -153,6 +152,7 @@ public class MonsterGUI extends Application {
 				new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(final ActionEvent arg0) {
+						System.out.println("Yup");
 						isCPUGame = true;
 						primaryStage.setScene(monsterScene);
 					}
@@ -301,7 +301,7 @@ public class MonsterGUI extends Application {
 							heavyButton.setDisable(false);
 							healButton.setDisable(false);
 							otherButton.setDisable(false);
-							isCPUGame = false;
+							//isCPUGame = false; //What is going on with this line here?
 						}
 					}
 				});
@@ -426,6 +426,12 @@ public class MonsterGUI extends Application {
 		if (onFieldMon.getHealthBattle() <= 0) {
 			engine.addBattleText(onFieldMon.getMonsterName() 
 					+ " Has Fainted\n");
+			System.out.println(isCPUGame);
+			System.out.println(onFieldMon == team2Chosen);
+			if(isCPUGame && onFieldMon == team2Chosen) {
+			engine.addBattleText("20 coins have been added to your account\n");
+				engine.setCoins(engine.getCoins() + 20);
+			}
 			updateBattleScene();
 
 
@@ -438,127 +444,37 @@ public class MonsterGUI extends Application {
 			for (Monster mon : teamList) {
 				if (mon.getHealthBattle() > 0) {
 					hasMonstersLeft = true;
+					if(isCPUGame && onFieldMon == team2Chosen) {
+						replaceFaintedMonster(teamList, mon);
+						break;
+					} else {
 					Button but = new Button("Pick " 
 							+ mon.getMonsterName());
 					but.setOnAction(new 
 							EventHandler<ActionEvent>() {
 						public void handle(final ActionEvent arg0) {
-							Monster chosenMon = null;
-							switch (engine.getTurn()) {
-							case 0:
-								team1Chosen = mon;
-								chosenMon = team1Chosen;
-								break;
-							case 1:
-								team2Chosen = mon;
-								chosenMon = team2Chosen;
-								break;
-							default:
-								break;
-							}
-							if (chosenMon != null) {
-								engine.addBattleText("Team " 
-										+ (engine.getTurn() 
-												+ 1) + " sent out " 
-												+ chosenMon.getMonsterName() + "!\n");
-							}
-							int switchedMonsterIndex = 1;
-							for (int i = 0; i < teamList.size(); i++) {
-								if (teamList.get(i) == chosenMon) {
-									switchedMonsterIndex = i;
-								}
-							}
-							updateBattleScene();
-							if (teamList == player1Team) {
-								engine.setTeamsAndMons(player1Team,
-										player2Team, switchedMonsterIndex, -1);
-
-							} else {
-								engine.setTeamsAndMons(player1Team,
-										player2Team, -1, switchedMonsterIndex);
-							}
-
-							attackButton.setDisable(false);
-							heavyButton.setDisable(false);
-							healButton.setDisable(false);
-							otherButton.setDisable(false);
-
-
-							switchMonPane.getChildren().clear();
-							stage.close();
+							replaceFaintedMonster(teamList, mon);
 						}
+
+						
 					});
 					switchMonPane.getChildren().add(but);
+				}
 				}
 
 			}
 			if (!hasMonstersLeft) {
-				//game needs to end
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-
-				int winner = 0;
-				int loser = 0;
-				boolean playerOneWin = false;
-
-				for (Monster mon : player1Team) {
-					if (mon.getHealthBattle() > 0) {
-						playerOneWin = true;
-					}
-				}
-
-				if (playerOneWin) { 
-					winner = 1;
-					loser = 2; 
-				} else {
-					winner = 2;
-					loser = 1;
-				}
-
-
-				alert.setTitle("Someone has run out of Pokemon!");
-				alert.setHeaderText("Player " + winner + " wins!");
-
-				alert.setContentText("Player " + loser
-						+ " has run out of Pokemon, so the match is over!");
-
-				ButtonType restart = new ButtonType("Restart");
-				ButtonType cancel = new ButtonType("Cancel");
-				alert.getButtonTypes().clear();
-				alert.getButtonTypes().addAll(restart, cancel);
-				Optional<ButtonType> option = alert.showAndWait();
-
-
-
-				//return to main menu, or exit program
-				attackButton.setDisable(true);
-				heavyButton.setDisable(true);
-				healButton.setDisable(true);
-				otherButton.setDisable(true);
-
-				if (!option.isPresent()) { 
-					// alert is exited, no button has been pressed.
-					System.out.println("Quit");
-					resetEverything();
-					mainStage.setScene(titleScene);
-
-
-				} else if (option.get() == restart) {
-					//okay button is pressed
-					System.out.println("OK");
-					resetEverything();
-					
-					mainStage.setScene(titleScene);
-
-				} else if (option.get() == cancel) {
-					mainStage.close();
-					stage.close();
-				}
+				gameOverAlert();
 			} else {
+				if(!isCPUGame || onFieldMon == team1Chosen) {
 				stage.setScene(pickPokemon);
 				stage.show();
+				}
 			}
 		}
 	}
+
+	
 
 	/******************************************************************
 	 * Resets the monsters and everything else for a new game.
@@ -822,10 +738,10 @@ public class MonsterGUI extends Application {
 
 			} else { // Team 2 is faster
 				engine.doMove(storedMoves[1], 0, move);
-				if(move==3) {
+				if (move == 3) {
 					healSound.setPriority(0);
 					healSound.play();
-				}else {
+				} else  {
 					punchSound.setPriority(0);
 					punchSound.play();
 				}
@@ -839,10 +755,10 @@ public class MonsterGUI extends Application {
 				if (team1Chosen.getHealthBattle() != 0) {
 					engine.doMove(storedMoves[0], 1, 
 							p1Move);
-					if(p1Move==3) {
+					if (p1Move == 3)  {
 						healSound.setPriority(1);
 						healSound.play();
-					}else {
+					} else  {
 						punchSound.setPriority(1);
 						punchSound.play();
 					}
@@ -859,6 +775,113 @@ public class MonsterGUI extends Application {
 				storedMoves[0] = null;
 				storedMoves[1] = null;
 			}
+		}
+	}
+	private void replaceFaintedMonster(ArrayList<Monster> teamList, Monster mon) {
+		Monster chosenMon = null;
+		switch (engine.getTurn()) {
+		case 0:
+			team1Chosen = mon;
+			chosenMon = team1Chosen;
+			break;
+		case 1:
+			team2Chosen = mon;
+			chosenMon = team2Chosen;
+			break;
+		default:
+			break;
+		}
+		if (chosenMon != null) {
+			engine.addBattleText("Team " 
+					+ (engine.getTurn() 
+							+ 1) + " sent out " 
+							+ chosenMon.getMonsterName() + "!\n");
+		}
+		int switchedMonsterIndex = 1;
+		for (int i = 0; i < teamList.size(); i++) {
+			if (teamList.get(i) == chosenMon) {
+				switchedMonsterIndex = i;
+			}
+		}
+		updateBattleScene();
+		if (teamList == player1Team) {
+			engine.setTeamsAndMons(player1Team,
+					player2Team, switchedMonsterIndex, -1);
+
+		} else {
+			engine.setTeamsAndMons(player1Team,
+					player2Team, -1, switchedMonsterIndex);
+		}
+
+		attackButton.setDisable(false);
+		heavyButton.setDisable(false);
+		healButton.setDisable(false);
+		otherButton.setDisable(false);
+
+
+		switchMonPane.getChildren().clear();
+		stage.close();
+	}
+	private void gameOverAlert() {
+		//game needs to end
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+
+		int winner = 0;
+		int loser = 0;
+		boolean playerOneWin = false;
+
+		for (Monster mon : player1Team) {
+			if (mon.getHealthBattle() > 0) {
+				playerOneWin = true;
+			}
+		}
+
+		if (playerOneWin) { 
+			winner = 1;
+			loser = 2; 
+		} else {
+			winner = 2;
+			loser = 1;
+		}
+
+
+		alert.setTitle("Someone has run out of Pokemon!");
+		alert.setHeaderText("Player " + winner + " wins!");
+
+		alert.setContentText("Player " + loser
+				+ " has run out of Pokemon, so the match is over!");
+
+		ButtonType restart = new ButtonType("Restart");
+		ButtonType cancel = new ButtonType("Cancel");
+		alert.getButtonTypes().clear();
+		alert.getButtonTypes().addAll(restart, cancel);
+		Optional<ButtonType> option = alert.showAndWait();
+
+
+
+		//return to main menu, or exit program
+		attackButton.setDisable(true);
+		heavyButton.setDisable(true);
+		healButton.setDisable(true);
+		otherButton.setDisable(true);
+
+		if (!option.isPresent()) { 
+			// alert is exited, no button has been pressed.
+			System.out.println("Quit");
+			resetEverything();
+			mainStage.setScene(titleScene);
+
+
+		} else if (option.get() == restart) {
+			//okay button is pressed
+			System.out.println("OK");
+			resetEverything();
+			
+			mainStage.setScene(titleScene);
+
+		} else if (option.get() == cancel) {
+			mainStage.close();
+			stage.close();
 		}
 	}
 }

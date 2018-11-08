@@ -169,6 +169,21 @@ public class Logic {
 	public String getBattleText() {
 		return battleLogText;
 	}
+	
+	/**
+	 * Sets the value of the coins
+	 * @param toSet Coin value to set
+	 */
+	public void setCoins(int toSet) {
+		coins = toSet;
+	}
+	/**
+	 * Returns the number of coins the player has
+	 * @return The number of coins
+	 */
+	public int getCoins() {
+		return coins;
+	}
 
 	/*****************************************************************
 	 * Appends text to the battle log text.
