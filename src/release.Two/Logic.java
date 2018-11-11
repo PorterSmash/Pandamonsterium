@@ -436,9 +436,10 @@ public class Logic {
 		- Items held
 		- coins in the coin bank
 		*/
-		String fileName = this.toString();
+		String fileName = this.toString() + ".txt";
 		try {
 			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+			writer.println("Testing");
 			for (Monster mon : player1Team) {
 				writer.println(mon.getMonsterName());
 				writer.println(mon.getMaxHealthPoints());
@@ -449,15 +450,17 @@ public class Logic {
 			for (String item : itemList) {
 				writer.print(item + ",");
 			}
-			writer.println("Items done.");
+			writer.println();
 			writer.println(this.coins);
+			writer.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error1");
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Error2");
 			e.printStackTrace();
 		}
+		
 	}
 	/**
 	 * Reads in information from a data file and continues a game.
@@ -471,6 +474,7 @@ public class Logic {
 			player1Team.clear();
 			String currentLine = fileIn.nextLine();
 			Monster readMonster = new Monster();
+			currentLine = fileIn.nextLine();
 			readMonster(fileIn, currentLine, readMonster);
 			player1Team.add(readMonster);
 			currentLine = fileIn.nextLine();
@@ -487,7 +491,6 @@ public class Logic {
 		} else {
 				currentLine = fileIn.nextLine();
 			}
-			currentLine = fileIn.nextLine();
 			coins = Integer.parseInt(currentLine);	
 			
 			
@@ -539,6 +542,36 @@ public class Logic {
 		compMonster.setDefenseBattle(compMonster.getDefensePoints());
 		compMonster.setSpeedBattle(compMonster.getSpeedPoints());
 		compMonster.setHealthBattle(compMonster.getMaxHealthPoints());
+	}
+	public static void main(String[] args) {
+		Logic engine = new Logic();
+		Monster team1 = new Monster();
+		Monster team2 = new Monster();
+		
+		team1.monsterFactory("Charizard");
+		team2.monsterFactory("Jolteon");
+		engine.getTeam1().add(team1);
+		engine.getTeam1().add(team1);
+		engine.getTeam1().add(team1);
+		
+		engine.getTeam2().add(team2);
+		engine.getTeam2().add(team2);
+		engine.getTeam2().add(team2);
+		
+		engine.setCoins(10);
+		engine.getItemList().add("ss");
+		String loader = engine.toString();
+		engine.saveGame();
+		System.out.println("Done saving");
+		
+		engine.loadGame(loader + ".txt");
+		System.out.println("Done loading");
+		System.out.println(engine.coins);
+		System.out.println(engine.player1Team.get(0).getMonsterName());
+		
+	}
+	public ArrayList<String> getItemList() {
+		return itemList;
 	}
 	
 }
