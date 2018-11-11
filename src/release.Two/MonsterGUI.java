@@ -1052,14 +1052,19 @@ public class MonsterGUI extends Application {
 			winner = 2;
 			loser = 1;
 		}
-
+		String saveFile = engine.toString() + ".txt";
+		engine.saveGame();
+		
 
 		alert.setTitle("Someone has run out of Pokemon!");
 		alert.setHeaderText("Player " + winner + " wins!");
 
 		alert.setContentText("Player " + loser
-				+ " has run out of Pokemon, so the match is over!");
-
+				+ " has run out of Pokemon, so the match is over!\n"
+				+ "(Game has been saved automatically in the file " 
+				+ saveFile 
+				+ ")");
+		
 		ButtonType restart = new ButtonType("Restart");
 		ButtonType cancel = new ButtonType("Cancel");
 		alert.getButtonTypes().clear();
