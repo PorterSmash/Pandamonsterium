@@ -27,6 +27,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -169,9 +170,21 @@ public class MonsterGUI extends Application {
 				new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(final ActionEvent arg0) {
-						System.out.println("Yup");
 						isCPUGame = true;
 						primaryStage.setScene(monsterScene);
+					}
+				});
+		
+		Button buttonLoad = new Button("Load Game");
+		buttonLoad.setPrefWidth(150);
+		buttonLoad.setPrefHeight(50);
+		buttonLoad.setOnAction(
+				new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(final ActionEvent e) {
+						loadGame();
+						primaryStage.setScene(battleScene);
+						updateBattleScene();
 					}
 				});
 
@@ -200,6 +213,9 @@ public class MonsterGUI extends Application {
 		startLayout.add(buttonCPU, 0, 3);
 		GridPane.setHalignment(buttonCPU, HPos.CENTER);
 		GridPane.setMargin(buttonCPU, new Insets(10, 10, 10, 10));
+		startLayout.add(buttonLoad, 0, 4);
+		GridPane.setHalignment(buttonLoad, HPos.CENTER);
+		GridPane.setMargin(buttonLoad, new Insets(10, 10, 10, 10));
 		primaryStage.setScene(titleScene);
 
 		backgroundMusic("default");
@@ -489,8 +505,6 @@ public class MonsterGUI extends Application {
 		if (onFieldMon.getHealthBattle() <= 0) {
 			engine.addBattleText(onFieldMon.getMonsterName() 
 					+ " Has Fainted\n");
-			System.out.println(isCPUGame);
-			System.out.println(onFieldMon == team2Chosen);
 			if(isCPUGame && onFieldMon == team2Chosen) {
 				engine.addBattleText("20 coins have been added to your account\n");
 				engine.setCoins(engine.getCoins() + 20);
@@ -1097,5 +1111,28 @@ public class MonsterGUI extends Application {
 			mainStage.close();
 			stage.close();
 		}
+	}
+	/**
+	 * Performs the loading for the game.
+	 */
+	private void loadGame() {
+		isCPUGame = true;
+		TextInputDialog fileInput = new TextInputDialog("[Filename]");
+		fileInput.setTitle("Load Game");
+		fileInput.setHeaderText("Enter save file information");
+		fileInput.setContentText(
+		"Enter the name of the save file you wish to load from:");
+		
+		Optional<String> result = fileInput.showAndWait();
+		result.ifPresent(fileName -> 
+		engine.loadGame(fileName + ".txt"));
+		player1Team = engine.getTeam1();
+		engine.generateEnemyTeam(player1Team.get(0).getLevel() 
+				+ player1Team.get(1).getLevel() 
+				+ player1Team.get(2).getLevel());
+		player2Team = engine.getTeam2();
+		
+		team1Chosen = player1Team.get(0);
+		team2Chosen = player2Team.get(0);	
 	}
 }

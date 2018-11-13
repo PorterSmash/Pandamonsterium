@@ -467,6 +467,7 @@ public class Logic {
 	 * @param fileName
 	 */
 	public void loadGame(final String fileName) {
+		
 		Scanner fileIn = null;
 		try {
 			fileIn = new Scanner(
@@ -479,8 +480,10 @@ public class Logic {
 			player1Team.add(readMonster);
 			currentLine = fileIn.nextLine();
 			readMonster(fileIn, currentLine, readMonster);
+			player1Team.add(readMonster);
 			currentLine = fileIn.nextLine();
 			readMonster(fileIn, currentLine, readMonster);
+			player1Team.add(readMonster);
 			currentLine = fileIn.nextLine();
 			if (!currentLine.equals(",")) {
 				String[] items = currentLine.split(",");
@@ -506,16 +509,21 @@ public class Logic {
 	}
 
 	private void readMonster(final Scanner fileIn, String currentLine, final Monster firstMon) {
+		System.out.println("Name" + currentLine);
 		firstMon.monsterFactory(currentLine);
 		currentLine = fileIn.nextLine();
+		System.out.println("Health" + currentLine);
 		firstMon.setMaxHealthPoints(
 				Integer.parseInt(currentLine));
 		currentLine = fileIn.nextLine();
+		System.out.println("Attack" + currentLine);
 		firstMon.setAttackPoints(Integer.parseInt(currentLine));
 		currentLine = fileIn.nextLine();
+		System.out.println("Defense" + currentLine);
 		firstMon.setDefensePoints(
 				Integer.parseInt(currentLine));
 		currentLine = fileIn.nextLine();
+		System.out.println("Speed" + currentLine);
 		firstMon.setSpeedPoints(Integer.parseInt(currentLine));
 	}
 	/**
@@ -565,13 +573,9 @@ public class Logic {
 		System.out.println("Done saving");
 		
 		engine.loadGame(loader + ".txt");
-		System.out.println("Done loading");
-		System.out.println(engine.coins);
-		System.out.println(engine.player1Team.get(0).getMonsterName());
 		
 	}
 	public ArrayList<String> getItemList() {
 		return itemList;
 	}
-	
 }
