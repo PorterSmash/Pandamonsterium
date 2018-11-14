@@ -84,7 +84,6 @@ public class MonsterGUI extends Application {
 	/** holds the audio sound for healing*/
 	private AudioClip healSound = new AudioClip(new File("heal.wav").toURI().toString());
 
-
 	private static Media defaultBgm = new Media(new File("defaultBGM.mp3").toURI().toString());
 
 	private static Media normBattleBgm = new Media(new File("normBattle.mp3").toURI().toString());
@@ -134,7 +133,7 @@ public class MonsterGUI extends Application {
 	private TextArea battleLog;
 
 	/** Announces what team. */
-	private Text whichTeam;
+	private Text whichTeam,inventoryLog;
 
 	/** Determines if it is a CPU game. */
 	private boolean isCPUGame;
@@ -394,7 +393,25 @@ public class MonsterGUI extends Application {
 		pickPokemon = new Scene(switchMonPane);
 
 		storedMoves = new Move[2];
+		
 
+		
+		GridPane itemGrid = new GridPane();
+		itemGrid.setPadding(new Insets(10, 10, 10, 10));
+		itemGrid.setHgap(10);
+		itemGrid.setVgap(10);
+		inventoryLog = new Text("Coins");
+		itemShop = new Scene(itemGrid,500,500);
+		createButtons();
+		itemGrid.add(healthBoostBut, 0, 0);
+		itemGrid.add(DodgerBut, 0, 1);
+		itemGrid.add(randomBut, 0, 2);
+		itemGrid.add(silkScarfBut, 0, 3);
+		itemGrid.add(critChanceBut, 0, 4);
+		itemGrid.add(godModeBut, 0, 5);
+		itemGrid.add(inventoryLog, 1, 7);
+		
+		
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent arg0) {
@@ -419,7 +436,9 @@ public class MonsterGUI extends Application {
 		otherButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
-				buttonMove(4);
+				//buttonMove(4);
+				engine.setCoins(500);
+				primaryStage.setScene(itemShop);
 			}
 		});
 
@@ -454,10 +473,6 @@ public class MonsterGUI extends Application {
 		battleLayout.add(player2Heal, 2, 12);	
 		
 		
-		//createButtons();
-		
-	//	itemShop = new Scene(battleLayout,500,500);
-		
 		
 
 		mainStage = primaryStage;
@@ -468,23 +483,67 @@ public class MonsterGUI extends Application {
 			
 		healthBoostBut = new Button ("Health Boost - 100 Coins");
 		healthBoostBut.setTooltip(new Tooltip("Adds a 30 HP Boost to your monsters"));
+		healthBoostBut.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent event) {
+				engine.itemShop(100);
+			}
+		});
 		
 		DodgerBut = new Button ("Enemy Dodge - 300 Coins");
 		DodgerBut.setTooltip(new Tooltip("Enemies miss twice as often"));
+		DodgerBut.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent event) {
+				engine.itemShop(300);
+				updateInventory();
+			}
+		});
 		
 		randomBut = new Button ("Surprise! - 200 Coins");
 		randomBut.setTooltip(new Tooltip("idk"));
+		randomBut.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent event) {
+				engine.itemShop(200);
+				updateInventory();
+			}
+		});
 		
 		silkScarfBut = new Button ("Silk Scarf - 400 Coins");
 		silkScarfBut.setTooltip(new Tooltip("Monster can only be killed after it reaches 1 HP"));
+		silkScarfBut.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent event) {
+				engine.itemShop(400);
+				updateInventory();
+			}
+		});
 		
 		critChanceBut = new Button("Critical Chance Drop - 500 Coins");
 		critChanceBut.setTooltip(new Tooltip("Enemy Critical Chance drops to zero"));
+		critChanceBut.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent event) {
+				engine.itemShop(500);
+				updateInventory();
+			}
+		});
 		
 		godModeBut = new Button("God Mode - 3000000 Coins");
 		godModeBut.setTooltip(new Tooltip("All enemy hit chances are zero"));
-		
-		
+		godModeBut.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent event) {
+				engine.itemShop(3000000);
+				updateInventory();
+			}
+		});	
+		updateInventory();
+	}
+	
+	public void updateInventory() {
+		inventoryLog.setText("Coins: " + engine.getCoins() + "Inventory: " + engine.getItemList().toString());
 	}
 	/******************************************************************
 	 * Checks if a monster fainted (0 health).

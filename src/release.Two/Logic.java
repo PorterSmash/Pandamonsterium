@@ -45,6 +45,18 @@ public class Logic {
 	
 	/** Used in conjunction with the silf scarf item. */
 	private boolean silkFlag = false;
+	
+	private int round = 1;
+	
+	
+	public int getRound() {
+		return round;
+	}
+
+	public void setRound(int round) {
+		this.round = round;
+	}
+
 	/******************************************************************
 	 * Constructor that creates an arraylist of monsters for player 1.
 	 * and player 2
@@ -204,6 +216,51 @@ public class Logic {
 	 * @param move Int that represents move to be done
 	 * @return int the damage to be applied
 	 ****************************************************************/
+//	private int calcDamage(final Move moveCommitted, final int move) {
+//		Monster target, attacker;
+//		if (moveCommitted.getMoveTarget() == 0) {
+//			target = player1Team.get(mon1);
+//			attacker = player2Team.get(mon2);
+//		} else {
+//			target = player2Team.get(mon2);
+//			attacker = player1Team.get(mon1);
+//			if (itemList.contains("d")) {
+//				moveCommitted.setHitChance(
+//				moveCommitted.getHitChance() / 2);
+//			}
+//		}
+//		
+//		int dmgNum = 0;
+//		if (move != 3) {
+//		if (diceRoll(moveCommitted.getHitChance())) {
+//			int dmgMultiplier = 1;
+//			
+//			if (diceRoll(moveCommitted.getCritChance())) {
+//				dmgMultiplier = 2;
+//				if (itemList.contains("cc") 
+//				&& attacker == player2Team.get(mon2)) {
+//					dmgMultiplier = 1;
+//				}
+//			}
+//			Random rnd = new Random();
+//			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
+//			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
+//		
+//		}
+//		} else  {
+//			dmgNum = moveCommitted.getAttackPower();
+//		}
+//		if (itemList.contains("gm") 
+//		&& attacker == player2Team.get(mon2)) {
+//			dmgNum = 0;
+//		}
+//		// Initial part adds between 0% and 50% damage to the attack, but it always subtracts 25%, 
+//		// so it can be anywhere between -25% and 25% damage. Gives some difference to attacks so 
+//		// it's not both mons doing the same damage every time.
+//
+//		Random rdn = new Random();
+//		return dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
+//		}
 	private int calcDamage(final Move moveCommitted, final int move) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
@@ -225,21 +282,22 @@ public class Logic {
 			
 			if (diceRoll(moveCommitted.getCritChance())) {
 				dmgMultiplier = 2;
-				if (itemList.contains("cc") 
-				&& attacker == player2Team.get(mon2)) {
+				if (itemList.contains("cc") && attacker == player2Team.get(mon2)) {
 					dmgMultiplier = 1;
 				}
 			}
-			Random rnd = new Random();
-			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
-			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
+			dmgNum = ((moveCommitted.getAttackPower() 
+					+ attacker.getAttackBattle()) 
+					* dmgMultiplier) - (target.
+							getDefenseBattle() / 2);
 		
 		}
 		} else  {
-			dmgNum = moveCommitted.getAttackPower();
+			Random rnd = new Random();
+			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
+			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
 		}
-		if (itemList.contains("gm") 
-		&& attacker == player2Team.get(mon2)) {
+		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
 			dmgNum = 0;
 		}
 		// Initial part adds between 0% and 50% damage to the attack, but it always subtracts 25%, 
@@ -352,39 +410,46 @@ public class Logic {
 	 ****************************************************************/
 	public void itemShop(final int price) {
 		if (price > coins) {
-			System.out.println("You do not have enough cois to purchase that");
+			System.out.println("You do not have enough coins to purchase that");
 			//This if clause is unrealistic. In reality we would have some buttons 
 			//that would only appear if coins is large enough, or the buttons
 			//would just send a message or something if you don't have enough
-		}
+		}else {
 		switch (price) {
 		case 100:
 			itemList.add("hb");
+			coins = coins - price;
 			//add a health boost to the monster, like 30 hp or something
 			//for each monster in player team, healthMax += 30.
 			break;
 		case 200:
 			itemList.add("something");
+			coins = coins - price;
 			break;
 		case 300:
 			itemList.add("d");
+			coins = coins - price;
 			//Dodger, enemy moves miss twice as often.
 			break;
 		case 400:
 			itemList.add("ss");
+			coins = coins - price;
 			//modeled after the silk scarf, a monster can only be killed
 			//after it is brought to 1 hp. So a killshot brings the monster to 1 hp,
 			//and teh next killshot actually kills it. <maybe too ambitious>
 			break;
 		case 500:
 			itemList.add("cc");
+			coins = coins - price;
 			//enemy monster crit chance is now 0, always. <takes two lines of code>
 			break;
 		case 3000000:
 			itemList.add("gm");
+			coins = coins - price;
 			//god mode, all enemy hit chances are now 0.
 		default:
 			break;
+		}
 		}
 		//As of right now, if you buy all the items in the shop you become super OP. 
 		//I'm ok with this.
@@ -578,4 +643,5 @@ public class Logic {
 	public ArrayList<String> getItemList() {
 		return itemList;
 	}
+	
 }
