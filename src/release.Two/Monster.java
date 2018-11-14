@@ -1,9 +1,15 @@
 package release.Two;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 //import java.util.ArrayList;
 import java.util.Scanner;
 //import javax.swing.ImageIcon;
+
+import javafx.scene.control.ChoiceDialog;
  
  /*********************************************************************
   * Monster class that holds all of the monsters statistics and 
@@ -61,6 +67,8 @@ import java.util.Scanner;
  	
  	/** tells whether the monster is on field or not.*/
 	private boolean onField;
+	
+	private int totalEXP;
 	
 	/******************************************************************
 	 * This method is for release 2.
@@ -344,18 +352,21 @@ import java.util.Scanner;
 		// Read the activity name, ON icon file path, and OFF file path.
 					monsterName = nextLine;
 					monsterLevel = 1;
+					totalEXP = 0;
 					
-					int[] statArray = new int[20];
-					for (int i = 0; i < 20; i++) {
+					int[] statArray = new int[21];
+					for (int i = 0; i < 21; i++) {
 						statArray[i] = Integer.parseInt(
 				fileIn.nextLine());
+						System.out.println(statArray[i]);
 					}
 					
 					setMonsterImagePath(fileIn.nextLine());
-					setMaxHealthPoints(statArray[0]);
-					setAttackPoints(statArray[1]);
-					setDefensePoints(statArray[2]);
-					setSpeedPoints(statArray[3]);
+					totalEXP = statArray[0];
+					setMaxHealthPoints(statArray[1]);
+					setAttackPoints(statArray[2]);
+					setDefensePoints(statArray[3]);
+					setSpeedPoints(statArray[4]);
 					
 		//when a monster is created, we set these to the values above
 					healthBattle  = maxHealthPoints;
@@ -363,20 +374,20 @@ import java.util.Scanner;
 					defenseBattle = defensePoints;
 					speedBattle   = speedPoints;
 					
-					Move move1 = new Move(statArray[4], 
-						statArray[5], statArray[6],
-						statArray[7]); //light attack
-					Move move2 = new Move(statArray[8],
-							statArray[9], 
-						statArray[10],
-						statArray[11]); //heavy attack
-					Move move3 = new Move(statArray[12],
-						statArray[13], statArray[14],
-						statArray[15]); //heal
-					Move move4 = new Move(statArray[16],
-						statArray[17], 
+					Move move1 = new Move(statArray[5], 
+						statArray[6], statArray[7],
+						statArray[8]); //light attack
+					Move move2 = new Move(statArray[9],
+							statArray[10], 
+						statArray[11],
+						statArray[12]); //heavy attack
+					Move move3 = new Move(statArray[13],
+						statArray[14], statArray[15],
+						statArray[16]); //heal
+					Move move4 = new Move(statArray[17],
 						statArray[18], 
-						statArray[19]); //block
+						statArray[19], 
+						statArray[20]); //block
 					
 					this.move1 = move1;
 					this.move2 = move2;
@@ -398,20 +409,65 @@ import java.util.Scanner;
 				+ speedPoints - 27;
 	}
 	
+	public void attemptUpdateLevel() {
+		if (totalEXP > 100*Math.pow(monsterLevel, 1.25)) {
+			
+			List<String> choices = new ArrayList<>();
+			choices.add("Health");
+			choices.add("Attack");
+			choices.add("Defense");
+			choices.add("Speed");
+
+			ChoiceDialog<String> dialog = new ChoiceDialog<>("Health", choices);
+			dialog.setTitle("You leveled up!");
+			dialog.setHeaderText("Congratulations, your monster " + monsterName + " leveled up to level " + monsterLevel + "!");
+			dialog.setContentText("Pick a stat to level up:");
+
+			// Traditional way to get the response value.
+			Optional<String> result = dialog.showAndWait();
+			if (result.isPresent()){
+				int choice;
+				if (result.get() == "Health") {
+					choice = 1;
+				} else if (result.get() == "Attack") {
+					choice = 2;
+				} else if (result.get() == "Defense") {
+					choice = 3;
+				} else {
+					choice = 4;
+				}
+				levelUp(choice);
+			    System.out.println("Your choice: " + result.get());
+			}
+			
+			monsterLevel++;
+		}
+	}
+	
+	public int giveEXP(int monsterLevel) {
+		Random rnd = new Random();
+		//E.x. @ level 50, it will give between 475 and 525 exp. 500 + ((1 through 51) - 26), or 474 + (1 through 51)
+		int addedEXP = (monsterLevel * 10) + (rnd.nextInt(monsterLevel + 1) - (monsterLevel/2 + 1));
+		totalEXP += addedEXP;
+		return addedEXP;
+		//totalEXP += 1000;
+	}
+	
 	/******************************************************************
 	 * Will be used for release 2, this improves the monster.
 	 * @param statID Stat to be increased
 	 *****************************************************************/
 	public void levelUp(final int statID) {
+		healthBattle = maxHealthPoints;
 		switch (statID) {
 		case 1:
 			maxHealthPoints += 10;
 			break;
 		case 2:
-			defensePoints += 1;
+			attackPoints += 1;
 			break;
 		case 3:
-			attackPoints += 1;
+			defensePoints += 1;
 			break;
 		case 4:
 			speedPoints += 1;

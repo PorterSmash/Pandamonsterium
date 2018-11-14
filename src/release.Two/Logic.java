@@ -294,7 +294,7 @@ public class Logic {
 		}
 		} else  {
 			Random rnd = new Random();
-			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
+			dmgNum = (int)((2 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
 			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
 		}
 		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
@@ -305,7 +305,8 @@ public class Logic {
 		// it's not both mons doing the same damage every time.
 
 		Random rdn = new Random();
-		return dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
+		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4);
+		return dmgNum; 
 		}
 	
 	/*****************************************************************
@@ -328,6 +329,9 @@ public class Logic {
 			attacker = player1Team.get(mon1);
 			teamNum = 1;
 		}
+		if (moveNum == 3) {
+			target = attacker;
+		}
 		int dmgDone = calcDamage(moveDone, moveNum);
 		if (itemList.contains("ss") && !silkFlag
 			&& dmgDone > target.getHealthBattle()
@@ -337,6 +341,7 @@ public class Logic {
 			//eventually this will need to get reset 
 			//after a battle is finished
 		}
+		
 		target.decreaseHealth(dmgDone);
 
 		turnNum++;

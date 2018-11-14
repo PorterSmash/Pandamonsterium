@@ -567,6 +567,18 @@ public class MonsterGUI extends Application {
 			if(isCPUGame && onFieldMon == team2Chosen) {
 				engine.addBattleText("20 coins have been added to your account\n");
 				engine.setCoins(engine.getCoins() + 20);
+				int beforeLevel = team1Chosen.getLevel();
+				int expLevel = team2Chosen.getLevel();
+				if (expLevel < 1) {
+					expLevel = 1;
+				}
+				int EXP = team1Chosen.giveEXP(expLevel);
+				engine.addBattleText("" + team1Chosen.getMonsterName() + " received " + EXP + " EXP!\n");
+				team1Chosen.attemptUpdateLevel();
+				if (beforeLevel < team1Chosen.getLevel()) {
+					String levelText = ("" + team1Chosen.getMonsterName() + " leveled up to level " + team1Chosen.getLevel() + "!\n");
+					engine.addBattleText(levelText);
+				}
 			}
 			updateBattleScene();
 
