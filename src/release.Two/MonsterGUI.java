@@ -567,18 +567,6 @@ public class MonsterGUI extends Application {
 			if(isCPUGame && onFieldMon == team2Chosen) {
 				engine.addBattleText("20 coins have been added to your account\n");
 				engine.setCoins(engine.getCoins() + 20);
-				int beforeLevel = team1Chosen.getLevel();
-				int expLevel = team2Chosen.getLevel();
-				if (expLevel < 1) {
-					expLevel = 1;
-				}
-				int EXP = team1Chosen.giveEXP(expLevel);
-				engine.addBattleText("" + team1Chosen.getMonsterName() + " received " + EXP + " EXP!\n");
-				team1Chosen.attemptUpdateLevel();
-				if (beforeLevel < team1Chosen.getLevel()) {
-					String levelText = ("" + team1Chosen.getMonsterName() + " leveled up to level " + team1Chosen.getLevel() + "!\n");
-					engine.addBattleText(levelText);
-				}
 			}
 			updateBattleScene();
 
@@ -1118,6 +1106,28 @@ public class MonsterGUI extends Application {
 	}
 	private void gameOverAlert() {
 		//game needs to end
+		if(isCPUGame) {
+			TextInputDialog fileInput = new TextInputDialog("[MonsterName]");
+			fileInput.setTitle("Level UP!");
+			fileInput.setHeaderText("A monster is ready to eb leveled up");
+			fileInput.setContentText(
+			"Enter the name of the save file you wish to level up: " 
+			+ player1Team.get(0).getMonsterName() + " "
+			+ player1Team.get(0).getMonsterName() + " " 
+			+ player1Team.get(0).getMonsterName() +")");
+			
+			
+			String result = fileInput.showAndWait().get();
+			Monster placeHolder = new Monster();
+			for(Monster mon : player1Team) {
+				if(mon.getMonsterName().equals(result)) {
+					placeHolder = mon;
+				}
+			}
+			placeHolder.attemptUpdateLevel();
+			engine.setTeams(player1Team, player2Team); //update the teams for the engine
+			//since there was a level up.
+		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 
 		int winner = 0;
