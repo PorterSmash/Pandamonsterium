@@ -119,7 +119,7 @@ public class MonsterGUI extends Application {
 	/** the four buttons the player can access.*/
 	private Button attackButton, heavyButton, healButton, otherButton;
 	
-	private Button healthBoostBut,DodgerBut,randomBut,silkScarfBut,critChanceBut,godModeBut;
+	private Button healthBoostBut,DodgerBut,randomBut,silkScarfBut,critChanceBut,godModeBut,iContinue;
 
 	/** Image for player 1s sprite.*/
 	private ImageView player1Sprite;
@@ -182,6 +182,7 @@ public class MonsterGUI extends Application {
 					@Override
 					public void handle(final ActionEvent e) {
 						loadGame();
+						setUpHealthBars();
 						primaryStage.setScene(battleScene);
 						updateBattleScene();
 					}
@@ -400,9 +401,11 @@ public class MonsterGUI extends Application {
 		itemGrid.setPadding(new Insets(10, 10, 10, 10));
 		itemGrid.setHgap(10);
 		itemGrid.setVgap(10);
-		inventoryLog = new Text("Coins");
+		inventoryLog = new Text("Coins: " + engine.getCoins() + "Inventory: " + engine.getItemList().toString());
+		updateInventory();
 		itemShop = new Scene(itemGrid,500,500);
-		createButtons();
+		
+		createButtons(primaryStage);
 		itemGrid.add(healthBoostBut, 0, 0);
 		itemGrid.add(DodgerBut, 0, 1);
 		itemGrid.add(randomBut, 0, 2);
@@ -410,6 +413,7 @@ public class MonsterGUI extends Application {
 		itemGrid.add(critChanceBut, 0, 4);
 		itemGrid.add(godModeBut, 0, 5);
 		itemGrid.add(inventoryLog, 1, 7);
+		itemGrid.add(iContinue, 0, 8);
 		
 		
 		attackButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -436,9 +440,9 @@ public class MonsterGUI extends Application {
 		otherButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
-				//buttonMove(4);
-				engine.setCoins(500);
-				primaryStage.setScene(itemShop);
+				buttonMove(4);
+				
+				//primaryStage.setScene(itemShop);
 			}
 		});
 
@@ -479,8 +483,8 @@ public class MonsterGUI extends Application {
 		primaryStage.show();
 
 	}
-	public void createButtons() {
-			
+	public void createButtons(Stage mainStage) {
+		updateInventory();
 		healthBoostBut = new Button ("Health Boost - 100 Coins");
 		healthBoostBut.setTooltip(new Tooltip("Adds a 30 HP Boost to your monsters"));
 		healthBoostBut.setOnAction(new EventHandler<ActionEvent>() {
@@ -489,6 +493,10 @@ public class MonsterGUI extends Application {
 				engine.itemShop(100);
 			}
 		});
+		if(engine.getCoins() < 100)
+			healthBoostBut.setDisable(true);
+		else
+			healthBoostBut.setDisable(false);
 		
 		DodgerBut = new Button ("Enemy Dodge - 300 Coins");
 		DodgerBut.setTooltip(new Tooltip("Enemies miss twice as often"));
@@ -499,6 +507,10 @@ public class MonsterGUI extends Application {
 				updateInventory();
 			}
 		});
+		if(engine.getCoins() < 300)
+			DodgerBut.setDisable(true);
+		else
+			DodgerBut.setDisable(false);
 		
 		randomBut = new Button ("Surprise! - 200 Coins");
 		randomBut.setTooltip(new Tooltip("idk"));
@@ -509,6 +521,10 @@ public class MonsterGUI extends Application {
 				updateInventory();
 			}
 		});
+		if(engine.getCoins() < 200)
+			randomBut.setDisable(true);
+		else
+			randomBut.setDisable(false);
 		
 		silkScarfBut = new Button ("Silk Scarf - 400 Coins");
 		silkScarfBut.setTooltip(new Tooltip("Monster can only be killed after it reaches 1 HP"));
@@ -519,6 +535,10 @@ public class MonsterGUI extends Application {
 				updateInventory();
 			}
 		});
+		if(engine.getCoins() < 400)
+			silkScarfBut.setDisable(true);
+		else
+			silkScarfBut.setDisable(false);
 		
 		critChanceBut = new Button("Critical Chance Drop - 500 Coins");
 		critChanceBut.setTooltip(new Tooltip("Enemy Critical Chance drops to zero"));
@@ -529,6 +549,10 @@ public class MonsterGUI extends Application {
 				updateInventory();
 			}
 		});
+		if(engine.getCoins() < 500)
+			critChanceBut.setDisable(true);
+		else
+			critChanceBut.setDisable(false);
 		
 		godModeBut = new Button("God Mode - 3000000 Coins");
 		godModeBut.setTooltip(new Tooltip("All enemy hit chances are zero"));
@@ -539,6 +563,27 @@ public class MonsterGUI extends Application {
 				updateInventory();
 			}
 		});	
+		if(engine.getCoins() < 3000000)
+			godModeBut.setDisable(true);
+		else
+			godModeBut.setDisable(false);
+		
+		iContinue = new Button("Continue");
+		iContinue.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent event) {
+				loadGame();
+				setUpHealthBars();
+				updateBattleScene();
+				backgroundMusic("normBattle");
+				attackButton.setDisable(false);
+				heavyButton.setDisable(false);
+				healButton.setDisable(false);
+				otherButton.setDisable(false);
+				mainStage.setScene(battleScene);
+				updateBattleScene();
+			}
+		});
 		updateInventory();
 	}
 	
@@ -567,6 +612,7 @@ public class MonsterGUI extends Application {
 			if(isCPUGame && onFieldMon == team2Chosen) {
 				engine.addBattleText("20 coins have been added to your account\n");
 				engine.setCoins(engine.getCoins() + 20);
+				System.out.println(engine.getCoins());
 			}
 			updateBattleScene();
 
@@ -1106,30 +1152,6 @@ public class MonsterGUI extends Application {
 	}
 	private void gameOverAlert() {
 		//game needs to end
-		if(isCPUGame) {
-			TextInputDialog fileInput = new TextInputDialog("[MonsterName]");
-			fileInput.setTitle("Level UP!");
-			fileInput.setHeaderText("A monster is ready to eb leveled up");
-			fileInput.setContentText(
-			"Enter the name of the save file you wish to level up: " 
-			+ player1Team.get(0).getMonsterName() + " "
-			+ player1Team.get(0).getMonsterName() + " " 
-			+ player1Team.get(0).getMonsterName() +")");
-			
-			
-			String result = fileInput.showAndWait().get();
-			Monster placeHolder = new Monster();
-			for(Monster mon : player1Team) {
-				if(mon.getMonsterName().equals(result)) {
-					placeHolder = mon;
-				}
-			}
-			placeHolder.attemptUpdateLevel();
-			engine.setTeams(player1Team, player2Team); //update the teams for the engine
-			//since there was a level up.
-		}
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-
 		int winner = 0;
 		int loser = 0;
 		boolean playerOneWin = false;
@@ -1147,6 +1169,32 @@ public class MonsterGUI extends Application {
 			winner = 2;
 			loser = 1;
 		}
+		if(isCPUGame && playerOneWin) {
+			TextInputDialog fileInput = new TextInputDialog(engine.toString());
+			fileInput.setTitle("Level UP!");
+			fileInput.setHeaderText("A monster is ready to eb leveled up");
+			fileInput.setContentText(
+			"Enter the name of the save file you wish to level up: " 
+			+ player1Team.get(0).getMonsterName() + " "
+			+ player1Team.get(1).getMonsterName() + " " 
+			+ player1Team.get(2).getMonsterName() +")");
+			
+			
+			String result = fileInput.showAndWait().get();
+			Monster placeHolder = new Monster();
+			for(Monster mon : player1Team) {
+				if(mon.getMonsterName().equals(result)) {
+					placeHolder = mon;
+				}
+			}
+			placeHolder.attemptUpdateLevel();
+			engine.setTeams(player1Team, player2Team); //update the teams for the engine
+			//since there was a level up.
+		}
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+
+		
+		
 		String saveFile = engine.toString() + ".txt";
 		engine.saveGame();
 		
@@ -1162,11 +1210,16 @@ public class MonsterGUI extends Application {
 		
 		ButtonType restart = new ButtonType("Restart");
 		ButtonType cancel = new ButtonType("Cancel");
+		ButtonType bContinue = new ButtonType("Continue");
+		
 		alert.getButtonTypes().clear();
 		alert.getButtonTypes().addAll(restart, cancel);
+		
+		if(playerOneWin) {
+			alert.getButtonTypes().add(bContinue);
+		}
+		
 		Optional<ButtonType> option = alert.showAndWait();
-
-
 
 		//return to main menu, or exit program
 		attackButton.setDisable(true);
@@ -1174,6 +1227,12 @@ public class MonsterGUI extends Application {
 		healButton.setDisable(true);
 		otherButton.setDisable(true);
 
+		
+		if(playerOneWin) {
+		if(option.get() == bContinue) {
+			mainStage.setScene(itemShop);
+		}
+		}
 		if (!option.isPresent()) { 
 			// alert is exited, no button has been pressed.
 			System.out.println("Quit");
@@ -1188,7 +1247,8 @@ public class MonsterGUI extends Application {
 
 			mainStage.setScene(titleScene);
 
-		} else if (option.get() == cancel) {
+		}
+		else if (option.get() == cancel) {
 			mainStage.close();
 			stage.close();
 		}
@@ -1198,7 +1258,7 @@ public class MonsterGUI extends Application {
 	 */
 	private void loadGame() {
 		isCPUGame = true;
-		TextInputDialog fileInput = new TextInputDialog("[Filename]");
+		TextInputDialog fileInput = new TextInputDialog(engine.toString());
 		fileInput.setTitle("Load Game");
 		fileInput.setHeaderText("Enter save file information");
 		fileInput.setContentText(
@@ -1208,12 +1268,16 @@ public class MonsterGUI extends Application {
 		result.ifPresent(fileName -> 
 		engine.loadGame(fileName + ".txt"));
 		player1Team = engine.getTeam1();
+		engine.healTeam();
 		engine.generateEnemyTeam(player1Team.get(0).getLevel() 
 				+ player1Team.get(1).getLevel() 
 				+ player1Team.get(2).getLevel());
+		
 		player2Team = engine.getTeam2();
 		
 		team1Chosen = player1Team.get(0);
 		team2Chosen = player2Team.get(0);	
+		engine.setTeamsAndMons(player1Team, 
+				player2Team, 0, 0);
 	}
 }

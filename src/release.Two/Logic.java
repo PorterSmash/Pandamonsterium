@@ -305,7 +305,7 @@ public class Logic {
 		// it's not both mons doing the same damage every time.
 
 		Random rdn = new Random();
-		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4);
+		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
 		return dmgNum; 
 		}
 	
@@ -529,6 +529,16 @@ public class Logic {
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("Error2");
 			e.printStackTrace();
+		}
+		
+	}
+	
+	public void healTeam() {
+		for (Monster mon : player1Team) {
+			mon.setHealthBattle(mon.getMaxHealthPoints());
+		}
+		for (Monster mon2 : player2Team) {
+			mon2.setHealthBattle(mon2.getMaxHealthPoints());
 		}
 		
 	}
