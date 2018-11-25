@@ -1172,11 +1172,11 @@ public class MonsterGUI extends Application {
 		if(isCPUGame && playerOneWin) {
 			TextInputDialog fileInput = new TextInputDialog(engine.toString());
 			fileInput.setTitle("Level UP!");
-			fileInput.setHeaderText("A monster is ready to eb leveled up");
+			fileInput.setHeaderText("A monster is ready to be leveled up");
 			fileInput.setContentText(
-			"Enter the name of the save file you wish to level up: " 
-			+ player1Team.get(0).getMonsterName() + " "
-			+ player1Team.get(1).getMonsterName() + " " 
+			"Enter the name of the save file you wish to level up: (" 
+			+ player1Team.get(0).getMonsterName() + ", "
+			+ player1Team.get(1).getMonsterName() + ", " 
 			+ player1Team.get(2).getMonsterName() +")");
 			
 			

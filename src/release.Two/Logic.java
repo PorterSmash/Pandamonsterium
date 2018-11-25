@@ -478,17 +478,17 @@ public class Logic {
 		*/
 		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
 		Random rnd = new Random();
-		String[] monsterList = {"Charizard", "Staryu", "Nidoking", "Jolteon", "Squirtle", "Raichu"};
+		String[] monsterList = {"Charizard", "Staryu", "Nidoking", "Jolteon", "Squirtle", "Raichu", "Troll", "Far-Out Man", "Gnomagician", "Magma Golem (Boss)"};
 		for(int i = 0; i < 2; i ++) { // generate 2 normal monsters
 			Monster computerMonster = new Monster();
-			computerMonster.monsterFactory(monsterList[rnd.nextInt(6)]); // auto-assigns info other than stats to monster
+			computerMonster.monsterFactory(monsterList[rnd.nextInt(10)]); // auto-assigns info other than stats to monster
 			computerMonster.setAllZero(); // sets all stats to 0
 			initializeComputerMonster(singleMonsterStats, computerMonster); // loops through, adding stats
 			player2Team.add(computerMonster); // adds monster to enemy team, repeat
 		}
 		// generate boss monster
 		Monster computerMonster = new Monster();
-		computerMonster.monsterFactory(monsterList[rnd.nextInt(6)]); // auto-assigns info other than stats to monster
+		computerMonster.monsterFactory(monsterList[9]); // auto-assigns info other than stats to monster
 		computerMonster.setAllZero(); // sets all stats to 0
 		initializeComputerMonster((int)(singleMonsterStats * 1.5), computerMonster); // loops through, adding stats, more powerful (times 1.5)
 		player2Team.add(computerMonster); // adds monster to enemy team, repeat
