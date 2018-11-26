@@ -199,6 +199,7 @@ public class Logic {
 	 * @return The number of coins
 	 */
 	public int getCoins() {
+		System.out.println("Total coins: " + coins);
 		return coins;
 	}
 
@@ -448,7 +449,7 @@ public class Logic {
 			coins = coins - price;
 			//enemy monster crit chance is now 0, always. <takes two lines of code>
 			break;
-		case 3000000:
+		case 10000:
 			itemList.add("gm");
 			coins = coins - price;
 			//god mode, all enemy hit chances are now 0.
@@ -481,7 +482,7 @@ public class Logic {
 		String[] monsterList = {"Charizard", "Staryu", "Nidoking", "Jolteon", "Squirtle", "Raichu", "Troll", "Far-Out Man", "Gnomagician", "Magma Golem (Boss)"};
 		for(int i = 0; i < 2; i ++) { // generate 2 normal monsters
 			Monster computerMonster = new Monster();
-			computerMonster.monsterFactory(monsterList[rnd.nextInt(10)]); // auto-assigns info other than stats to monster
+			computerMonster.monsterFactory(monsterList[rnd.nextInt(9)]); // auto-assigns info other than stats to monster
 			computerMonster.setAllZero(); // sets all stats to 0
 			initializeComputerMonster(singleMonsterStats, computerMonster); // loops through, adding stats
 			player2Team.add(computerMonster); // adds monster to enemy team, repeat
@@ -509,7 +510,6 @@ public class Logic {
 		String fileName = this.toString() + ".txt";
 		try {
 			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
-			writer.println("Testing");
 			for (Monster mon : player1Team) {
 				writer.println(mon.getMonsterName());
 				writer.println(mon.getMaxHealthPoints());
@@ -553,18 +553,13 @@ public class Logic {
 			fileIn = new Scanner(
 					new File(fileName), "UTF-8");	
 			player1Team.clear();
-			String currentLine = fileIn.nextLine();
-			Monster readMonster = new Monster();
-			currentLine = fileIn.nextLine();
-			readMonster(fileIn, currentLine, readMonster);
-			player1Team.add(readMonster);
-			currentLine = fileIn.nextLine();
-			readMonster(fileIn, currentLine, readMonster);
-			player1Team.add(readMonster);
-			currentLine = fileIn.nextLine();
-			readMonster(fileIn, currentLine, readMonster);
-			player1Team.add(readMonster);
-			currentLine = fileIn.nextLine();
+			String currentLine = "";
+			for (int i = 3; i > 0; i--) {
+				Monster readMonster = new Monster();
+				currentLine = fileIn.nextLine();
+				readMonster(fileIn, currentLine, readMonster);
+				player1Team.add(readMonster);
+			}
 			if (!currentLine.equals(",")) {
 				String[] items = currentLine.split(",");
 				for (int i = 0; i < items.length; i++) {
@@ -574,6 +569,7 @@ public class Logic {
 		} else {
 				currentLine = fileIn.nextLine();
 			}
+			currentLine = fileIn.nextLine();
 			coins = Integer.parseInt(currentLine);	
 			
 			
@@ -605,6 +601,10 @@ public class Logic {
 		currentLine = fileIn.nextLine();
 		System.out.println("Speed" + currentLine);
 		firstMon.setSpeedPoints(Integer.parseInt(currentLine));
+		firstMon.setHealthBattle(firstMon.getMaxHealthPoints());
+		firstMon.setAttackBattle(firstMon.getAttackPoints());
+		firstMon.setDefenseBattle(firstMon.getDefensePoints());
+		firstMon.setSpeedBattle(firstMon.getSpeedPoints());
 	}
 	/**
 	 * RAndomizes and sets the stats of the monster.
@@ -618,7 +618,8 @@ public class Logic {
 		//System.out.println(compMonster.getAttackPoints() + " " + compMonster.getDefensePoints() + " " + compMonster.getSpeedPoints() + " " + compMonster.getMaxHealthPoints());
 		int totalLoops = 0;
 		if (compMonster.getLevel() > 3) {
-			totalLoops = 21 + monsterLevel + rnd.nextInt(5) - 2; // 0 though 4, minus 2, so +- 2 levels
+			//totalLoops = 21 + monsterLevel + rnd.nextInt(5) - 2; // 0 though 4, minus 2, so +- 2 levels
+			totalLoops = 15 + monsterLevel + rnd.nextInt(5) - 2;
 		} else {
 			totalLoops = 21 + monsterLevel + rnd.nextInt(2); // can be one level above at most
 		}

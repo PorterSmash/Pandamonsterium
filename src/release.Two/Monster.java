@@ -461,6 +461,7 @@ import javafx.scene.control.ChoiceDialog;
 			System.out.println("Invalid stat ID was "
 					+ "passed to levelUp method");
 		}
+		resetStats();
 //		monsterLevel += 1; unnecessary since level is calculated based on stats
  	}
 	

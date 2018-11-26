@@ -25,6 +25,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
@@ -170,7 +171,11 @@ public class MonsterGUI extends Application {
 					@Override
 					public void handle(final ActionEvent arg0) {
 						isCPUGame = true;
-						primaryStage.setScene(monsterScene);
+						attackButton.setDisable(false);
+						heavyButton.setDisable(false);
+						healButton.setDisable(false);
+						otherButton.setDisable(false);
+						primaryStage.setScene(monsterScene);	
 					}
 				});
 		
@@ -185,6 +190,10 @@ public class MonsterGUI extends Application {
 						setUpHealthBars();
 						primaryStage.setScene(battleScene);
 						updateBattleScene();
+						attackButton.setDisable(false);
+						heavyButton.setDisable(false);
+						healButton.setDisable(false);
+						otherButton.setDisable(false);
 					}
 				});
 
@@ -401,7 +410,7 @@ public class MonsterGUI extends Application {
 		itemGrid.setPadding(new Insets(10, 10, 10, 10));
 		itemGrid.setHgap(10);
 		itemGrid.setVgap(10);
-		inventoryLog = new Text("Coins: " + engine.getCoins() + "Inventory: " + engine.getItemList().toString());
+		inventoryLog = new Text("Coins: " + engine.getCoins() + ", Inventory: " + engine.getItemList().toString());
 		updateInventory();
 		itemShop = new Scene(itemGrid,500,500);
 		
@@ -483,14 +492,45 @@ public class MonsterGUI extends Application {
 		primaryStage.show();
 
 	}
+	
+	private void updateShopButtons() {
+		if(engine.getCoins() < 100)
+			healthBoostBut.setDisable(true);
+		else
+			healthBoostBut.setDisable(false);
+		if(engine.getCoins() < 300)
+			DodgerBut.setDisable(true);
+		else
+			DodgerBut.setDisable(false);
+		if(engine.getCoins() < 200)
+			randomBut.setDisable(true);
+		else
+			randomBut.setDisable(false);
+		if(engine.getCoins() < 400)
+			silkScarfBut.setDisable(true);
+		else
+			silkScarfBut.setDisable(false);
+		if(engine.getCoins() < 500)
+			critChanceBut.setDisable(true);
+		else
+			critChanceBut.setDisable(false);
+		if(engine.getCoins() < 10000)
+			godModeBut.setDisable(true);
+		else
+			godModeBut.setDisable(false);
+	}
+	
 	public void createButtons(Stage mainStage) {
 		updateInventory();
+		int totalCoins = engine.getCoins();
 		healthBoostBut = new Button ("Health Boost - 100 Coins");
 		healthBoostBut.setTooltip(new Tooltip("Adds a 30 HP Boost to your monsters"));
 		healthBoostBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
 				engine.itemShop(100);
+				updateInventory();
+				updateShopButtons();
 			}
 		});
 		if(engine.getCoins() < 100)
@@ -505,6 +545,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(300);
 				updateInventory();
+				updateShopButtons();
 			}
 		});
 		if(engine.getCoins() < 300)
@@ -519,6 +560,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(200);
 				updateInventory();
+				updateShopButtons();
 			}
 		});
 		if(engine.getCoins() < 200)
@@ -533,6 +575,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(400);
 				updateInventory();
+				updateShopButtons();
 			}
 		});
 		if(engine.getCoins() < 400)
@@ -547,6 +590,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(500);
 				updateInventory();
+				updateShopButtons();
 			}
 		});
 		if(engine.getCoins() < 500)
@@ -559,11 +603,12 @@ public class MonsterGUI extends Application {
 		godModeBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
-				engine.itemShop(3000000);
+				engine.itemShop(10000);
 				updateInventory();
+				updateShopButtons();
 			}
 		});	
-		if(engine.getCoins() < 3000000)
+		if(engine.getCoins() < 10000)
 			godModeBut.setDisable(true);
 		else
 			godModeBut.setDisable(false);
@@ -588,7 +633,7 @@ public class MonsterGUI extends Application {
 	}
 	
 	public void updateInventory() {
-		inventoryLog.setText("Coins: " + engine.getCoins() + "Inventory: " + engine.getItemList().toString());
+		inventoryLog.setText("Coins: " + engine.getCoins() + ", Inventory: " + engine.getItemList().toString());
 	}
 	/******************************************************************
 	 * Checks if a monster fainted (0 health).
@@ -612,6 +657,7 @@ public class MonsterGUI extends Application {
 			if(isCPUGame && onFieldMon == team2Chosen) {
 				engine.addBattleText("20 coins have been added to your account\n");
 				engine.setCoins(engine.getCoins() + 20);
+				updateInventory();
 				System.out.println(engine.getCoins());
 			}
 			updateBattleScene();
@@ -1170,31 +1216,42 @@ public class MonsterGUI extends Application {
 			loser = 1;
 		}
 		if(isCPUGame && playerOneWin) {
-			TextInputDialog fileInput = new TextInputDialog(engine.toString());
-			fileInput.setTitle("Level UP!");
-			fileInput.setHeaderText("A monster is ready to be leveled up");
-			fileInput.setContentText(
-			"Enter the name of the save file you wish to level up: (" 
-			+ player1Team.get(0).getMonsterName() + ", "
-			+ player1Team.get(1).getMonsterName() + ", " 
-			+ player1Team.get(2).getMonsterName() +")");
+			engine.setCoins(engine.getCoins() + 100);
+			updateInventory();
 			
-			
-			String result = fileInput.showAndWait().get();
-			Monster placeHolder = new Monster();
-			for(Monster mon : player1Team) {
-				if(mon.getMonsterName().equals(result)) {
-					placeHolder = mon;
-				}
+
+			ArrayList<String> monChoices = new ArrayList<String>();
+			monChoices.add(player1Team.get(0).getMonsterName());
+			if (!monChoices.get(0).equals(player1Team.get(1).getMonsterName())) {
+				monChoices.add(player1Team.get(1).getMonsterName());
 			}
-			placeHolder.attemptUpdateLevel();
-			engine.setTeams(player1Team, player2Team); //update the teams for the engine
-			//since there was a level up.
+			if (monChoices.size() == 2 && !player1Team.get(2).getMonsterName().
+					equals(monChoices.get(0)) && !player1Team.get(2).getMonsterName().
+					equals(monChoices.get(1))) {
+				monChoices.add(player1Team.get(2).getMonsterName());
+			}
+			
+			ChoiceDialog<String> dialog = new ChoiceDialog<>(monChoices.get(0), monChoices);
+			dialog.setTitle("LEVEL UP!");
+			dialog.setHeaderText("Choose one of your monster types to level up!	");
+			dialog.setContentText("");
+
+			// Traditional way to get the response value.
+			Optional<String> result = dialog.showAndWait();
+			if (result.isPresent()){
+				Monster placeHolder = new Monster();
+			    for (Monster mon : player1Team) {
+			    	if (result.get().equals(mon.getMonsterName())) {
+			    		placeHolder = mon;
+			    	}
+			    }
+			    placeHolder.attemptUpdateLevel();
+			}
 		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 
 		
-		
+		engine.setTeams(player1Team, player2Team); //update the teams for the engine
 		String saveFile = engine.toString() + ".txt";
 		engine.saveGame();
 		
@@ -1230,6 +1287,7 @@ public class MonsterGUI extends Application {
 		
 		if(playerOneWin) {
 		if(option.get() == bContinue) {
+			updateShopButtons();
 			mainStage.setScene(itemShop);
 		}
 		}
@@ -1279,5 +1337,6 @@ public class MonsterGUI extends Application {
 		team2Chosen = player2Team.get(0);	
 		engine.setTeamsAndMons(player1Team, 
 				player2Team, 0, 0);
+		updateInventory();
 	}
 }
