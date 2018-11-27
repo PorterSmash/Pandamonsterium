@@ -118,7 +118,7 @@ public class MonsterGUI extends Application {
 	private static boolean firstBgm = true;
 
 	/** the four buttons the player can access.*/
-	private Button attackButton, heavyButton, healButton, otherButton;
+	private Button attackButton, heavyButton, healButton, switchMonButton;
 	
 	private Button healthBoostBut,DodgerBut,randomBut,silkScarfBut,critChanceBut,godModeBut,iContinue;
 
@@ -174,7 +174,7 @@ public class MonsterGUI extends Application {
 						attackButton.setDisable(false);
 						heavyButton.setDisable(false);
 						healButton.setDisable(false);
-						otherButton.setDisable(false);
+						switchMonButton.setDisable(false);
 						primaryStage.setScene(monsterScene);	
 					}
 				});
@@ -193,7 +193,7 @@ public class MonsterGUI extends Application {
 						attackButton.setDisable(false);
 						heavyButton.setDisable(false);
 						healButton.setDisable(false);
-						otherButton.setDisable(false);
+						switchMonButton.setDisable(false);
 					}
 				});
 
@@ -311,7 +311,7 @@ public class MonsterGUI extends Application {
 									attackButton.setDisable(false);
 									heavyButton.setDisable(false);
 									healButton.setDisable(false);
-									otherButton.setDisable(false);
+									switchMonButton.setDisable(false);
 								}
 							}		
 						} else {
@@ -342,7 +342,7 @@ public class MonsterGUI extends Application {
 							attackButton.setDisable(false);
 							heavyButton.setDisable(false);
 							healButton.setDisable(false);
-							otherButton.setDisable(false);
+							switchMonButton.setDisable(false);
 							//isCPUGame = false; //What is going on with this line here?
 						}
 					}
@@ -380,7 +380,7 @@ public class MonsterGUI extends Application {
 		attackButton = new Button("Attack");
 		heavyButton = new Button("Heavy Attack");
 		healButton = new Button("Heal");
-		otherButton = new Button("Other");
+		switchMonButton = new Button("Switch Monster");
 
 		battleLog = new TextArea();
 
@@ -446,11 +446,12 @@ public class MonsterGUI extends Application {
 			}
 		});
 
-		otherButton.setOnAction(new EventHandler<ActionEvent>() {
+		switchMonButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
 				buttonMove(4);
-				
+				//switchMonsters();
+				updateBattleScene();
 				//primaryStage.setScene(itemShop);
 			}
 		});
@@ -484,13 +485,96 @@ public class MonsterGUI extends Application {
 
 		battleLayout.add(player1Heal, 0, 12);	
 		battleLayout.add(player2Heal, 2, 12);	
-		
-		
-		
 
 		mainStage = primaryStage;
 		primaryStage.show();
 
+	}
+	private void switchMonsters() {
+		
+		if(isCPUGame || engine.getTurn() == 0) {
+		ArrayList<String> monChoices1 = new ArrayList<String>();
+		if(player1Team.get(0).getHealthBattle()!=0) {
+		monChoices1.add(player1Team.get(0).getMonsterName()+" 1");
+		}
+		if (player1Team.get(1).getHealthBattle()!=0) {
+			monChoices1.add(player1Team.get(1).getMonsterName()+" 2");
+		}
+		if (player1Team.get(2).getHealthBattle()!=0) {
+			monChoices1.add(player1Team.get(2).getMonsterName()+" 3");
+		}
+		 
+		ChoiceDialog<String> dialog1 = new ChoiceDialog<>(monChoices1.get(0), monChoices1);
+		dialog1.setTitle("Switch Monster");
+		dialog1.setHeaderText("Choose one of your monsters to switch!	");
+		dialog1.setContentText("");
+
+		// Traditional way to get the response value.
+		Optional<String> result = dialog1.showAndWait();
+		if (result.isPresent()){
+			Monster placeHolder = new Monster();
+			int index = 1;
+		    for (Monster mon : player1Team) {
+		    	if (result.get().equals(mon.getMonsterName()+" "+index)) {
+		    		placeHolder = mon;
+		    		break;
+		    	}
+		    	index++;
+		    }
+		   team1Chosen = placeHolder;
+		   int switchedMonsterIndex = 1;
+			for (int i = 0; i < player1Team.size(); i++) {
+				if (player1Team.get(i) == team1Chosen) {
+					switchedMonsterIndex = i;
+				}
+			}
+			updateBattleScene();
+				engine.setTeamsAndMons(player1Team,
+						player2Team, switchedMonsterIndex, -1);
+		}
+		}
+		else {
+			ArrayList<String> monChoices1 = new ArrayList<String>();
+			if(player2Team.get(0).getHealthBattle()!=0) {
+				monChoices1.add(player2Team.get(0).getMonsterName()+" 1");
+				}
+				if (player2Team.get(1).getHealthBattle()!=0) {
+					monChoices1.add(player2Team.get(1).getMonsterName()+" 2");
+				}
+				if (player2Team.get(2).getHealthBattle()!=0) {
+					monChoices1.add(player2Team.get(2).getMonsterName()+" 3");
+				}
+			 
+			ChoiceDialog<String> dialog1 = new ChoiceDialog<>(monChoices1.get(0), monChoices1);
+			dialog1.setTitle("Switch Monster");
+			dialog1.setHeaderText("Choose one of your monsters to switch!	");
+			dialog1.setContentText("");
+
+			// Traditional way to get the response value.
+			Optional<String> result = dialog1.showAndWait();
+			if (result.isPresent()){
+				Monster placeHolder = new Monster();
+				int index =1;
+			    for (Monster mon : player2Team) {
+			    	if (result.get().equals(mon.getMonsterName()+" "+index)) {
+			    		placeHolder = mon;
+			    		break;
+			    	}
+			    	index++;
+			    }
+			   team2Chosen = placeHolder;
+			   int switchedMonsterIndex = 1;
+				for (int i = 0; i < player2Team.size(); i++) {
+					if (player2Team.get(i) == team2Chosen) {
+						switchedMonsterIndex = i;
+					}
+				}
+				updateBattleScene();
+					engine.setTeamsAndMons(player1Team,
+							player2Team, switchedMonsterIndex, -1);
+			}
+		}
+		
 	}
 	
 	private void updateShopButtons() {
@@ -531,12 +615,9 @@ public class MonsterGUI extends Application {
 				engine.itemShop(100);
 				updateInventory();
 				updateShopButtons();
+				engine.saveGame();
 			}
 		});
-		if(engine.getCoins() < 100)
-			healthBoostBut.setDisable(true);
-		else
-			healthBoostBut.setDisable(false);
 		
 		DodgerBut = new Button ("Enemy Dodge - 300 Coins");
 		DodgerBut.setTooltip(new Tooltip("Enemies miss twice as often"));
@@ -546,12 +627,9 @@ public class MonsterGUI extends Application {
 				engine.itemShop(300);
 				updateInventory();
 				updateShopButtons();
+				engine.saveGame();
 			}
 		});
-		if(engine.getCoins() < 300)
-			DodgerBut.setDisable(true);
-		else
-			DodgerBut.setDisable(false);
 		
 		randomBut = new Button ("Surprise! - 200 Coins");
 		randomBut.setTooltip(new Tooltip("idk"));
@@ -561,12 +639,9 @@ public class MonsterGUI extends Application {
 				engine.itemShop(200);
 				updateInventory();
 				updateShopButtons();
+				engine.saveGame();
 			}
 		});
-		if(engine.getCoins() < 200)
-			randomBut.setDisable(true);
-		else
-			randomBut.setDisable(false);
 		
 		silkScarfBut = new Button ("Silk Scarf - 400 Coins");
 		silkScarfBut.setTooltip(new Tooltip("Monster can only be killed after it reaches 1 HP"));
@@ -576,12 +651,9 @@ public class MonsterGUI extends Application {
 				engine.itemShop(400);
 				updateInventory();
 				updateShopButtons();
+				engine.saveGame();
 			}
 		});
-		if(engine.getCoins() < 400)
-			silkScarfBut.setDisable(true);
-		else
-			silkScarfBut.setDisable(false);
 		
 		critChanceBut = new Button("Critical Chance Drop - 500 Coins");
 		critChanceBut.setTooltip(new Tooltip("Enemy Critical Chance drops to zero"));
@@ -591,12 +663,9 @@ public class MonsterGUI extends Application {
 				engine.itemShop(500);
 				updateInventory();
 				updateShopButtons();
+				engine.saveGame();
 			}
 		});
-		if(engine.getCoins() < 500)
-			critChanceBut.setDisable(true);
-		else
-			critChanceBut.setDisable(false);
 		
 		godModeBut = new Button("God Mode - 3000000 Coins");
 		godModeBut.setTooltip(new Tooltip("All enemy hit chances are zero"));
@@ -606,13 +675,9 @@ public class MonsterGUI extends Application {
 				engine.itemShop(10000);
 				updateInventory();
 				updateShopButtons();
+				engine.saveGame();
 			}
 		});	
-		if(engine.getCoins() < 10000)
-			godModeBut.setDisable(true);
-		else
-			godModeBut.setDisable(false);
-		
 		iContinue = new Button("Continue");
 		iContinue.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -624,12 +689,14 @@ public class MonsterGUI extends Application {
 				attackButton.setDisable(false);
 				heavyButton.setDisable(false);
 				healButton.setDisable(false);
-				otherButton.setDisable(false);
+				switchMonButton.setDisable(false);
 				mainStage.setScene(battleScene);
 				updateBattleScene();
 			}
 		});
+		updateShopButtons();
 		updateInventory();
+		
 	}
 	
 	public void updateInventory() {
@@ -667,7 +734,7 @@ public class MonsterGUI extends Application {
 			attackButton.setDisable(true);
 			heavyButton.setDisable(true);
 			healButton.setDisable(true);
-			otherButton.setDisable(true);
+			switchMonButton.setDisable(true);
 
 			for (Monster mon : teamList) {
 				if (mon.getHealthBattle() > 0) {
@@ -848,10 +915,10 @@ public class MonsterGUI extends Application {
 		GridPane.setMargin(healButton, new Insets(10, 10, 10, 10));
 		healButton.setPrefSize(100, 20);
 
-		actionButtons.add(otherButton, 1, 1);
-		GridPane.setHalignment(otherButton, HPos.CENTER);
-		GridPane.setMargin(otherButton, new Insets(10, 10, 10, 10));
-		otherButton.setPrefSize(100, 20);
+		actionButtons.add(switchMonButton, 1, 1);
+		GridPane.setHalignment(switchMonButton, HPos.CENTER);
+		GridPane.setMargin(switchMonButton, new Insets(10, 10, 10, 10));
+		switchMonButton.setPrefSize(100, 20);
 
 		battleLayout.add(actionButtons, 2, 21);
 
@@ -901,7 +968,7 @@ public class MonsterGUI extends Application {
 			}
 			player1Heal.setVisible(true);
 			player2Heal.setVisible(true);
-		}else {
+		}else if(move==1 || move==2){
 
 			punchSound.setPriority(0);
 			punchSound.play();
@@ -971,7 +1038,7 @@ public class MonsterGUI extends Application {
 				} else if (move == 3) {
 					storedMoves[0] = team1Chosen.getMove3();
 				} else {
-					storedMoves[0] = team1Chosen.getMove4();
+					switchMonsters();
 				}
 			} else if (storedMoves[1] == null) {
 				//if player one has a move already it will take 
@@ -983,7 +1050,7 @@ public class MonsterGUI extends Application {
 				}	else if (move == 3) {
 					storedMoves[1] = team2Chosen.getMove3();
 				}	else {
-					storedMoves[1] = team2Chosen.getMove4();
+					switchMonsters();
 				}
 
 
@@ -1063,7 +1130,7 @@ public class MonsterGUI extends Application {
 			} else if (move == 3) {
 				storedMoves[0] = team1Chosen.getMove3();
 			} else {
-				storedMoves[0] = team1Chosen.getMove4();
+				switchMonsters();
 			}
 
 			storedMoves[1] = M_m_m_monsterSmash(team2Chosen);
@@ -1075,7 +1142,7 @@ public class MonsterGUI extends Application {
 				System.out.println("Player 1 attacked first. Speed: " 
 						+ team1Chosen.getSpeedBattle() + " vs. " 
 						+ team2Chosen.getSpeedBattle());
-
+				if(p1Move!=4)
 				engine.doMove(storedMoves[0], 1, p1Move);
 				soundImagesUpdate(p1Move,1);
 				player1Team = engine.getTeam1();
@@ -1086,6 +1153,7 @@ public class MonsterGUI extends Application {
 				}
 				checkFainted(); // should check team 2
 				if (team2Chosen.getHealthBattle() > 0) {
+					if(aiMove!=4)
 					engine.doMove(storedMoves[1], 0, aiMove);
 					soundImagesUpdate(aiMove,2);
 					player1Team = engine.getTeam1();
@@ -1104,6 +1172,7 @@ public class MonsterGUI extends Application {
 
 
 			} else { // Team 2 is faster
+				if(aiMove!=4)
 				engine.doMove(storedMoves[1], 0, aiMove);
 				soundImagesUpdate(aiMove,2);
 				player1Team = engine.getTeam1();
@@ -1114,6 +1183,7 @@ public class MonsterGUI extends Application {
 				}
 				checkFainted(); // should check team 1
 				if (team1Chosen.getHealthBattle() != 0) {
+					if(p1Move!=4)
 					engine.doMove(storedMoves[0], 1, 
 							p1Move);
 					soundImagesUpdate(p1Move,1);
@@ -1190,7 +1260,7 @@ public class MonsterGUI extends Application {
 		attackButton.setDisable(false);
 		heavyButton.setDisable(false);
 		healButton.setDisable(false);
-		otherButton.setDisable(false);
+		switchMonButton.setDisable(false);
 
 
 		switchMonPane.getChildren().clear();
@@ -1249,9 +1319,10 @@ public class MonsterGUI extends Application {
 			}
 		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
+		
 		for(Monster mon : player1Team) {
-			mon.resetStats(); //So no dead monsters are saved
-		}
+            mon.resetStats(); //So no dead monsters are saved
+        }
 		
 		engine.setTeams(player1Team, player2Team); //update the teams for the engine
 		String saveFile = engine.toString() + ".txt";
@@ -1284,7 +1355,7 @@ public class MonsterGUI extends Application {
 		attackButton.setDisable(true);
 		heavyButton.setDisable(true);
 		healButton.setDisable(true);
-		otherButton.setDisable(true);
+		switchMonButton.setDisable(true);
 
 		
 		if(playerOneWin) {

@@ -507,4 +507,6 @@ import javafx.scene.control.ChoiceDialog;
 				+ attackPoints
 				+ speedPoints - 27;
 	}
+
+	
 }

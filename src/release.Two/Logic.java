@@ -425,6 +425,10 @@ public class Logic {
 		case 100:
 			itemList.add("hb");
 			coins = coins - price;
+			for (Monster mon : player1Team) {
+				mon.setMaxHealthPoints(mon.getMaxHealthPoints()+30);
+				mon.setHealthBattle(mon.getMaxHealthPoints());
+			}
 			//add a health boost to the monster, like 30 hp or something
 			//for each monster in player team, healthMax += 30.
 			break;
