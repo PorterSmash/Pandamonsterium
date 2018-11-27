@@ -1249,7 +1249,9 @@ public class MonsterGUI extends Application {
 			}
 		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-
+		for(Monster mon : player1Team) {
+			mon.resetStats(); //So no dead monsters are saved
+		}
 		
 		engine.setTeams(player1Team, player2Team); //update the teams for the engine
 		String saveFile = engine.toString() + ".txt";
