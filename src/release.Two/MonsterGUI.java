@@ -2,6 +2,7 @@ package release.Two;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -85,6 +86,7 @@ public class MonsterGUI extends Application {
 	/** holds the audio sound for healing*/
 	private AudioClip healSound = new AudioClip(new File("heal.wav").toURI().toString());
 
+	/** holds the audio sound for the background music on non battle screens*/
 	private static Media defaultBgm = new Media(new File("defaultBGM.mp3").toURI().toString());
 
 	private static Media normBattleBgm = new Media(new File("normBattle.mp3").toURI().toString());
@@ -274,8 +276,8 @@ public class MonsterGUI extends Application {
 						if (!isCPUGame) {
 							if (choices[0] == null || choices[1] == null
 									|| choices[2] == null) {
-								System.out.println(
-										"Choose all monsters");
+							//	System.out.println(
+								//		"Choose all monsters");
 							} else {
 								if (!playerOnePicked) {
 									whichTeam.setText(
@@ -322,11 +324,11 @@ public class MonsterGUI extends Application {
 							}
 
 							team1Chosen = player1Team.get(0);
-							System.out.println(player1Team.get(0).getLevel() +" " + player1Team.get(1).getLevel() + " " + player1Team.get(2).getLevel());
+							//System.out.println(player1Team.get(0).getLevel() +" " + player1Team.get(1).getLevel() + " " + player1Team.get(2).getLevel());
 							engine.generateEnemyTeam(player1Team.get(0).getLevel() + player1Team.get(1).getLevel() + player1Team.get(2).getLevel());
 							player2Team = engine.getTeam2();
 							team2Chosen = player2Team.get(0);
-							System.out.println(player2Team.get(0).getLevel() +" " + player2Team.get(1).getLevel() + " " + player2Team.get(2).getLevel());
+						//	System.out.println(player2Team.get(0).getLevel() +" " + player2Team.get(1).getLevel() + " " + player2Team.get(2).getLevel());
 
 							//							if (!attackButton.isDisabled()) {
 							setUpHealthBars();
@@ -725,7 +727,7 @@ public class MonsterGUI extends Application {
 				engine.addBattleText("20 coins have been added to your account\n");
 				engine.setCoins(engine.getCoins() + 20);
 				updateInventory();
-				System.out.println(engine.getCoins());
+		//		System.out.println(engine.getCoins());
 			}
 			updateBattleScene();
 
@@ -1027,7 +1029,7 @@ public class MonsterGUI extends Application {
 		//checks if player one has gone. if they havent
 		//it will store it into p1move.
 
-		System.out.println(isCPUGame);
+	//	System.out.println(isCPUGame);
 		if (!isCPUGame) {
 			if (storedMoves[0] == null) {
 				p1Move = move;
@@ -1058,9 +1060,9 @@ public class MonsterGUI extends Application {
 				//who will attack first
 				if (team1Chosen.getSpeedBattle() 
 						> team2Chosen.getSpeedBattle()) {
-					System.out.println("Player 1 attacked first. Speed: " 
-							+ team1Chosen.getSpeedBattle() + " vs. " 
-							+ team2Chosen.getSpeedBattle());
+				//	System.out.println("Player 1 attacked first. Speed: " 
+				//			+ team1Chosen.getSpeedBattle() + " vs. " 
+				//			+ team2Chosen.getSpeedBattle());
 					if(p1Move !=4)
 						engine.doMove(storedMoves[0], 1, p1Move);
 					else 
@@ -1132,7 +1134,7 @@ public class MonsterGUI extends Application {
 				}
 			}
 		} else { // This IS a CPU game, add P1's move, and randomly select P2's
-			System.out.println("CompGame");
+		//	System.out.println("CompGame");
 			p1Move = move;
 			if (move == 1)  {
 				storedMoves[0] = team1Chosen.getMove1();
@@ -1145,14 +1147,14 @@ public class MonsterGUI extends Application {
 			}
 
 			storedMoves[1] = M_m_m_monsterSmash(team2Chosen);
-			System.out.println(M_m_m_monsterSmash(team2Chosen));
+			//System.out.println(M_m_m_monsterSmash(team2Chosen));
 			//checks which team has a faster monster
 			//who will attack first
 			if (team1Chosen.getSpeedBattle() 
 					> team2Chosen.getSpeedBattle()) {
-				System.out.println("Player 1 attacked first. Speed: " 
-						+ team1Chosen.getSpeedBattle() + " vs. " 
-						+ team2Chosen.getSpeedBattle());
+			//	System.out.println("Player 1 attacked first. Speed: " 
+					//	+ team1Chosen.getSpeedBattle() + " vs. " 
+					//	+ team2Chosen.getSpeedBattle());
 				if(p1Move!=4)
 					engine.doMove(storedMoves[0], 1, p1Move);
 				soundImagesUpdate(p1Move,1);
@@ -1217,7 +1219,7 @@ public class MonsterGUI extends Application {
 		Random rnd = new Random();
 		int moveChoice = rnd.nextInt(100);
 
-		System.out.println(aiMove + " "+ moveChoice);
+		//System.out.println(aiMove + " "+ moveChoice);
 
 		aiMove=0;
 		if (moveChoice < 39) {
@@ -1348,7 +1350,11 @@ public class MonsterGUI extends Application {
 				+ "(Game has been saved automatically in the file " 
 				+ saveFile 
 				+ ")");
-
+		//return to main menu, or exit program
+				attackButton.setDisable(true);
+				heavyButton.setDisable(true);
+				healButton.setDisable(true);
+				switchMonButton.setDisable(true);
 		ButtonType restart = new ButtonType("Restart");
 		ButtonType cancel = new ButtonType("Cancel");
 		ButtonType bContinue = new ButtonType("Continue");
@@ -1356,37 +1362,30 @@ public class MonsterGUI extends Application {
 		alert.getButtonTypes().clear();
 		alert.getButtonTypes().addAll(restart, cancel);
 
-		if(playerOneWin) {
+		if(playerOneWin&&isCPUGame) {
 			alert.getButtonTypes().add(bContinue);
 		}
 
 		Optional<ButtonType> option = alert.showAndWait();
 
-		//return to main menu, or exit program
-		attackButton.setDisable(true);
-		heavyButton.setDisable(true);
-		healButton.setDisable(true);
-		switchMonButton.setDisable(true);
-
-
-		if(playerOneWin) {
+		if(playerOneWin&&isCPUGame) {
 			if(option.get() == bContinue) {
 				updateShopButtons();
 				mainStage.setScene(itemShop);
 			}
 		}
+		
 		if (!option.isPresent()) { 
 			// alert is exited, no button has been pressed.
-			System.out.println("Quit");
+			//System.out.println("Quit");
 			resetEverything();
 			mainStage.setScene(titleScene);
 
 
 		} else if (option.get() == restart) {
 			//okay button is pressed
-			System.out.println("OK");
+			//System.out.println("OK");
 			resetEverything();
-
 			mainStage.setScene(titleScene);
 
 		}
@@ -1407,14 +1406,16 @@ public class MonsterGUI extends Application {
 				"Enter the name of the save file you wish to load from:");
 
 		Optional<String> result = fileInput.showAndWait();
+		
 		result.ifPresent(fileName -> 
 		engine.loadGame(fileName + ".txt"));
+		
 		player1Team = engine.getTeam1();
 		engine.healTeam();
 		engine.generateEnemyTeam(player1Team.get(0).getLevel() 
 				+ player1Team.get(1).getLevel() 
 				+ player1Team.get(2).getLevel());
-
+		
 		player2Team = engine.getTeam2();
 
 		team1Chosen = player1Team.get(0);

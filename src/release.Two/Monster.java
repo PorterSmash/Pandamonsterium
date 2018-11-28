@@ -350,13 +350,12 @@ import javafx.scene.control.ChoiceDialog;
 		// Read the activity name, ON icon file path, and OFF file path.
 					monsterName = nextLine;
 					monsterLevel = 1;
-					
-					
+									
 					int[] statArray = new int[21];
 					for (int i = 0; i < 20; i++) {
 						statArray[i] = Integer.parseInt(
 				fileIn.nextLine());
-						System.out.println(statArray[i]);
+				//System.out.println(statArray[i]);
 					}
 					
 					setMonsterImagePath(fileIn.nextLine());
@@ -432,7 +431,7 @@ import javafx.scene.control.ChoiceDialog;
 					choice = 4;
 				}
 				levelUp(choice);
-			    System.out.println("Your choice: " + result.get());
+			//    System.out.println("Your choice: " + result.get());
 			}
 			
 			monsterLevel++;

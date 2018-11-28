@@ -36,19 +36,19 @@ public class Logic {
 
 	/** Turn number for battle log to differentiate between turns. */
 	private int turnNum = 1;
-	
+
 	/** Coins the player has to purchase items. */
 	private int coins = 0;
-	
+
 	/** The list of items the player currently owns. */
 	private ArrayList<String> itemList = new ArrayList<String>();
-	
+
 	/** Used in conjunction with the silf scarf item. */
 	private boolean silkFlag = false;
-	
+
 	private int round = 1;
-	
-	
+
+
 	public int getRound() {
 		return round;
 	}
@@ -79,7 +79,7 @@ public class Logic {
 	public Logic() {
 		battleLogText = "";
 	}
-	
+
 	/******************************************************************
 	 * Sets up the teams with the initial monsters and sets up their
 	 * first monster.
@@ -112,7 +112,7 @@ public class Logic {
 		//that way you also don't need to create a new engine 
 		//object every time you do a calculation
 	}
-	
+
 	/*****************************************************************
 	 * Sets the teams in the engine to stay updated.
 	 * @param team1 To set for team one
@@ -123,10 +123,10 @@ public class Logic {
 		player1Team = team1;
 		player2Team = team2;
 	}
-	 /****************************************************************
-	  * Sets the silkFlag boolean.
-	  * @param flag Bool to set
-	  ***************************************************************/
+	/****************************************************************
+	 * Sets the silkFlag boolean.
+	 * @param flag Bool to set
+	 ***************************************************************/
 	public void setSilkFlag(final boolean flag) {
 		silkFlag = flag;
 	}
@@ -155,7 +155,7 @@ public class Logic {
 	public int getMon1() {
 		return mon1;
 	}
-	
+
 	/*****************************************************************
 	 * Gets you the monster on field for player 2.
 	 * @return int for which monster is on field
@@ -186,7 +186,7 @@ public class Logic {
 	public String getBattleText() {
 		return battleLogText;
 	}
-	
+
 	/**
 	 * Sets the value of the coins.
 	 * @param toSet Coin value to set
@@ -199,7 +199,7 @@ public class Logic {
 	 * @return The number of coins
 	 */
 	public int getCoins() {
-		System.out.println("Total coins: " + coins);
+		//System.out.println("Total coins: " + coins);
 		return coins;
 	}
 
@@ -210,58 +210,58 @@ public class Logic {
 	public void addBattleText(final String battleText) {
 		battleLogText = battleText + battleLogText;
 	}
-	
+
 	/*****************************************************************
 	 * Calculates the damage to do for a given move.
 	 * @param moveCommitted Move to be done
 	 * @param move Int that represents move to be done
 	 * @return int the damage to be applied
 	 ****************************************************************/
-//	private int calcDamage(final Move moveCommitted, final int move) {
-//		Monster target, attacker;
-//		if (moveCommitted.getMoveTarget() == 0) {
-//			target = player1Team.get(mon1);
-//			attacker = player2Team.get(mon2);
-//		} else {
-//			target = player2Team.get(mon2);
-//			attacker = player1Team.get(mon1);
-//			if (itemList.contains("d")) {
-//				moveCommitted.setHitChance(
-//				moveCommitted.getHitChance() / 2);
-//			}
-//		}
-//		
-//		int dmgNum = 0;
-//		if (move != 3) {
-//		if (diceRoll(moveCommitted.getHitChance())) {
-//			int dmgMultiplier = 1;
-//			
-//			if (diceRoll(moveCommitted.getCritChance())) {
-//				dmgMultiplier = 2;
-//				if (itemList.contains("cc") 
-//				&& attacker == player2Team.get(mon2)) {
-//					dmgMultiplier = 1;
-//				}
-//			}
-//			Random rnd = new Random();
-//			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
-//			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
-//		
-//		}
-//		} else  {
-//			dmgNum = moveCommitted.getAttackPower();
-//		}
-//		if (itemList.contains("gm") 
-//		&& attacker == player2Team.get(mon2)) {
-//			dmgNum = 0;
-//		}
-//		// Initial part adds between 0% and 50% damage to the attack, but it always subtracts 25%, 
-//		// so it can be anywhere between -25% and 25% damage. Gives some difference to attacks so 
-//		// it's not both mons doing the same damage every time.
-//
-//		Random rdn = new Random();
-//		return dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
-//		}
+	//	private int calcDamage(final Move moveCommitted, final int move) {
+	//		Monster target, attacker;
+	//		if (moveCommitted.getMoveTarget() == 0) {
+	//			target = player1Team.get(mon1);
+	//			attacker = player2Team.get(mon2);
+	//		} else {
+	//			target = player2Team.get(mon2);
+	//			attacker = player1Team.get(mon1);
+	//			if (itemList.contains("d")) {
+	//				moveCommitted.setHitChance(
+	//				moveCommitted.getHitChance() / 2);
+	//			}
+	//		}
+	//		
+	//		int dmgNum = 0;
+	//		if (move != 3) {
+	//		if (diceRoll(moveCommitted.getHitChance())) {
+	//			int dmgMultiplier = 1;
+	//			
+	//			if (diceRoll(moveCommitted.getCritChance())) {
+	//				dmgMultiplier = 2;
+	//				if (itemList.contains("cc") 
+	//				&& attacker == player2Team.get(mon2)) {
+	//					dmgMultiplier = 1;
+	//				}
+	//			}
+	//			Random rnd = new Random();
+	//			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
+	//			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
+	//		
+	//		}
+	//		} else  {
+	//			dmgNum = moveCommitted.getAttackPower();
+	//		}
+	//		if (itemList.contains("gm") 
+	//		&& attacker == player2Team.get(mon2)) {
+	//			dmgNum = 0;
+	//		}
+	//		// Initial part adds between 0% and 50% damage to the attack, but it always subtracts 25%, 
+	//		// so it can be anywhere between -25% and 25% damage. Gives some difference to attacks so 
+	//		// it's not both mons doing the same damage every time.
+	//
+	//		Random rdn = new Random();
+	//		return dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
+	//		}
 	private int calcDamage(final Move moveCommitted, final int move) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
@@ -272,28 +272,28 @@ public class Logic {
 			attacker = player1Team.get(mon1);
 			if (itemList.contains("d")) {
 				moveCommitted.setHitChance(
-				moveCommitted.getHitChance() / 2);
+						moveCommitted.getHitChance() / 2);
 			}
 		}
-		
+
 		int dmgNum = 0;
 		if (move != 3) {
-		if (diceRoll(moveCommitted.getHitChance())) {
-			int dmgMultiplier = 1;
-			
-			if (diceRoll(moveCommitted.getCritChance())) {
-				dmgMultiplier = 2;
-				if (itemList.contains("cc") && attacker == player2Team.get(mon2)) {
-					dmgMultiplier = 1;
+			if (diceRoll(moveCommitted.getHitChance())) {
+				int dmgMultiplier = 1;
+
+				if (diceRoll(moveCommitted.getCritChance())) {
+					dmgMultiplier = 2;
+					if (itemList.contains("cc") && attacker == player2Team.get(mon2)) {
+						dmgMultiplier = 1;
+					}
 				}
+				dmgNum = Math.abs(((moveCommitted.getAttackPower() 
+						+ attacker.getAttackBattle()) 
+						* dmgMultiplier) - (target.
+								getDefenseBattle() / 2));
+
 			}
-			dmgNum = ((moveCommitted.getAttackPower() 
-					+ attacker.getAttackBattle()) 
-					* dmgMultiplier) - (target.
-							getDefenseBattle() / 2);
-		
-		}
-		} else  {
+		} else if(move ==3) {
 			Random rnd = new Random();
 			dmgNum = (int)((2 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
 			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
@@ -308,8 +308,8 @@ public class Logic {
 		Random rdn = new Random();
 		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
 		return dmgNum; 
-		}
-	
+	}
+
 	/*****************************************************************
 	 * Applies the damage to a monster.
 	 * @param moveDone Move to be committed
@@ -335,14 +335,14 @@ public class Logic {
 		}
 		int dmgDone = calcDamage(moveDone, moveNum);
 		if (itemList.contains("ss") && !silkFlag
-			&& dmgDone > target.getHealthBattle()
-			&& teamNum == 2) {
+				&& dmgDone > target.getHealthBattle()
+				&& teamNum == 2) {
 			dmgDone = target.getHealthBattle() + 1;
 			silkFlag = true;
 			//eventually this will need to get reset 
 			//after a battle is finished
 		}
-		
+
 		target.decreaseHealth(dmgDone);
 
 		turnNum++;
@@ -353,36 +353,36 @@ public class Logic {
 			firstOrSecond = "second";
 		}
 		if (moveNum == 1) { 
-		battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
-		getMonsterName() + " (Team " + teamNum + ") attacked "
-		+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
-		+ 1) + ") " + firstOrSecond + " for " + dmgDone
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+					getMonsterName() + " (Team " + teamNum + ") attacked "
+					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
+							+ 1) + ") " + firstOrSecond + " for " + dmgDone
 					+ " damage.\n" + battleLogText;
 		}
 		if (moveNum == 2) {
-		battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
-		getMonsterName() + " (Team " + teamNum + ") heavily attacked "
-		+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
-	+ 1) + ") " + firstOrSecond + " for " + dmgDone
-		+ " damage.\n" + battleLogText;
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+					getMonsterName() + " (Team " + teamNum + ") heavily attacked "
+					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
+							+ 1) + ") " + firstOrSecond + " for " + dmgDone
+					+ " damage.\n" + battleLogText;
 		}
 
 		if (moveNum == 3) {
-	battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
-	getMonsterName() + " (Team " + teamNum + ") healed themselves "
-	+  "with " + Math.abs(dmgDone)
-	+ " health points.\n" + battleLogText;
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+					getMonsterName() + " (Team " + teamNum + ") healed themselves "
+					+  "with " + Math.abs(dmgDone)
+					+ " health points.\n" + battleLogText;
 		}
 		if (moveNum == 4) {
-		battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
-		getMonsterName() + " (Team " + teamNum + ") special attacked "
-	+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
-	+ 1) + ") " + firstOrSecond + " for " + dmgDone
-	+ " damage.\n" + battleLogText;
+			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
+					getMonsterName() + " (Team " + teamNum + ") special attacked "
+					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
+							+ 1) + ") " + firstOrSecond + " for " + dmgDone
+					+ " damage.\n" + battleLogText;
 		}
-		
+
 	}
-	
+
 	/******************************************************************
 	 * Randomly chooses a number to determine the chance of certain
 	 * moves. Having the roll be less than the chance will allow 
@@ -395,7 +395,7 @@ public class Logic {
 		int roll = rand.nextInt(11);
 		return roll <= chance;	
 	}
-	
+
 	/******************************************************************
 	 * Changes the turn to switch each player.
 	 *****************************************************************/
@@ -409,7 +409,7 @@ public class Logic {
 	public void incTurnNum() {
 		turnNum++;
 	}
-	
+
 	/*****************************************************************
 	 * Gives the player an item(String) for a price.
 	 * @param price Price of the item
@@ -421,49 +421,49 @@ public class Logic {
 			//that would only appear if coins is large enough, or the buttons
 			//would just send a message or something if you don't have enough
 		}else {
-		switch (price) {
-		case 100:
-			itemList.add("hb");
-			coins = coins - price;
-			for (Monster mon : player1Team) {
-				mon.setMaxHealthPoints(mon.getMaxHealthPoints()+30);
-				mon.setHealthBattle(mon.getMaxHealthPoints());
+			switch (price) {
+			case 100:
+				itemList.add("hb");
+				coins = coins - price;
+				for (Monster mon : player1Team) {
+					mon.setMaxHealthPoints(mon.getMaxHealthPoints()+30);
+					mon.setHealthBattle(mon.getMaxHealthPoints());
+				}
+				//add a health boost to the monster, like 30 hp or something
+				//for each monster in player team, healthMax += 30.
+				break;
+			case 200:
+				itemList.add("something");
+				coins = coins - price;
+				break;
+			case 300:
+				itemList.add("d");
+				coins = coins - price;
+				//Dodger, enemy moves miss twice as often.
+				break;
+			case 400:
+				itemList.add("ss");
+				coins = coins - price;
+				//modeled after the silk scarf, a monster can only be killed
+				//after it is brought to 1 hp. So a killshot brings the monster to 1 hp,
+				//and teh next killshot actually kills it. <maybe too ambitious>
+				break;
+			case 500:
+				itemList.add("cc");
+				coins = coins - price;
+				//enemy monster crit chance is now 0, always. <takes two lines of code>
+				break;
+			case 10000:
+				itemList.add("gm");
+				coins = coins - price;
+				//god mode, all enemy hit chances are now 0.
+			default:
+				break;
 			}
-			//add a health boost to the monster, like 30 hp or something
-			//for each monster in player team, healthMax += 30.
-			break;
-		case 200:
-			itemList.add("something");
-			coins = coins - price;
-			break;
-		case 300:
-			itemList.add("d");
-			coins = coins - price;
-			//Dodger, enemy moves miss twice as often.
-			break;
-		case 400:
-			itemList.add("ss");
-			coins = coins - price;
-			//modeled after the silk scarf, a monster can only be killed
-			//after it is brought to 1 hp. So a killshot brings the monster to 1 hp,
-			//and teh next killshot actually kills it. <maybe too ambitious>
-			break;
-		case 500:
-			itemList.add("cc");
-			coins = coins - price;
-			//enemy monster crit chance is now 0, always. <takes two lines of code>
-			break;
-		case 10000:
-			itemList.add("gm");
-			coins = coins - price;
-			//god mode, all enemy hit chances are now 0.
-		default:
-			break;
-		}
 		}
 		//As of right now, if you buy all the items in the shop you become super OP. 
 		//I'm ok with this.
-		
+
 	}
 	/*****************************************************************
 	 * Generates a team of monsters to battle against the player when they
@@ -480,7 +480,9 @@ public class Logic {
 		to attribute to statID (b). So for each monster in the team, we call
 		levelup(b) * a times. Also we generate the monsters randomly. So pick 3 numbers 1-6
 		and then those are the monsters we run with.
-		*/
+		 */
+		
+		player2Team.clear();
 		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
 		Random rnd = new Random();
 		String[] monsterList = {"Charizard", "Staryu", "Nidoking", "Jolteon", "Squirtle", "Raichu", "Troll", "Far-Out Man", "Gnomagician", "Magma Golem (Boss)"};
@@ -498,6 +500,7 @@ public class Logic {
 		initializeComputerMonster((int)(singleMonsterStats * 1.5), computerMonster); // loops through, adding stats, more powerful (times 1.5)
 		player2Team.add(computerMonster); // adds monster to enemy team, repeat
 		
+
 	}
 	/**
 	 * Creates a text file that contains all necessary information
@@ -510,7 +513,7 @@ public class Logic {
 		- Monsters and monster levels
 		- Items held
 		- coins in the coin bank
-		*/
+		 */
 		String fileName = this.toString() + ".txt";
 		try {
 			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
@@ -534,9 +537,9 @@ public class Logic {
 			System.out.println("Error2");
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void healTeam() {
 		for (Monster mon : player1Team) {
 			mon.setHealthBattle(mon.getMaxHealthPoints());
@@ -544,14 +547,14 @@ public class Logic {
 		for (Monster mon2 : player2Team) {
 			mon2.setHealthBattle(mon2.getMaxHealthPoints());
 		}
-		
+
 	}
 	/**
 	 * Reads in information from a data file and continues a game.
 	 * @param fileName
 	 */
 	public void loadGame(final String fileName) {
-		
+
 		Scanner fileIn = null;
 		try {
 			fileIn = new Scanner(
@@ -570,40 +573,40 @@ public class Logic {
 					itemList.add(items[i]);
 				}
 				currentLine = fileIn.nextLine();
-		} else {
+			} else {
 				currentLine = fileIn.nextLine();
 			}
 			currentLine = fileIn.nextLine();
 			coins = Integer.parseInt(currentLine);	
-			
-			
-	} catch (FileNotFoundException e) {
+
+
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		
-} finally {
+
+		} finally {
 			if (fileIn != null) {
-			fileIn.close();
+				fileIn.close();
 			}
 		}
-		
+
 	}
 
 	private void readMonster(final Scanner fileIn, String currentLine, final Monster firstMon) {
-		System.out.println("Name" + currentLine);
+		//System.out.println("Name" + currentLine);
 		firstMon.monsterFactory(currentLine);
 		currentLine = fileIn.nextLine();
-		System.out.println("Health" + currentLine);
+		//System.out.println("Health" + currentLine);
 		firstMon.setMaxHealthPoints(
 				Integer.parseInt(currentLine));
 		currentLine = fileIn.nextLine();
-		System.out.println("Attack" + currentLine);
+		//System.out.println("Attack" + currentLine);
 		firstMon.setAttackPoints(Integer.parseInt(currentLine));
 		currentLine = fileIn.nextLine();
-		System.out.println("Defense" + currentLine);
+	//	System.out.println("Defense" + currentLine);
 		firstMon.setDefensePoints(
 				Integer.parseInt(currentLine));
 		currentLine = fileIn.nextLine();
-		System.out.println("Speed" + currentLine);
+	//	System.out.println("Speed" + currentLine);
 		firstMon.setSpeedPoints(Integer.parseInt(currentLine));
 		firstMon.setHealthBattle(firstMon.getMaxHealthPoints());
 		firstMon.setAttackBattle(firstMon.getAttackPoints());
@@ -640,28 +643,28 @@ public class Logic {
 		Logic engine = new Logic();
 		Monster team1 = new Monster();
 		Monster team2 = new Monster();
-		
+
 		team1.monsterFactory("Charizard");
 		team2.monsterFactory("Jolteon");
 		engine.getTeam1().add(team1);
 		engine.getTeam1().add(team1);
 		engine.getTeam1().add(team1);
-		
+
 		engine.getTeam2().add(team2);
 		engine.getTeam2().add(team2);
 		engine.getTeam2().add(team2);
-		
+
 		engine.setCoins(10);
 		engine.getItemList().add("ss");
 		String loader = engine.toString();
 		engine.saveGame();
 		System.out.println("Done saving");
-		
+
 		engine.loadGame(loader + ".txt");
-		
+
 	}
 	public ArrayList<String> getItemList() {
 		return itemList;
 	}
-	
+
 }
