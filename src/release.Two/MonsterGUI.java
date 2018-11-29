@@ -425,7 +425,7 @@ public class MonsterGUI extends Application {
 		itemGrid.add(silkScarfBut, 0, 2);
 		itemGrid.add(critChanceBut, 0, 3);
 		itemGrid.add(godModeBut, 0, 4);
-		itemGrid.add(inventoryLog, 1, 7);
+		itemGrid.add(inventoryLog, 0, 10);
 		itemGrid.add(iContinue, 0, 8);
 
 
@@ -606,7 +606,6 @@ public class MonsterGUI extends Application {
 
 	public void createButtons(Stage mainStage) {
 		updateInventory();
-		int totalCoins = engine.getCoins();
 		healthBoostBut = new Button ("Health Boost - 100 Coins");
 		healthBoostBut.setTooltip(new Tooltip("Adds a 30 HP Boost to your monsters"));
 		healthBoostBut.setOnAction(new EventHandler<ActionEvent>() {
