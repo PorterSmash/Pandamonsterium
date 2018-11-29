@@ -461,7 +461,7 @@ import javafx.scene.control.ChoiceDialog;
 					+ "passed to levelUp method");
 		}
 		resetStats();
-//		monsterLevel += 1; unnecessary since level is calculated based on stats
+        
  	}
 	
 	/******************************************************************

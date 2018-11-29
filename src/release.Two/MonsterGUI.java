@@ -60,7 +60,7 @@ import javafx.util.Duration;
  *********************************************************************/
 public class MonsterGUI extends Application {
 	/** Declares the three needed scenes.*/
-	private Scene titleScene, monsterScene, battleScene, pickPokemon,itemShop;
+	private Scene titleScene, monsterScene, battleScene, pickMonster,itemShop;
 
 	/** Pane used for switching monsters. */
 	private FlowPane switchMonPane;
@@ -122,7 +122,10 @@ public class MonsterGUI extends Application {
 	/** the four buttons the player can access.*/
 	private Button attackButton, heavyButton, healButton, switchMonButton;
 
-	private Button healthBoostBut,DodgerBut,randomBut,silkScarfBut,critChanceBut,godModeBut,iContinue;
+	/** Buttons for Items in shop*/
+	private Button healthBoostBut,DodgerBut,silkScarfBut,critChanceBut,godModeBut,iContinue;
+	
+	private boolean hbBought,dBought,ssBought,ccBought,gmBought = false;
 
 	/** Image for player 1s sprite.*/
 	private ImageView player1Sprite;
@@ -402,7 +405,7 @@ public class MonsterGUI extends Application {
 		switchMonPane.setPadding(new Insets(10, 10, 10, 10));
 		switchMonPane.setHgap(10);
 		switchMonPane.setVgap(10);
-		pickPokemon = new Scene(switchMonPane);
+		pickMonster = new Scene(switchMonPane);
 
 		storedMoves = new Move[2];
 
@@ -419,10 +422,9 @@ public class MonsterGUI extends Application {
 		createButtons(primaryStage);
 		itemGrid.add(healthBoostBut, 0, 0);
 		itemGrid.add(DodgerBut, 0, 1);
-		itemGrid.add(randomBut, 0, 2);
-		itemGrid.add(silkScarfBut, 0, 3);
-		itemGrid.add(critChanceBut, 0, 4);
-		itemGrid.add(godModeBut, 0, 5);
+		itemGrid.add(silkScarfBut, 0, 2);
+		itemGrid.add(critChanceBut, 0, 3);
+		itemGrid.add(godModeBut, 0, 4);
 		itemGrid.add(inventoryLog, 1, 7);
 		itemGrid.add(iContinue, 0, 8);
 
@@ -580,27 +582,23 @@ public class MonsterGUI extends Application {
 	}
 
 	private void updateShopButtons() {
-		if(engine.getCoins() < 100)
+		if(engine.getCoins() < 100 || hbBought)
 			healthBoostBut.setDisable(true);
 		else
 			healthBoostBut.setDisable(false);
-		if(engine.getCoins() < 300)
+		if(engine.getCoins() < 300 || dBought)
 			DodgerBut.setDisable(true);
 		else
 			DodgerBut.setDisable(false);
-		if(engine.getCoins() < 200)
-			randomBut.setDisable(true);
-		else
-			randomBut.setDisable(false);
-		if(engine.getCoins() < 400)
+		if(engine.getCoins() < 400 || ssBought)
 			silkScarfBut.setDisable(true);
 		else
 			silkScarfBut.setDisable(false);
-		if(engine.getCoins() < 500)
+		if(engine.getCoins() < 500|| ccBought)
 			critChanceBut.setDisable(true);
 		else
 			critChanceBut.setDisable(false);
-		if(engine.getCoins() < 10000)
+		if(engine.getCoins() < 10000 || gmBought)
 			godModeBut.setDisable(true);
 		else
 			godModeBut.setDisable(false);
@@ -616,6 +614,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(100);
 				updateInventory();
+				hbBought = true;
 				updateShopButtons();
 				engine.saveGame();
 			}
@@ -628,18 +627,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(300);
 				updateInventory();
-				updateShopButtons();
-				engine.saveGame();
-			}
-		});
-
-		randomBut = new Button ("Surprise! - 200 Coins");
-		randomBut.setTooltip(new Tooltip("idk"));
-		randomBut.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(final ActionEvent event) {
-				engine.itemShop(200);
-				updateInventory();
+				dBought = true;
 				updateShopButtons();
 				engine.saveGame();
 			}
@@ -652,6 +640,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(400);
 				updateInventory();
+				ssBought = true;
 				updateShopButtons();
 				engine.saveGame();
 			}
@@ -664,6 +653,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(500);
 				updateInventory();
+				ccBought = true;
 				updateShopButtons();
 				engine.saveGame();
 			}
@@ -676,6 +666,7 @@ public class MonsterGUI extends Application {
 			public void handle(final ActionEvent event) {
 				engine.itemShop(10000);
 				updateInventory();
+				gmBought = true;
 				updateShopButtons();
 				engine.saveGame();
 			}
@@ -761,7 +752,7 @@ public class MonsterGUI extends Application {
 				gameOverAlert();
 			} else {
 				if(!isCPUGame || onFieldMon == team1Chosen) {
-					stage.setScene(pickPokemon);
+					stage.setScene(pickMonster);
 					stage.show();
 				}
 			}
@@ -1146,7 +1137,7 @@ public class MonsterGUI extends Application {
 				switchMonsters();
 			}
 
-			storedMoves[1] = M_m_m_monsterSmash(team2Chosen);
+			storedMoves[1] = monsterSmash(team2Chosen);
 			//System.out.println(M_m_m_monsterSmash(team2Chosen));
 			//checks which team has a faster monster
 			//who will attack first
@@ -1215,7 +1206,7 @@ public class MonsterGUI extends Application {
 			}
 		}
 	}
-	private Move M_m_m_monsterSmash(Monster enemyMon) {
+	private Move monsterSmash(Monster enemyMon) {
 		Random rnd = new Random();
 		int moveChoice = rnd.nextInt(100);
 
