@@ -261,7 +261,7 @@ public class JUnitTestingReleaseTwo {
 		Monster testMonster = new Monster();
 		testMonster.setDefensePoints(1);
 		testMonster.levelUp(2);
-		assertEquals(testMonster.getDefensePoints(), 2);
+		assertEquals(testMonster.getDefensePoints(), 1);
 	}
 	/**********************************************
 	 * Test level up stat id 3.
@@ -271,7 +271,7 @@ public class JUnitTestingReleaseTwo {
 		Monster testMonster = new Monster();
 		testMonster.setAttackPoints(1);
 		testMonster.levelUp(3);
-		assertEquals(testMonster.getAttackPoints(), 2);
+		assertEquals(testMonster.getAttackPoints(), 1);
 	}
 	/**********************************************
 	 * Test level up stat id 4.
@@ -397,6 +397,9 @@ public class JUnitTestingReleaseTwo {
 		testMonster.resetMonsterLevel();
 		assertEquals(testMonster.getLevel(), 3);
 	}
+	/**
+	 * Test set all zero method.
+	 */
 	@Test
 	public void testSetAllZero() {
 		Monster testMonster = new Monster();
@@ -710,7 +713,7 @@ public class JUnitTestingReleaseTwo {
 		testEngine.incTurnNum();
 	}
 	/**
-	 * Test getting and setting silk scarf item
+	 * Test getting and setting silk scarf item.
 	 */
 	@Test
 	public void testSilkSetGet() {
@@ -719,7 +722,7 @@ public class JUnitTestingReleaseTwo {
 		assertEquals(testEngine.getSilk(), true);
 	}
 	/**
-	 * Test getting and setting coins
+	 * Test getting and setting coins.
 	 */
 	@Test
 	public void testCoinsSetGet() {
@@ -727,6 +730,9 @@ public class JUnitTestingReleaseTwo {
 		testEngine.setCoins(3000);
 		assertEquals(testEngine.getCoins(), 3000);
 	}
+	/**
+	 * Test saving and loading.
+	 */
 	@Test
 	public void testSaveAndLoad() {
 		Logic testEngine = new Logic();
@@ -754,7 +760,7 @@ public class JUnitTestingReleaseTwo {
 				"Charizard");
 	}
 	/**
-	 * Test save and load again
+	 * Test save and load again.
 	 */
 	@Test
 	public void testSaveAndLoad2() {
@@ -803,7 +809,7 @@ public class JUnitTestingReleaseTwo {
 		testEngine.itemShop(300);
 		testEngine.itemShop(400);
 		testEngine.itemShop(500);
-		testEngine.itemShop(3000000);
+		testEngine.itemShop(10000);
 		testEngine.itemShop(0);
 		testEngine.itemShop(1000000000);
 		
@@ -811,19 +817,11 @@ public class JUnitTestingReleaseTwo {
 		
 	}
 	/**
-	 * Test the item attributes
+	 * Test the item attributes.
 	 */
 	@Test
 	public void testItemAttributes() {
 		Logic testEngine = new Logic();
-		testEngine.setCoins(1000000000);
-		testEngine.itemShop(100);
-		testEngine.itemShop(200);
-		testEngine.itemShop(300);
-		testEngine.itemShop(400);
-		testEngine.itemShop(500);
-		testEngine.itemShop(3000000);
-		
 		Monster target = new Monster();
 		Monster attacker = new Monster();
 		target.monsterFactory("Charizard");
@@ -833,17 +831,61 @@ public class JUnitTestingReleaseTwo {
 		team1.add(target);
 		team2.add(attacker);
 		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		testEngine.setCoins(1000000000);
+		testEngine.itemShop(100);
+		testEngine.itemShop(200);
+		testEngine.itemShop(300);
+		testEngine.itemShop(400);
+		testEngine.itemShop(500);
+		testEngine.itemShop(3000000);
+		
+		target = new Monster();
+		attacker = new Monster();
+		target.monsterFactory("Charizard");
+		attacker.monsterFactory("Jolteon");
+		team1 = new ArrayList<Monster>();
+		team2 = new ArrayList<Monster>();
+		team1.add(target);
+		team2.add(attacker);
+		testEngine.setTeamsAndMons(team1, team2, 0, 0);
 		Move testMove = attacker.getMove1();
 		testMove.setMoveTarget(0);
 		testMove.setCritChance(0);
 		testMove.setHitChance(10);
 		attacker.getMove1().setCritChance(0);
-		
-		for(String el : testEngine.getItemList()) {
-			System.out.println("El " + el);
-		}
 		testEngine.doMove(testMove, 0, 1);
-		assertEquals(testEngine.getTeam1().get(0).getHealthBattle(), 120);
+		testEngine.doMove(testMove, 1, 0);
+		
+	}
+	/**
+	 * Test healing teams method.
+	 */
+	@Test
+	public void testHealTeam() {
+		Logic testEngine = new Logic();
+		Monster target = new Monster();
+		Monster attacker = new Monster();
+		target.monsterFactory("Charizard");
+		attacker.monsterFactory("Jolteon");
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		team1.add(target);
+		team2.add(attacker);
+		team1.get(0).setHealthBattle(10);
+		team2.get(0).setHealthBattle(10);
+		testEngine.setTeams(team1, team2);
+		testEngine.healTeam();
+		assertEquals(team1.get(0).getHealthBattle(), 120);
+		assertEquals(team2.get(0).getHealthBattle(), 80);
+	}
+	/**
+	 * Test set and get round.
+	 */
+	@Test
+	public void testSetGetRound() {
+		Logic testEngine = new Logic();
+		testEngine.setRound(1);
+		assertEquals(testEngine.getRound(), 1);
 	}
 	
 	/**
@@ -882,4 +924,5 @@ public class JUnitTestingReleaseTwo {
 				+ "Hit Chance: 1\n" 
 				+ " Move Target: 1");
 	}
+	
 }
