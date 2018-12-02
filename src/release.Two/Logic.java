@@ -48,7 +48,6 @@ public class Logic {
 
 	private int round = 1;
 
-
 	public int getRound() {
 		return round;
 	}
@@ -211,57 +210,6 @@ public class Logic {
 		battleLogText = battleText + battleLogText;
 	}
 
-	/*****************************************************************
-	 * Calculates the damage to do for a given move.
-	 * @param moveCommitted Move to be done
-	 * @param move Int that represents move to be done
-	 * @return int the damage to be applied
-	 ****************************************************************/
-	//	private int calcDamage(final Move moveCommitted, final int move) {
-	//		Monster target, attacker;
-	//		if (moveCommitted.getMoveTarget() == 0) {
-	//			target = player1Team.get(mon1);
-	//			attacker = player2Team.get(mon2);
-	//		} else {
-	//			target = player2Team.get(mon2);
-	//			attacker = player1Team.get(mon1);
-	//			if (itemList.contains("d")) {
-	//				moveCommitted.setHitChance(
-	//				moveCommitted.getHitChance() / 2);
-	//			}
-	//		}
-	//		
-	//		int dmgNum = 0;
-	//		if (move != 3) {
-	//		if (diceRoll(moveCommitted.getHitChance())) {
-	//			int dmgMultiplier = 1;
-	//			
-	//			if (diceRoll(moveCommitted.getCritChance())) {
-	//				dmgMultiplier = 2;
-	//				if (itemList.contains("cc") 
-	//				&& attacker == player2Team.get(mon2)) {
-	//					dmgMultiplier = 1;
-	//				}
-	//			}
-	//			Random rnd = new Random();
-	//			dmgNum = (int)((5 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
-	//			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
-	//		
-	//		}
-	//		} else  {
-	//			dmgNum = moveCommitted.getAttackPower();
-	//		}
-	//		if (itemList.contains("gm") 
-	//		&& attacker == player2Team.get(mon2)) {
-	//			dmgNum = 0;
-	//		}
-	//		// Initial part adds between 0% and 50% damage to the attack, but it always subtracts 25%, 
-	//		// so it can be anywhere between -25% and 25% damage. Gives some difference to attacks so 
-	//		// it's not both mons doing the same damage every time.
-	//
-	//		Random rdn = new Random();
-	//		return dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
-	//		}
 	private int calcDamage(final Move moveCommitted, final int move) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
@@ -270,6 +218,7 @@ public class Logic {
 		} else {
 			target = player2Team.get(mon2);
 			attacker = player1Team.get(mon1);
+			
 			if (itemList.contains("d")) {
 				moveCommitted.setHitChance(
 						moveCommitted.getHitChance() / 2);
@@ -295,7 +244,7 @@ public class Logic {
 			}
 		} else if(move ==3) {
 			Random rnd = new Random();
-			dmgNum = (int)((2 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextDouble()); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
+			dmgNum = (int)((2 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextInt(1)); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
 			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
 		}
 		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
@@ -306,7 +255,7 @@ public class Logic {
 		// it's not both mons doing the same damage every time.
 
 		Random rdn = new Random();
-		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
+		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextInt(1)) - (dmgNum/4); 
 		return dmgNum; 
 	}
 
@@ -373,15 +322,8 @@ public class Logic {
 					+  "with " + Math.abs(dmgDone)
 					+ " health points.\n" + battleLogText;
 		}
-		if (moveNum == 4) {
-			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
-					getMonsterName() + " (Team " + teamNum + ") special attacked "
-					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
-							+ 1) + ") " + firstOrSecond + " for " + dmgDone
-					+ " damage.\n" + battleLogText;
-		}
 
-	}
+	} 
 
 	/******************************************************************
 	 * Randomly chooses a number to determine the chance of certain
@@ -432,10 +374,6 @@ public class Logic {
 				//add a health boost to the monster, like 30 hp or something
 				//for each monster in player team, healthMax += 30.
 				break;
-			case 200:
-				itemList.add("something");
-				coins = coins - price;
-				break;
 			case 300:
 				itemList.add("d");
 				coins = coins - price;
@@ -458,6 +396,7 @@ public class Logic {
 				coins = coins - price;
 				//god mode, all enemy hit chances are now 0.
 			default:
+				System.out.print("Nothing has been bought");
 				break;
 			}
 		}
@@ -481,7 +420,7 @@ public class Logic {
 		levelup(b) * a times. Also we generate the monsters randomly. So pick 3 numbers 1-6
 		and then those are the monsters we run with.
 		 */
-		
+		 
 		player2Team.clear();
 		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
 		Random rnd = new Random();
@@ -522,7 +461,7 @@ public class Logic {
 				writer.println(mon.getMaxHealthPoints());
 				writer.println(mon.getAttackPoints());
 				writer.println(mon.getDefensePoints());
-				writer.println(mon.getSpeedPoints());
+				writer.println(mon.getSpeedPoints()); 
 			}
 			for (String item : itemList) {
 				writer.print(item + ",");
@@ -531,10 +470,8 @@ public class Logic {
 			writer.println(this.coins);
 			writer.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("Error1");
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			System.out.println("Error2");
 			e.printStackTrace();
 		}
 
@@ -581,8 +518,8 @@ public class Logic {
 
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-
+			System.out.println("error");
+			
 		} finally {
 			if (fileIn != null) {
 				fileIn.close();
@@ -626,7 +563,7 @@ public class Logic {
 		int totalLoops = 0;
 		if (compMonster.getLevel() > 3) {
 			//totalLoops = 21 + monsterLevel + rnd.nextInt(5) - 2; // 0 though 4, minus 2, so +- 2 levels
-			totalLoops = 15 + monsterLevel + rnd.nextInt(5) - 2;
+	//		totalLoops = 15 + monsterLevel + rnd.nextInt(5) - 2;
 		} else {
 			totalLoops = 21 + monsterLevel + rnd.nextInt(2); // can be one level above at most
 		}
@@ -648,13 +585,13 @@ public class Logic {
 		team2.monsterFactory("Jolteon");
 		engine.getTeam1().add(team1);
 		engine.getTeam1().add(team1);
-		engine.getTeam1().add(team1);
+		engine.getTeam1().add(team1); 
 
 		engine.getTeam2().add(team2);
 		engine.getTeam2().add(team2);
 		engine.getTeam2().add(team2);
 
-		engine.setCoins(10);
+		engine.setCoins(1000000);
 		engine.getItemList().add("ss");
 		String loader = engine.toString();
 		engine.saveGame();

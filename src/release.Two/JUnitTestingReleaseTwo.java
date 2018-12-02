@@ -290,7 +290,7 @@ public class JUnitTestingReleaseTwo {
 	public void testMonsterFactoryChar1() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Charizard");
-		assertEquals(testMonster.getMaxHealthPoints(), 120);
+		assertEquals(testMonster.getMaxHealthPoints(), 100);
 	}
 	/**********************************************
 	 * Test monster factory attack.
@@ -326,7 +326,7 @@ public class JUnitTestingReleaseTwo {
 	public void testMonsterFactoryStar1() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Staryu");
-		assertEquals(testMonster.getMaxHealthPoints(), 100);
+		assertEquals(testMonster.getMaxHealthPoints(), 80);
 	}
 	/**********************************************
 	 * Test Test monster factory attack for different monster.
@@ -335,7 +335,7 @@ public class JUnitTestingReleaseTwo {
 	public void testMonsterFactoryStar2() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Staryu");
-		assertEquals(testMonster.getAttackPoints(), 6);
+		assertEquals(testMonster.getAttackPoints(), 8);
 	}
 	/**********************************************
 	 * Test monster factory defense for different monster.
@@ -395,7 +395,7 @@ public class JUnitTestingReleaseTwo {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Charizard");
 		testMonster.resetMonsterLevel();
-		assertEquals(testMonster.getLevel(), 3);
+		assertEquals(testMonster.getLevel(), 1);
 	}
 	/**
 	 * Test set all zero method.
@@ -711,6 +711,7 @@ public class JUnitTestingReleaseTwo {
 		//this is a read only value
 		Logic testEngine = new Logic();
 		testEngine.incTurnNum();
+		assertEquals(testEngine.getTurn(),0);
 	}
 	/**
 	 * Test getting and setting silk scarf item.
@@ -813,7 +814,7 @@ public class JUnitTestingReleaseTwo {
 		testEngine.itemShop(0);
 		testEngine.itemShop(1000000000);
 		
-		assertEquals(testEngine.getItemList().size(), 6);
+		assertEquals(testEngine.getItemList().size(), 5);
 		
 	}
 	/**
@@ -875,7 +876,7 @@ public class JUnitTestingReleaseTwo {
 		team2.get(0).setHealthBattle(10);
 		testEngine.setTeams(team1, team2);
 		testEngine.healTeam();
-		assertEquals(team1.get(0).getHealthBattle(), 120);
+		assertEquals(team1.get(0).getHealthBattle(), 100);
 		assertEquals(team2.get(0).getHealthBattle(), 80);
 	}
 	/**

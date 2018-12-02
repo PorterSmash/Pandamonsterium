@@ -91,9 +91,7 @@ public class MonsterGUI extends Application {
 
 	private static Media normBattleBgm = new Media(new File("normBattle.mp3").toURI().toString());
 
-	private static Media bossBattleBgm = new Media(new File("bossBattle.wav").toURI().toString());
-
-	private static MediaPlayer defaultPlayer,normPlayer,bossPlayer;
+	private static MediaPlayer defaultPlayer,normPlayer;
 
 	/**Health bars displays. */
 	private Rectangle healthBar1, healthBar2;
@@ -103,9 +101,6 @@ public class MonsterGUI extends Application {
 
 	/** Labels of each monster's name.*/
 	private Label nameLabel1, nameLabel2;
-
-	/** Label for the monsters level.*/
-	private Label levelLabel1, levelLabel2;
 
 	/** Player one's team of monsters.*/
 	private ArrayList<Monster> player1Team = new ArrayList<Monster>();
@@ -198,7 +193,7 @@ public class MonsterGUI extends Application {
 						attackButton.setDisable(false);
 						heavyButton.setDisable(false);
 						healButton.setDisable(false);
-						switchMonButton.setDisable(false);
+						switchMonButton.setDisable(false); 
 					}
 				});
 
@@ -658,7 +653,7 @@ public class MonsterGUI extends Application {
 			}
 		});
 
-		godModeBut = new Button("God Mode - 3000000 Coins");
+		godModeBut = new Button("God Mode - 10000 Coins");
 		godModeBut.setTooltip(new Tooltip("All enemy hit chances are zero"));
 		godModeBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -715,7 +710,7 @@ public class MonsterGUI extends Application {
 					+ " Has Fainted\n");
 			if(isCPUGame && onFieldMon == team2Chosen) {
 				engine.addBattleText("20 coins have been added to your account\n");
-				engine.setCoins(engine.getCoins() + 20);
+				engine.setCoins(engine.getCoins() + 20000);
 				updateInventory();
 		//		System.out.println(engine.getCoins());
 			}
@@ -785,21 +780,20 @@ public class MonsterGUI extends Application {
 				/ (double) team1Chosen.getMaxHealthPoints());
 		healthPointsLabel1.setText(team1Chosen.getHealthBattle()
 				+ "/" + team1Chosen.getMaxHealthPoints());
-		//levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
-		nameLabel1.setText("" + team1Chosen.getMonsterName() + " " + "(Lvl. " + team1Chosen.getLevel()+ ")") ;
+		
+		nameLabel1.setText("" + team1Chosen.getMonsterName()) ;
 
 		healthBar2.setWidth((250 
 				* (double) team2Chosen.getHealthBattle())
 				/ (double) team2Chosen.getMaxHealthPoints());
 		healthPointsLabel2.setText(team2Chosen.getHealthBattle() 
 				+ "/" + team2Chosen.getMaxHealthPoints());
-		//levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
-		nameLabel2.setText("" + team2Chosen.getMonsterName() + " " + "(Lvl. " + team2Chosen.getLevel()+ ")");
+	
+		nameLabel2.setText("" + team2Chosen.getMonsterName());
 
 		player1Sprite.setImage(updateImages(team1Chosen));
 		player2Sprite.setImage(updateImages(team2Chosen));
-		//player1Effect.setVisible(false);
-		//player2Effect.setVisible(false);
+	
 		battleLog.setText(engine.getBattleText());
 	}
 
@@ -844,13 +838,13 @@ public class MonsterGUI extends Application {
 
 		healthPointsLabel1.setText(team1Chosen.getHealthBattle() 
 				+ "/" + team1Chosen.getMaxHealthPoints());
-		nameLabel1.setText("" + team1Chosen.getMonsterName() + " " + "(Lvl. " + team1Chosen.getLevel()+ ")") ;
-		//levelLabel1.setText("Lvl. " + team1Chosen.getLevel());
+		nameLabel1.setText("" + team1Chosen.getMonsterName()) ;
+		
 
 		healthPointsLabel2.setText(team2Chosen.getHealthBattle() 
 				+ "/" + team2Chosen.getMaxHealthPoints());
-		nameLabel2.setText("" + team2Chosen.getMonsterName() + " " + "(Lvl. " + team2Chosen.getLevel()+ ")");
-		//levelLabel2.setText("Lvl. " + team2Chosen.getLevel());
+		nameLabel2.setText("" + team2Chosen.getMonsterName() );
+	
 	}
 
 	/******************************************************************
@@ -860,12 +854,12 @@ public class MonsterGUI extends Application {
 		healthBar1 = new Rectangle();
 		healthPointsLabel1 = new Label();
 		nameLabel1 = new Label();
-		//levelLabel1 = new Label();
+	
 
 		healthBar2 = new Rectangle();
 		healthPointsLabel2 = new Label();
 		nameLabel2 = new Label();
-		//levelLabel2 = new Label();
+	
 	}
 
 	/******************************************************************
@@ -885,11 +879,11 @@ public class MonsterGUI extends Application {
 		battleLayout.add(healthBarBack2, 2, 1);
 		battleLayout.add(healthBar2, 2, 1);
 		battleLayout.add(nameLabel1, 0, 0);
-		//battleLayout.add(levelLabel1, 1, 0);
+		
 		battleLayout.add(healthPointsLabel1, 0, 2);
 
 		battleLayout.add(nameLabel2, 2, 0);
-		//battleLayout.add(levelLabel2, 3, 0);
+		
 		battleLayout.add(healthPointsLabel2, 2, 2);
 		GridPane actionButtons = new GridPane();
 		actionButtons.add(attackButton, 0, 0);
@@ -1045,14 +1039,11 @@ public class MonsterGUI extends Application {
 					storedMoves[1]= team2Chosen.getMove4();
 				}
 
-
+		
 				//checks which team has a faster monster
 				//who will attack first
 				if (team1Chosen.getSpeedBattle() 
 						> team2Chosen.getSpeedBattle()) {
-				//	System.out.println("Player 1 attacked first. Speed: " 
-				//			+ team1Chosen.getSpeedBattle() + " vs. " 
-				//			+ team2Chosen.getSpeedBattle());
 					if(p1Move !=4)
 						engine.doMove(storedMoves[0], 1, p1Move);
 					else 
@@ -1100,7 +1091,8 @@ public class MonsterGUI extends Application {
 						engine.changeTurn();
 					}
 					checkFainted(); // should check team 1
-					if (team1Chosen.getHealthBattle() != 0) {
+					if (team1Chosen.getHealthBattle() > 0) {
+						
 						if(p1Move!=4)
 							engine.doMove(storedMoves[0], 1, 
 									p1Move);
@@ -1209,8 +1201,6 @@ public class MonsterGUI extends Application {
 		Random rnd = new Random();
 		int moveChoice = rnd.nextInt(100);
 
-		//System.out.println(aiMove + " "+ moveChoice);
-
 		aiMove=0;
 		if (moveChoice < 39) {
 			aiMove = 1;
@@ -1269,6 +1259,7 @@ public class MonsterGUI extends Application {
 		switchMonPane.getChildren().clear();
 		stage.close();
 	}
+	
 	private void gameOverAlert() {
 		//game needs to end
 		int winner = 0;
@@ -1322,15 +1313,15 @@ public class MonsterGUI extends Application {
 			}
 		}
 		Alert alert = new Alert(AlertType.CONFIRMATION);
-
+		String saveFile = engine.toString() + ".txt";
+		if(isCPUGame) {
 		for(Monster mon : player1Team) {
 			mon.resetStats(); //So no dead monsters are saved
 		}
-
+		
 		engine.setTeams(player1Team, player2Team); //update the teams for the engine
-		String saveFile = engine.toString() + ".txt";
 		engine.saveGame();
-
+		}
 
 		alert.setTitle("Someone has run out of Pokemon!");
 		alert.setHeaderText("Player " + winner + " wins!");
@@ -1341,10 +1332,7 @@ public class MonsterGUI extends Application {
 				+ saveFile 
 				+ ")");
 		//return to main menu, or exit program
-				attackButton.setDisable(true);
-				heavyButton.setDisable(true);
-				healButton.setDisable(true);
-				switchMonButton.setDisable(true);
+				
 		ButtonType restart = new ButtonType("Restart");
 		ButtonType cancel = new ButtonType("Cancel");
 		ButtonType bContinue = new ButtonType("Continue");
@@ -1357,24 +1345,21 @@ public class MonsterGUI extends Application {
 		}
 
 		Optional<ButtonType> option = alert.showAndWait();
-
+		attackButton.setDisable(true);
+		heavyButton.setDisable(true);
+		healButton.setDisable(true);
+		switchMonButton.setDisable(true);
+		
 		if(playerOneWin&&isCPUGame) {
 			if(option.get() == bContinue) {
 				updateShopButtons();
 				mainStage.setScene(itemShop);
 			}
 		}
-		
-		if (!option.isPresent()) { 
-			// alert is exited, no button has been pressed.
-			//System.out.println("Quit");
-			resetEverything();
-			mainStage.setScene(titleScene);
 
-
-		} else if (option.get() == restart) {
+	 if (option.get() == restart) {
 			//okay button is pressed
-			//System.out.println("OK");
+		
 			resetEverything();
 			mainStage.setScene(titleScene);
 
@@ -1384,11 +1369,13 @@ public class MonsterGUI extends Application {
 			stage.close();
 		}
 	}
+	
 	/**
 	 * Performs the loading for the game.
 	 */
-	private void loadGame() {
+	private void loadGame(){
 		isCPUGame = true;
+	
 		TextInputDialog fileInput = new TextInputDialog(engine.toString());
 		fileInput.setTitle("Load Game");
 		fileInput.setHeaderText("Enter save file information");
