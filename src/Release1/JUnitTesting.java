@@ -1,4 +1,4 @@
-package release.One;
+package Release1;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -15,7 +15,7 @@ import org.junit.Test;
  */
 public class JUnitTesting {
 	/**********************************************
-	 * Test.
+	 * Test monster level.
 	 *********************************************/
 	@Test
 	public void testMonsterLevel() {
@@ -541,7 +541,7 @@ public class JUnitTesting {
 		assertEquals(testLogic.getMon2(), 0);
 	}
 	/**********************************************
-	 * Test doMove where param is 1
+	 * Test doMove where param is 1.
 	 *********************************************/
 	@Test
 	public void testDoMove1() {
@@ -564,7 +564,7 @@ public class JUnitTesting {
 	+ "(Team 2) first for 7 damage.\n");
 	}
 	/**********************************************
-	 * Test doMove where param is 2
+	 * Test doMove where param is 2.
 	 *********************************************/
 	@Test
 	public void testDoMove2() {
@@ -578,6 +578,7 @@ public class JUnitTesting {
 		team1.add(target);
 		team2.add(attacker);
 		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		attacker.getMove2().setCritChance(0);
 		Move testMove = attacker.getMove2();
 		testMove.setCritChance(0);
 		testMove.setHitChance(10);
@@ -587,7 +588,7 @@ public class JUnitTesting {
 	+ "heavily attacked Jolteon (Team 2) first for 9 damage.\n");
 	}
 	/**********************************************
-	 * Test doMove where param is 3
+	 * Test doMove where param is 3.
 	 *********************************************/
 	@Test
 	public void testDoMove3() {
@@ -608,10 +609,10 @@ public class JUnitTesting {
 		testEngine.doMove(testMove, 1, 3);
 		assertEquals(testEngine.getBattleText(), 
 	"(Turn 1) Charizard (Team 1) healed "
-	+ "themselves with 7 health points.\n");
+	+ "themselves with 5 health points.\n");
 	}
 	/**********************************************
-	 * Test doMove where param is 4
+	 * Test doMove where param is 4.
 	 *********************************************/
 	@Test
 	public void testDoMove4() {
@@ -656,6 +657,29 @@ public class JUnitTesting {
 		testEngine.doMove(testMove, 0, 1);
 	assertEquals(testEngine.getBattleText(), "(Turn 1) Jolteon (Team 2) "
 	+ "attacked Charizard (Team 1) first for 7 damage.\n");
+	}
+	/**
+	 * Test getting crits.
+	 */
+	@Test
+	public void critMove() {
+		Logic testEngine = new Logic();
+		Monster target = new Monster();
+		Monster attacker = new Monster();
+		target.monsterFactory("Charizard");
+		attacker.monsterFactory("Jolteon");
+		ArrayList<Monster> team1 = new ArrayList<Monster>();
+		ArrayList<Monster> team2 = new ArrayList<Monster>();
+		team1.add(target);
+		team2.add(attacker);
+		testEngine.setTeamsAndMons(team1, team2, 0, 0);
+		Move testMove = attacker.getMove1();
+		testMove.setCritChance(10);
+		testMove.setHitChance(10);
+		testEngine.doMove(testMove, 1, 1);
+		assertEquals(testEngine.getBattleText(), 
+	"(Turn 1) Charizard (Team 1) attacked Jolteon "
+	+ "(Team 2) first for 16 damage.\n");
 	}
 	/**********************************************
 	 * Test get/set battleText.

@@ -23,9 +23,6 @@ public class Logic {
 	/** current monster on field for player two's team.*/
 	private int mon2;
 
-	/** holds last move performed.*/
-	private Move lastMove;
-
 	/** shows whose turn it is.*/
 	private int playerTurn = 0;
 
@@ -34,7 +31,15 @@ public class Logic {
 
 	/** Turn number for battle log to differentiate between turns. */
 	private int turnNum = 1;
-
+	
+	/** Coins the player has to purchase items. */
+	private int coins = 0;
+	
+	/** The list of items the player currently owns. */
+	private ArrayList<String> itemList = new ArrayList<String>();
+	
+	/** Used in conjunction with the silf scarf item. */
+	private boolean silkFlag = false;
 	/******************************************************************
 	 * Constructor that creates an arraylist of monsters for player 1.
 	 * and player 2
@@ -43,7 +48,7 @@ public class Logic {
 	 *****************************************************************/
 	Logic(final ArrayList<Monster> player1, 
 			final ArrayList<Monster> player2) {
-		this.mon1 = 0;
+		this.mon1 = 0; 
 		this.mon2 = 0;
 
 		player1Team = player1;
@@ -101,6 +106,13 @@ public class Logic {
 		player1Team = team1;
 		player2Team = team2;
 	}
+	 /****************************************************************
+	  * Sets the silkFlag boolean.
+	  * @param flag Bool to set
+	  ***************************************************************/
+	public void setSilkFlag(final boolean flag) {
+		silkFlag = flag;
+	}
 
 	/*****************************************************************
 	 * Gets the array list of monsters for team 1.
@@ -144,6 +156,13 @@ public class Logic {
 	}
 
 	/*****************************************************************
+	 * Returns the value of the silk scarf boolean
+	 * @return Boolean value of silk scarf
+	 *****************************************************************/
+	public boolean getSilk() {
+		return silkFlag;
+	}
+	/*****************************************************************
 	 * Gets the text to update the battle log.
 	 * @return The battle log text.
 	 *****************************************************************/
@@ -162,9 +181,10 @@ public class Logic {
 	/*****************************************************************
 	 * Calculates the damage to do for a given move.
 	 * @param moveCommitted Move to be done
+	 * @param move Int that represents move to be done
 	 * @return int the damage to be applied
 	 ****************************************************************/
-	private int calcDamage(final Move moveCommitted) {
+	private int calcDamage(final Move moveCommitted, final int move) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
 			target = player1Team.get(mon1);
@@ -172,19 +192,34 @@ public class Logic {
 		} else {
 			target = player2Team.get(mon2);
 			attacker = player1Team.get(mon1);
+			if (itemList.contains("d")) {
+				moveCommitted.setHitChance(
+				moveCommitted.getHitChance() / 2);
+			}
 		}
+		
 		int dmgNum = 0;
-
+		if (move != 3) {
 		if (diceRoll(moveCommitted.getHitChance())) {
 			int dmgMultiplier = 1;
-			System.out.println("Move is a hit");
+			
 			if (diceRoll(moveCommitted.getCritChance())) {
 				dmgMultiplier = 2;
+				if (itemList.contains("cc") && attacker == player2Team.get(mon2)) {
+					dmgMultiplier = 1;
+				}
 			}
 			dmgNum = ((moveCommitted.getAttackPower() 
 					+ attacker.getAttackBattle()) 
 					* dmgMultiplier) - (target.
 							getDefenseBattle() / 2);
+		
+		}
+		} else  {
+			dmgNum = moveCommitted.getAttackPower();
+		}
+		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
+			dmgNum = 0;
 		}
 		return dmgNum;
 	}
@@ -209,7 +244,15 @@ public class Logic {
 			attacker = player1Team.get(mon1);
 			teamNum = 1;
 		}
-		int dmgDone = calcDamage(moveDone);
+		int dmgDone = calcDamage(moveDone, moveNum);
+		if (itemList.contains("ss") && !silkFlag
+			&& dmgDone > target.getHealthBattle()
+			&& teamNum == 2) {
+			dmgDone = target.getHealthBattle() + 1;
+			silkFlag = true;
+			//eventually this will need to get reset 
+			//after a battle is finished
+		}
 		target.decreaseHealth(dmgDone);
 
 		turnNum++;
@@ -251,72 +294,6 @@ public class Logic {
 	}
 	
 	/******************************************************************
-	 * Calculates the damage based on the move input. Can do a 
-	 * normal attack, heavy attack,
-	 * @param moveCommitted move committed from the move class
-	 *****************************************************************/
-	public void calculateDamage(final Move moveCommitted) {
-		lastMove = moveCommitted;
-		
-		ArrayList<Monster> playerList;
-		//the following three vars make in turn neutral
-		
-		ArrayList<Monster> opponentPlayerList;
-		int target1; //refers to a defending target(healing)
-		int target2; //refers to an attacking target
-		if (playerTurn == 0) {
-			playerList = player1Team;
-			opponentPlayerList = player2Team;
-			target1 = mon1;
-			target2 = mon2;
-		} else {
-			playerList = player2Team;
-			opponentPlayerList = player1Team;
-			target1 = mon2;
-			target2 = mon1;
-		}
-		if (moveCommitted.getMoveTarget() == 0) {
-			//monster damage is applied to is monster 1
-			System.out.println("Healing");
-			if (diceRoll(moveCommitted.getHitChance())) {
-				int critVal = 5;
-				System.out.println("Move is a hit");
-				if (diceRoll(moveCommitted.getCritChance())) {
-					System.out.println("Move is a crit");
-					critVal = 10;
-				}
-				playerList.get(target1).
-				decreaseHealth(moveCommitted.
-						getAttackPower() * critVal);
-
-			} else {
-				System.out.println("Your attack missed");
-			}
-
-		} else {
-			//monster damage is applied to is mon2
-			if (diceRoll(moveCommitted.getHitChance())) {
-				int critVal = 5;
-				System.out.println("Move is a hit");
-				if (diceRoll(moveCommitted.getCritChance())) {
-					System.out.println("Move is a crit");
-					critVal = 10;
-				}
-				opponentPlayerList.get(target2).decreaseHealth(
-						(playerList.get(target1).
-				getAttackBattle() * critVal 
-			* ((10 - opponentPlayerList
-			.get(target2).getDefenseBattle()))) / 5);
-
-			} else {
-				System.out.println("Your attack missed");
-			}
-		}
-		changeTurn();
-		displayData();
-	}
-
-	/******************************************************************
 	 * Randomly chooses a number to determine the chance of certain
 	 * moves. Having the roll be less than the chance will allow 
 	 * the move to hit, or be critical.
@@ -342,14 +319,96 @@ public class Logic {
 	public void incTurnNum() {
 		turnNum++;
 	}
-	/******************************************************************
-	 * a little helper method to use while debugging.
-	 *****************************************************************/
-	public void displayData() {
-		System.out.println("Char1 Health: " 
-				+ player1Team.get(mon1).getHealthBattle());
-		System.out.println("Char2 Health: " 
-				+ player2Team.get(mon2).getHealthBattle());
-		System.out.println("Last Move: " + lastMove.toString());
+	
+	/*****************************************************************
+	 * Gives the player an item(String) for a price.
+	 * @param price Price of the item
+	 ****************************************************************/
+	public void itemShop(final int price) {
+		if(price > coins) {
+			System.out.println("You do not have enough cois to purchase that");
+			//This if clause is unrealistic. In reality we would have some buttons 
+			//that would only appear if coins is large enough, or the buttons
+			//would just send a message or something if you don't have enough
+		}
+		switch(price) {
+		case 100:
+			itemList.add("hb");
+			//add a health boost to the monster, like 30 hp or something
+			//for each monster in player team, healthMax += 30.
+			break;
+		case 200:
+			itemList.add("something");
+			break;
+		case 300:
+			itemList.add("d");
+			//Dodger, enemy moves miss twice as often.
+			break;
+		case 400:
+			itemList.add("ss");
+			//modeled after the silk scarf, a monster can only be killed
+			//after it is brought to 1 hp. So a killshot brings the monster to 1 hp,
+			//and teh next killshot actually kills it. <maybe too ambitious>
+			break;
+		case 500:
+			itemList.add("cc");
+			//enemy monster crit chance is now 0, always. <takes two lines of code>
+			break;
+		case 3000000:
+			itemList.add("gm");
+			//god mode, all enemy hit chances are now 0.
+		default:
+			break;
+		}
+		//As of right now, if you buy all the items in the shop you become super OP. 
+		//I'm ok with this.
+		
 	}
+	/*****************************************************************
+	 * Generates a team of monsters to battle against the player when they
+	 * are playing alone.
+	 * @param levelID amount of stats that the enemy team has
+	 * CHANGE THE INT PARAMETER LATER TO A STRING SO THAT THE LEVEL IS NOT DETERMINED JUST BY A NUMBER
+	 * Note, levelId will be at least 4, more likely 10 sum(allStatValues) basically
+	 *****************************************************************/
+	public void generateEnemyTeam(final int levelID) {
+		/**My current idea is to make a team of three monsters, and then 
+		have each monster start with 1 for the 4 stat values. Then
+		the system randomly chooses a number between 1-3 inclusive(let's say "a"), and then 
+		a number from 0-3 inclusive. ("b") So "a" is the amount of stat points
+		to attribute to statID (b). So for each monster in the team, we call
+		levelup(b) * a times. Also we generate the monsters randomly. So pick 3 numbers 1-6
+		and then those are the monsters we run with.
+		*/
+		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
+		Random rnd = new Random();
+		String[] monsterList = {"Charizard", "Staryu", "Nidoking", "Jolteon", "Squirtle", "Raichu"};
+		for(int i = 0; i < 2; i ++) { // generate 2 normal monsters
+			Monster computerMonster = new Monster();
+			computerMonster.monsterFactory(monsterList[rnd.nextInt(7)]); // auto-assigns info other than stats to monster
+			computerMonster.setAllZero(); // sets all stats to 0
+			initializeComputerMonster(singleMonsterStats, computerMonster); // loops through, adding stats
+			player2Team.add(computerMonster); // adds monster to enemy team, repeat
+		}
+		// generate boss monster
+		Monster computerMonster = new Monster();
+		computerMonster.monsterFactory(monsterList[rnd.nextInt(7)]); // auto-assigns info other than stats to monster
+		computerMonster.setAllZero(); // sets all stats to 0
+		initializeComputerMonster((int)(singleMonsterStats * 1.5), computerMonster); // loops through, adding stats, more powerful (times 1.5)
+		player2Team.add(computerMonster); // adds monster to enemy team, repeat
+		
+	}
+	/**
+	 * RAndomizes and sets the stats of the monster
+	 * @param compMonster
+	 */
+	private void initializeComputerMonster(final int monsterLevel, final Monster compMonster) {
+		Random rnd = new Random();
+		compMonster.setMaxHealthPoints(60); // start HP at 60, since everything was set to zero, and having a monster with 0hp would be bad
+		int totalLoops = monsterLevel + (rnd.nextInt(5) - 2) + 18; // Mon will be +- 2 levels from the entered monster level (variation), all mons start with 18 stat points at level 1
+		for (int i = 0; i < totalLoops; i++) { // Levels up 1 stat per level + the initial 18 stat points, randomly distributed
+			compMonster.levelUp(rnd.nextInt(4) + 1);
+		}
+	}
+	
 }
