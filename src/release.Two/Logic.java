@@ -604,7 +604,7 @@ public class Logic {
 	
 	/*****************************************************************
 	 * gets the item list that contains the shop items
-	 * @returns ItemsList
+	 * @return ItemList list of items
 	 *****************************************************************/
 	public ArrayList<String> getItemList() {
 		return itemList;
