@@ -724,7 +724,8 @@ public class MonsterGUI extends Application {
 	/******************************************************************
 	 * Checks if a monster fainted (0 health).
 	 *****************************************************************/
-	public void checkFainted() {
+	public boolean checkFainted() {
+		boolean fainted = false;
 		ArrayList<Monster> teamList;
 		Monster onFieldMon;
 		int teamNum = 0;
@@ -777,6 +778,8 @@ public class MonsterGUI extends Application {
 			}
 			if (!hasMonstersLeft) {
 				gameOverAlert();
+				fainted = true;
+				return fainted;
 			} else {
 				if(!isCPUGame || onFieldMon == team1Chosen) {
 					stage.setScene(pickMonster);
@@ -784,6 +787,7 @@ public class MonsterGUI extends Application {
 				}
 			}
 		}
+		return fainted;
 	}
 
 	/******************************************************************
@@ -797,6 +801,7 @@ public class MonsterGUI extends Application {
 		// reset monsters
 		player1Team = new ArrayList<Monster>();
 		player2Team = new ArrayList<Monster>();
+		isCPUGame = false;
 		// reset engine
 		engine = new Logic();
 	}
@@ -1063,7 +1068,6 @@ public class MonsterGUI extends Application {
 		//checks if player one has gone. if they havent
 		//it will store it into p1move.
 
-
 		if (!isCPUGame) {
 			if (storedMoves[0] == null) {
 				p1Move = move;
@@ -1106,8 +1110,8 @@ public class MonsterGUI extends Application {
 					if (engine.getTurn() == 0) {
 						engine.changeTurn();
 					}
-					checkFainted(); // should check team 2
-					if (team2Chosen.getHealthBattle() > 0) {
+					boolean fainted =checkFainted(); // should check team 2
+					if (team2Chosen.getHealthBattle() > 0&&!fainted) {
 						if(move!=4)
 							engine.doMove(storedMoves[1], 0, move);
 						else
@@ -1140,8 +1144,8 @@ public class MonsterGUI extends Application {
 					if (engine.getTurn() == 1) {
 						engine.changeTurn();
 					}
-					checkFainted(); // should check team 1
-					if (team1Chosen.getHealthBattle() > 0) {
+					boolean fainted = checkFainted(); // should check team 1
+					if (team1Chosen.getHealthBattle() > 0 !=fainted) {
 						
 						if(p1Move!=4)
 							engine.doMove(storedMoves[0], 1, 
@@ -1194,8 +1198,8 @@ public class MonsterGUI extends Application {
 				if (engine.getTurn() == 0) {
 					engine.changeTurn();
 				}
-				checkFainted(); // should check team 2
-				if (team2Chosen.getHealthBattle() > 0) {
+				boolean fainted = checkFainted(); // should check team 2
+				if (team2Chosen.getHealthBattle() > 0 &&!fainted) {
 					if(aiMove!=4)
 						engine.doMove(storedMoves[1], 0, aiMove);
 					soundImagesUpdate(aiMove,2);
@@ -1224,9 +1228,8 @@ public class MonsterGUI extends Application {
 				if (engine.getTurn() == 1) {
 					engine.changeTurn();
 				}
-				checkFainted(); // should check team 1
-				System.out.print(team1Chosen.getHealthBattle());
-				if (team1Chosen.getHealthBattle() > 0) {
+				boolean faint = checkFainted(); // should check team 1
+				if (team1Chosen.getHealthBattle() > 0 && !faint) {
 					if(p1Move!=4)
 						engine.doMove(storedMoves[0], 1, 
 								p1Move);
