@@ -151,8 +151,10 @@ public class MonsterGUI extends Application {
 	/** Determines if it is a CPU game. */
 	private boolean isCPUGame;
 	
+	/**Checks if load game works */
 	private boolean loaded = false;
 
+	/**Checks if its AI Move */
 	private int aiMove;
 	/******************************************************************
 	 * Override method for javafx. Starts the game with the stage
@@ -1470,10 +1472,6 @@ public class MonsterGUI extends Application {
 		        updateInventory();
 		        loaded = true;
 	        }
-	        
-	        
-	        
-	       
 	        
 	}
 }
