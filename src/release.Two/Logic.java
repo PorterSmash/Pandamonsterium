@@ -258,6 +258,10 @@ public class Logic {
 
 		Random rdn = new Random();
 		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
+		System.out.println("\nAll three of these need to be true before gm runs");
+		System.out.println(itemList.contains("gm"));
+		System.out.println(attacker == player2Team.get(mon2));
+		System.out.println(target == player1Team.get(mon1));
 		if(itemList.contains("gm") && attacker == player2Team.get(mon2) &&
 				target == player1Team.get(mon1)) {
 			dmgNum = 0;
@@ -597,30 +601,6 @@ public class Logic {
 	/*****************************************************************
 	 * Main Method to test the game
 	 *****************************************************************/
-	public static void main(String[] args) {
-		Logic engine = new Logic();
-		Monster team1 = new Monster();
-		Monster team2 = new Monster();
-
-		team1.monsterFactory("Charizard");
-		team2.monsterFactory("Jolteon");
-		engine.getTeam1().add(team1);
-		engine.getTeam1().add(team1);
-		engine.getTeam1().add(team1); 
-
-		engine.getTeam2().add(team2);
-		engine.getTeam2().add(team2);
-		engine.getTeam2().add(team2);
-
-		engine.setCoins(1000000);
-		engine.getItemList().add("ss");
-		String loader = engine.toString();
-		engine.saveGame();
-		System.out.println("Done saving");
-
-		engine.loadGame(loader + ".txt");
-
-	}
 	
 	/*****************************************************************
 	 * gets the item list that contains the shop items

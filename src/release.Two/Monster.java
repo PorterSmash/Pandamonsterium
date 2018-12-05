@@ -407,7 +407,7 @@ import javafx.scene.control.ChoiceDialog;
 	/******************************************************************
 	 * Attempts to update level of a monster
 	 *****************************************************************/
-	public void attemptUpdateLevel() {
+	/*public void attemptUpdateLevel() {
 			List<String> choices = new ArrayList<>();
 			choices.add("Health");
 			choices.add("Attack");
@@ -439,7 +439,7 @@ import javafx.scene.control.ChoiceDialog;
 			}
 			
 			monsterLevel++;
-	}
+	} */
 	
 	/******************************************************************
 	 * Will be used for release 2, this improves the monster.
