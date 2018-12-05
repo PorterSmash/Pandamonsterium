@@ -43,9 +43,6 @@ public class Logic {
 	/** The list of items the player currently owns. */
 	private ArrayList<String> itemList = new ArrayList<String>();
 
-	/** Used in conjunction with the silf scarf item. */
-	private boolean silkFlag = false;
-	
 	/** the round number*/
 	private int round = 1;
 	
@@ -129,14 +126,7 @@ public class Logic {
 			final ArrayList<Monster> team2) {
 		player1Team = team1;
 		player2Team = team2;
-	}
-	/****************************************************************
-	 * Sets the silkFlag boolean.
-	 * @param flag Bool to set
-	 ***************************************************************/
-	public void setSilkFlag(final boolean flag) {
-		silkFlag = flag;
-	}
+	}	
 
 	/*****************************************************************
 	 * Gets the array list of monsters for team 1.
@@ -179,13 +169,6 @@ public class Logic {
 		return playerTurn;
 	}
 
-	/*****************************************************************
-	 * Returns the value of the silk scarf boolean.
-	 * @return Boolean value of silk scarf
-	 *****************************************************************/
-	public boolean getSilk() {
-		return silkFlag;
-	}
 	/*****************************************************************
 	 * Gets the text to update the battle log.
 	 * @return The battle log text.
@@ -230,15 +213,14 @@ public class Logic {
 		if (moveTarget == 0) {
 			target = player1Team.get(mon1);
 			attacker = player2Team.get(mon2);
-		} else {
-			target = player2Team.get(mon2);
-			attacker = player1Team.get(mon1);
 			if (itemList.contains("d")) {
 				moveCommitted.setHitChance(
 						moveCommitted.getHitChance() / 2);
 			}
+		} else {
+			target = player2Team.get(mon2);
+			attacker = player1Team.get(mon1);
 		}
-
 		int dmgNum = 0;
 		if (move != 3) {
 			
@@ -307,14 +289,7 @@ public class Logic {
 			target = attacker;
 		}
 		int dmgDone = calcDamage(moveDone, moveNum,moveTarget);
-		if (itemList.contains("ss") && !silkFlag
-				&& dmgDone > target.getHealthBattle()
-				&& teamNum == 2) {
-			dmgDone = target.getHealthBattle() + 1;
-			silkFlag = true;
-			//eventually this will need to get reset 
-			//after a battle is finished
-		}
+		
 
 		target.decreaseHealth(dmgDone);
 
@@ -404,14 +379,7 @@ public class Logic {
 				coins = coins - price;
 				//Dodger, enemy moves miss twice as often.
 				break;
-			case 400:
-				itemList.add("ss");
-				coins = coins - price;
-				//modeled after the silk scarf, a monster can only be killed
-				//after it is brought to 1 hp. So a killshot
-				//brings the monster to 1 hp,
-				//and teh next killshot actually kills it. <maybe too ambitious>
-				break;
+			
 			case 500:
 				itemList.add("cc");
 				coins = coins - price;
@@ -445,11 +413,13 @@ public class Logic {
 		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
 		Random rnd = new Random();
 		String[] monsterList = {"Charizard", "Staryu", 
-				"Nidoking", "Jolteon", "Squirtle", "Raichu", "Troll", 
+				"Nidoking", "Jolteon", "Squirtle", "Raichu","Eevee","Gengar",
+				"Blaziken","Swellow","Ivysaur","Rattata",
+				"Magikarp","Beedrill","Ludicolo","Troll", 
 				"Far-Out Man", "Gnomagician", "Magma Golem (Boss)"};
 		for(int i = 0; i < 2; i ++) { // generate 2 normal monsters
 			Monster computerMonster = new Monster();
-			computerMonster.monsterFactory(monsterList[rnd.nextInt(9)]); 
+			computerMonster.monsterFactory(monsterList[rnd.nextInt(18)]); 
 			// auto-assigns info other than stats to monster
 			computerMonster.setAllZero(); // sets all stats to 0
 			initializeComputerMonster(singleMonsterStats, computerMonster); 
@@ -459,7 +429,7 @@ public class Logic {
 		}
 		// generate boss monster
 		Monster computerMonster = new Monster();
-		computerMonster.monsterFactory(monsterList[9]); 
+		computerMonster.monsterFactory(monsterList[18]); 
 		// auto-assigns info other than stats to monster
 		computerMonster.setAllZero(); // sets all stats to 0
 		initializeComputerMonster((int)(singleMonsterStats * 1.5),
@@ -524,38 +494,45 @@ public class Logic {
 	public void loadGame(final String fileName) {
 
 		Scanner fileIn = null;
-		try {
-			fileIn = new Scanner(
-					new File(fileName), "UTF-8");	
-			player1Team.clear();
-			String currentLine = "";
-			for (int i = 3; i > 0; i--) {
-				Monster readMonster = new Monster();
-				currentLine = fileIn.nextLine();
-				readMonster(fileIn, currentLine, readMonster);
-				player1Team.add(readMonster);
-			}
-			if (!currentLine.equals(",")) {
-				String[] items = currentLine.split(",");
-				for (int i = 0; i < items.length; i++) {
-					itemList.add(items[i]);
+		
+		
+		boolean check = new File(fileName).exists();
+		if (check) {
+			try {
+				fileIn = new Scanner(
+						new File(fileName), "UTF-8");	
+				player1Team.clear();
+				String currentLine = "";
+				for (int i = 3; i > 0; i--) {
+					Monster readMonster = new Monster();
+					currentLine = fileIn.nextLine();
+					readMonster(fileIn, currentLine, readMonster);
+					player1Team.add(readMonster);
+				}
+				if (!currentLine.equals(",")) {
+					String[] items = currentLine.split(",");
+					for (int i = 0; i < items.length; i++) {
+						itemList.add(items[i]);
+					}
+					currentLine = fileIn.nextLine();
+				} else {
+					currentLine = fileIn.nextLine();
 				}
 				currentLine = fileIn.nextLine();
-			} else {
-				currentLine = fileIn.nextLine();
-			}
-			currentLine = fileIn.nextLine();
-			coins = Integer.parseInt(currentLine);	
+				coins = Integer.parseInt(currentLine);	
 
 
-		} catch (FileNotFoundException e) {
-			System.out.println("error");
-			
-		} finally {
-			if (fileIn != null) {
-				fileIn.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("error");
+				
+			} finally {
+				if (fileIn != null) {
+					fileIn.close();
+				}
 			}
 		}
+		
+		
 
 	}
 	/******************************************************************

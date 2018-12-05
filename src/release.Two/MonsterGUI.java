@@ -9,6 +9,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JOptionPane;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -127,10 +129,10 @@ public class MonsterGUI extends Application {
 	healButton, switchMonButton;
 
 	/** Buttons for Items in shop*/
-	private Button healthBoostBut,DodgerBut,silkScarfBut,
+	private Button healthBoostBut,DodgerBut,
 	critChanceBut,godModeBut,iContinue;
 	
-	private boolean hbBought,dBought,ssBought,ccBought,gmBought = false;
+	private boolean hbBought,dBought,ccBought,gmBought = false;
 
 	/** Image for player 1s sprite.*/
 	private ImageView player1Sprite;
@@ -248,19 +250,23 @@ public class MonsterGUI extends Application {
 		monsterBox1.setLayoutY(100);
 
 		monsterBox1.getItems().addAll("Charizard", "Staryu", 
-				"Nidoking", "Squirtle", "Jolteon", "Raichu");
+				"Nidoking", "Squirtle", "Jolteon", "Raichu","Eevee","Gengar",
+				"Blaziken","Swellow","Ivysaur","Rattata",
+				"Magikarp","Beedrill","Ludicolo");
 		monsterBox1.getSelectionModel().selectFirst();
 
 		ChoiceBox<String> monsterBox2 = new ChoiceBox<>();
-		monsterBox2.getItems().addAll("Charizard", 
-				"Staryu", "Nidoking", "Squirtle", 
-				"Jolteon", "Raichu");
+		monsterBox2.getItems().addAll("Charizard", "Staryu", 
+				"Nidoking", "Squirtle", "Jolteon", "Raichu","Eevee","Gengar",
+				"Blaziken","Swellow","Ivysaur","Rattata",
+				"Magikarp","Beedrill","Ludicolo");
 		monsterBox2.getSelectionModel().selectFirst();
 
 		ChoiceBox<String> monsterBox3 = new ChoiceBox<>();
-		monsterBox3.getItems().addAll("Charizard", 
-				"Staryu", "Nidoking", "Squirtle", 
-				"Jolteon", "Raichu");
+		monsterBox3.getItems().addAll("Charizard", "Staryu", 
+				"Nidoking", "Squirtle", "Jolteon", "Raichu","Eevee","Gengar",
+				"Blaziken","Swellow","Ivysaur","Rattata",
+				"Magikarp","Beedrill","Ludicolo");
 		monsterBox3.getSelectionModel().selectFirst();
 
 		// Choose monster button (goes to next scene)
@@ -428,7 +434,6 @@ public class MonsterGUI extends Application {
 		createButtons(primaryStage);
 		itemGrid.add(healthBoostBut, 0, 0);
 		itemGrid.add(DodgerBut, 0, 1);
-		itemGrid.add(silkScarfBut, 0, 2);
 		itemGrid.add(critChanceBut, 0, 3);
 		itemGrid.add(godModeBut, 0, 4);
 		itemGrid.add(inventoryLog, 0, 10);
@@ -605,10 +610,6 @@ public class MonsterGUI extends Application {
 			DodgerBut.setDisable(true);
 		else
 			DodgerBut.setDisable(false);
-		if(engine.getCoins() < 400 || ssBought)
-			silkScarfBut.setDisable(true);
-		else
-			silkScarfBut.setDisable(false);
 		if(engine.getCoins() < 500|| ccBought)
 			critChanceBut.setDisable(true);
 		else
@@ -646,20 +647,6 @@ public class MonsterGUI extends Application {
 				engine.itemShop(300);
 				updateInventory();
 				dBought = true;
-				updateShopButtons();
-				engine.saveGame();
-			}
-		});
-
-		silkScarfBut = new Button ("Silk Scarf - 400 Coins");
-		silkScarfBut.setTooltip(new Tooltip("Monster can only be"
-				+ " killed after it reaches 1 HP"));
-		silkScarfBut.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(final ActionEvent event) {
-				engine.itemShop(400);
-				updateInventory();
-				ssBought = true;
 				updateShopButtons();
 				engine.saveGame();
 			}
@@ -802,6 +789,11 @@ public class MonsterGUI extends Application {
 		player1Team = new ArrayList<Monster>();
 		player2Team = new ArrayList<Monster>();
 		isCPUGame = false;
+		hbBought= false;
+		dBought= false;
+		ccBought= false;
+		gmBought = false;
+		updateShopButtons();
 		// reset engine
 		engine = new Logic();
 	}
@@ -1145,8 +1137,7 @@ public class MonsterGUI extends Application {
 						engine.changeTurn();
 					}
 					boolean fainted = checkFainted(); // should check team 1
-					if (team1Chosen.getHealthBattle() > 0 !=fainted) {
-						
+					if (team1Chosen.getHealthBattle() > 0 &&!fainted) {
 						if(p1Move!=4)
 							engine.doMove(storedMoves[0], 1, 
 									p1Move);
@@ -1228,8 +1219,8 @@ public class MonsterGUI extends Application {
 				if (engine.getTurn() == 1) {
 					engine.changeTurn();
 				}
-				boolean faint = checkFainted(); // should check team 1
-				if (team1Chosen.getHealthBattle() > 0 && !faint) {
+				boolean fainted = checkFainted(); // should check team 1
+				if (team1Chosen.getHealthBattle() > 0 && !fainted) {
 					if(p1Move!=4)
 						engine.doMove(storedMoves[0], 1, 
 								p1Move);
@@ -1446,30 +1437,31 @@ public class MonsterGUI extends Application {
 	 *****************************************************************/
 	private void loadGame(){
 		isCPUGame = true;
-	
-		TextInputDialog fileInput = new TextInputDialog(engine.toString());
-		fileInput.setTitle("Load Game");
-		fileInput.setHeaderText("Enter save file information");
-		fileInput.setContentText(
-				"Enter the name of the save file you wish to load from:");
+	    
+        TextInputDialog fileInput = new TextInputDialog(engine.toString());
+        fileInput.setTitle("Load Game");
+        fileInput.setHeaderText("Enter save file information");
+        fileInput.setContentText(
+                "Enter the name of the save file you wish to load from:");
 
-		Optional<String> result = fileInput.showAndWait();
-		
-		result.ifPresent(fileName -> 
-		engine.loadGame(fileName + ".txt"));
-		
-		player1Team = engine.getTeam1();
-		engine.healTeam();
-		engine.generateEnemyTeam(player1Team.get(0).getLevel() 
-				+ player1Team.get(1).getLevel() 
-				+ player1Team.get(2).getLevel());
-		
-		player2Team = engine.getTeam2();
+        Optional<String> result = fileInput.showAndWait();
+        
+        result.ifPresent(fileName -> 
+        engine.loadGame(fileName + ".txt"));
+        
+        player1Team = engine.getTeam1();
+        engine.healTeam();
+        engine.generateEnemyTeam(player1Team.get(0).getLevel() 
+                + player1Team.get(1).getLevel() 
+                + player1Team.get(2).getLevel());
+        
+        player2Team = engine.getTeam2();
 
-		team1Chosen = player1Team.get(0);
-		team2Chosen = player2Team.get(0);	
-		engine.setTeamsAndMons(player1Team, 
-				player2Team, 0, 0);
-		updateInventory();
+        team1Chosen = player1Team.get(0);
+        team2Chosen = player2Team.get(0);    
+        engine.setTeamsAndMons(player1Team, 
+                player2Team, 0, 0);
+        updateInventory();
+		
 	}
 }

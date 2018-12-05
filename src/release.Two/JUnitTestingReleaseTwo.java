@@ -713,15 +713,7 @@ public class JUnitTestingReleaseTwo {
 		testEngine.incTurnNum();
 		assertEquals(testEngine.getTurn(),0);
 	}
-	/**
-	 * Test getting and setting silk scarf item.
-	 */
-	@Test
-	public void testSilkSetGet() {
-		Logic testEngine = new Logic();
-		testEngine.setSilkFlag(true);
-		assertEquals(testEngine.getSilk(), true);
-	}
+
 	/**
 	 * Test getting and setting coins.
 	 */
