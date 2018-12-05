@@ -98,8 +98,11 @@ public class MonsterGUI extends Application {
 	private static Media normBattleBgm = new 
 			Media(new File("normBattle.mp3").toURI().toString());
 
-	/** Holds the players for the 2 music medias we have*/
-	private static MediaPlayer defaultPlayer,normPlayer;
+	/** Holds the players for default music*/
+	private static MediaPlayer defaultPlayer = new MediaPlayer(defaultBgm);
+	
+	/**Holds the players for the normal battle music*/
+	private static MediaPlayer normPlayer = new MediaPlayer(normBattleBgm);
 
 	/**Health bars displays. */
 	private Rectangle healthBar1, healthBar2;
@@ -132,6 +135,7 @@ public class MonsterGUI extends Application {
 	private Button healthBoostBut,DodgerBut,
 	critChanceBut,godModeBut,iContinue;
 	
+	/**checks if the items are bought */
 	private boolean hbBought,dBought,ccBought,gmBought = false;
 
 	/** Image for player 1s sprite.*/
@@ -159,6 +163,7 @@ public class MonsterGUI extends Application {
 	/******************************************************************
 	 * Override method for javafx. Starts the game with the stage
 	 * and runs the scenes.
+	 * @param Stage the primary stage used for the game. 
 	 *****************************************************************/
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
@@ -715,7 +720,6 @@ public class MonsterGUI extends Application {
 	
 	/******************************************************************
 	 * Checks if a monster fainted (0 health).
-	 * @return boolean True if fainted, false if not
 	 *****************************************************************/
 	public boolean checkFainted() {
 		boolean fainted = false;
@@ -788,6 +792,7 @@ public class MonsterGUI extends Application {
 	 *****************************************************************/
 	private void resetEverything() {
 		// TODO update text files for levels
+		firstBgm = true;
 		backgroundMusic("default");
 		whichTeam.setText(
 				"Pick Team One Monsters");
@@ -954,12 +959,10 @@ public class MonsterGUI extends Application {
 	
 	/******************************************************************
 	 * changes the background music depending on scene
-	 * @param scene Either battle or menu
+	 * @param scene
 	 *****************************************************************/
 	public static void backgroundMusic(String scene){
-
 		if(scene.equals("default")) {
-			defaultPlayer= new MediaPlayer(defaultBgm);
 			if(!firstBgm) {
 				normPlayer.stop();
 			}
@@ -967,13 +970,9 @@ public class MonsterGUI extends Application {
 			defaultPlayer.play();
 			firstBgm=false;
 		}
-
 		if(scene.equals("normBattle")) {
-			normPlayer = new MediaPlayer(normBattleBgm);
 			normPlayer.setCycleCount(MediaPlayer.INDEFINITE);
 			defaultPlayer.stop();
-			//	bossPlayer.stop();
-
 			normPlayer.play();
 		}
 	}
@@ -1423,14 +1422,16 @@ public class MonsterGUI extends Application {
 			if(option.get() == bContinue) {
 				updateShopButtons();
 				mainStage.setScene(itemShop);
+				backgroundMusic("default");
 			}
 		}
 
 	 if (option.get() == restart) {
 			//okay button is pressed
-		
+		 	backgroundMusic("default");
 			resetEverything();
 			mainStage.setScene(titleScene);
+			
 
 		}
 		else if (option.get() == cancel) {
@@ -1443,35 +1444,41 @@ public class MonsterGUI extends Application {
 	 * Performs the loading for the game.
 	 *****************************************************************/
 	private void loadGame(){
-		 isCPUGame = true;
-	        
-	        TextInputDialog fileInput = new TextInputDialog(engine.toString());
-	        fileInput.setTitle("Load Game");
-	        fileInput.setHeaderText("Enter save file information");
-	        fileInput.setContentText(
-	                "Enter the name of the save file you wish to load from:");
+        isCPUGame = true;
+           
+           TextInputDialog fileInput = new TextInputDialog(engine.toString());
+           fileInput.setTitle("Load Game");
+           fileInput.setHeaderText("Enter save file information");
+           fileInput.setContentText(
+                   "Enter the name of the save file you wish to load from:");
 
-	        Optional<String> result = fileInput.showAndWait();
-	        
-	        String fileName = result.get();
-	        if (new File(fileName + ".txt").canExecute()) {
-	            result.ifPresent(file -> 
-	            engine.loadGame(file + ".txt"));
-	            player1Team = engine.getTeam1();
-		        engine.healTeam();
-		        engine.generateEnemyTeam(player1Team.get(0).getLevel() 
-		                + player1Team.get(1).getLevel() 
-		                + player1Team.get(2).getLevel());
-		        
-		        player2Team = engine.getTeam2();
+           Optional<String> result = fileInput.showAndWait();
+           
+           String fileName = result.get();
+           if (new File(fileName + ".txt").canExecute()) {
+               result.ifPresent(file -> 
+               engine.loadGame(file + ".txt"));
+               player1Team = engine.getTeam1();
+               engine.healTeam();
+               
+               for (Monster mon : player1Team) {
+                   mon.resetMonsterLevel();
+               }
+               
+               engine.generateEnemyTeam(player1Team.get(0).getLevel() 
+                       + player1Team.get(1).getLevel() 
+                       + player1Team.get(2).getLevel());
+               
+               player2Team = engine.getTeam2();
 
-		        team1Chosen = player1Team.get(0);
-		        team2Chosen = player2Team.get(0);    
-		        engine.setTeamsAndMons(player1Team, 
-		                player2Team, 0, 0);
-		        updateInventory();
-		        loaded = true;
-	        }
-	        
-	}
+               team1Chosen = player1Team.get(0);
+               team2Chosen = player2Team.get(0);    
+               engine.setTeamsAndMons(player1Team, 
+                       player2Team, 0, 0);
+               updateInventory();
+               loaded = true;
+               backgroundMusic("normBattle");
+           }
+           
+   }
 }
