@@ -349,7 +349,7 @@ import javafx.scene.control.ChoiceDialog;
 				if (nextLine.equals(monName)) {
 		// Read the activity name, ON icon file path, and OFF file path.
 					monsterName = nextLine;
-					monsterLevel = 1;
+					monsterLevel = 1; 
 									
 					int[] statArray = new int[21];
 					for (int i = 0; i < 20; i++) {
@@ -404,7 +404,9 @@ import javafx.scene.control.ChoiceDialog;
 				+ attackPoints
 				+ speedPoints - 27;
 	}
-	
+	/******************************************************************
+	 * Attempts to update level of a monster
+	 *****************************************************************/
 	public void attemptUpdateLevel() {
 			List<String> choices = new ArrayList<>();
 			choices.add("Health");
@@ -412,9 +414,12 @@ import javafx.scene.control.ChoiceDialog;
 			choices.add("Defense");
 			choices.add("Speed");
 
-			ChoiceDialog<String> dialog = new ChoiceDialog<>("Health", choices);
+			ChoiceDialog<String> dialog = new ChoiceDialog<>
+			("Health", choices);
 			dialog.setTitle("You leveled up!");
-			dialog.setHeaderText("Congratulations, your monster " + this.getMonsterName() + " leveled up to level " + monsterLevel + "!");
+			dialog.setHeaderText("Congratulations, your monster " 
+			+ this.getMonsterName() + " leveled up to level " 
+					+ monsterLevel + "!");
 			dialog.setContentText("Pick a stat to level up:");
 
 			// Traditional way to get the response value.
@@ -486,9 +491,9 @@ import javafx.scene.control.ChoiceDialog;
 		speedBattle = speedPoints;
 		defenseBattle = defensePoints;
 	}
-	/**
+	/******************************************************************
 	 * Sets all the stats in the monster to 0
-	 */
+	 *****************************************************************/
 	public void setAllZero() {
 		maxHealthPoints = 0;
 		attackPoints = 0;
@@ -497,9 +502,9 @@ import javafx.scene.control.ChoiceDialog;
 		monsterLevel = 0;
 		resetStats();
 	}
-	/**
+	/******************************************************************
 	 * Set the monster's level
-	 */
+	 *****************************************************************/
 	public void resetMonsterLevel() {
 		monsterLevel = (maxHealthPoints / 10)
 				+ defensePoints 

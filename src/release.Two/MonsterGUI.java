@@ -81,16 +81,22 @@ public class MonsterGUI extends Application {
 	private int p1Move;
 
 	/** holds the audio sound for punches*/
-	private AudioClip punchSound = new AudioClip(new File("punch.wav").toURI().toString());
+	private AudioClip punchSound = new 
+			AudioClip(new File("punch.wav").toURI().toString());
 
 	/** holds the audio sound for healing*/
-	private AudioClip healSound = new AudioClip(new File("heal.wav").toURI().toString());
+	private AudioClip healSound = new 
+			AudioClip(new File("heal.wav").toURI().toString());
 
 	/** holds the audio sound for the background music on non battle screens*/
-	private static Media defaultBgm = new Media(new File("defaultBGM.mp3").toURI().toString());
+	private static Media defaultBgm = new 
+			Media(new File("defaultBGM.mp3").toURI().toString());
 
-	private static Media normBattleBgm = new Media(new File("normBattle.mp3").toURI().toString());
+	/** holds the audio sound for the battle music*/
+	private static Media normBattleBgm = new 
+			Media(new File("normBattle.mp3").toURI().toString());
 
+	/** Holds the players for the 2 music medias we have*/
 	private static MediaPlayer defaultPlayer,normPlayer;
 
 	/**Health bars displays. */
@@ -103,10 +109,12 @@ public class MonsterGUI extends Application {
 	private Label nameLabel1, nameLabel2;
 
 	/** Player one's team of monsters.*/
-	private ArrayList<Monster> player1Team = new ArrayList<Monster>();
+	private ArrayList<Monster> player1Team = 
+			new ArrayList<Monster>();
 
 	/** Player two's team of monsters.*/
-	private ArrayList<Monster> player2Team = new ArrayList<Monster>();
+	private ArrayList<Monster> player2Team = 
+			new ArrayList<Monster>();
 
 	/** An logic engine used for damage calculations.*/
 	private Logic engine = new Logic();
@@ -115,10 +123,12 @@ public class MonsterGUI extends Application {
 	private static boolean firstBgm = true;
 
 	/** the four buttons the player can access.*/
-	private Button attackButton, heavyButton, healButton, switchMonButton;
+	private Button attackButton, heavyButton, 
+	healButton, switchMonButton;
 
 	/** Buttons for Items in shop*/
-	private Button healthBoostBut,DodgerBut,silkScarfBut,critChanceBut,godModeBut,iContinue;
+	private Button healthBoostBut,DodgerBut,silkScarfBut,
+	critChanceBut,godModeBut,iContinue;
 	
 	private boolean hbBought,dBought,ssBought,ccBought,gmBought = false;
 
@@ -322,16 +332,16 @@ public class MonsterGUI extends Application {
 							}
 
 							team1Chosen = player1Team.get(0);
-							//System.out.println(player1Team.get(0).getLevel() +" " + player1Team.get(1).getLevel() + " " + player1Team.get(2).getLevel());
-							engine.generateEnemyTeam(player1Team.get(0).getLevel() + player1Team.get(1).getLevel() + player1Team.get(2).getLevel());
+							
+							engine.generateEnemyTeam(
+									player1Team.get(0).getLevel()
+									+ player1Team.get(1).getLevel()
+									+ player1Team.get(2).getLevel());
 							player2Team = engine.getTeam2();
 							team2Chosen = player2Team.get(0);
-						//	System.out.println(player2Team.get(0).getLevel() +" " + player2Team.get(1).getLevel() + " " + player2Team.get(2).getLevel());
-
-							//							if (!attackButton.isDisabled()) {
+						
 							setUpHealthBars();
-							//							}
-
+						
 							engine.setTeamsAndMons(player1Team, 
 									player2Team, 0, 0);
 
@@ -343,7 +353,7 @@ public class MonsterGUI extends Application {
 							heavyButton.setDisable(false);
 							healButton.setDisable(false);
 							switchMonButton.setDisable(false);
-							//isCPUGame = false; //What is going on with this line here?
+							
 						}
 					}
 				});
@@ -410,7 +420,8 @@ public class MonsterGUI extends Application {
 		itemGrid.setPadding(new Insets(10, 10, 10, 10));
 		itemGrid.setHgap(10);
 		itemGrid.setVgap(10);
-		inventoryLog = new Text("Coins: " + engine.getCoins() + ", Inventory: " + engine.getItemList().toString());
+		inventoryLog = new Text("Coins: " + engine.getCoins() +
+				", Inventory: " + engine.getItemList().toString());
 		updateInventory();
 		itemShop = new Scene(itemGrid,500,500);
 
@@ -489,6 +500,10 @@ public class MonsterGUI extends Application {
 		primaryStage.show();
 
 	}
+	
+	/******************************************************************
+	 * Switches Monster upon request if they are still in game
+	 *****************************************************************/
 	private void switchMonsters() {
 
 		if(isCPUGame || engine.getTurn() == 0) {
@@ -503,7 +518,8 @@ public class MonsterGUI extends Application {
 				monChoices1.add(player1Team.get(2).getMonsterName()+" 3");
 			}
 
-			ChoiceDialog<String> dialog1 = new ChoiceDialog<>(monChoices1.get(0), monChoices1);
+			ChoiceDialog<String> dialog1 = new ChoiceDialog<>
+			(monChoices1.get(0), monChoices1);
 			dialog1.setTitle("Switch Monster");
 			dialog1.setHeaderText("Choose one of your monsters to switch!	");
 			dialog1.setContentText("");
@@ -544,7 +560,8 @@ public class MonsterGUI extends Application {
 				monChoices1.add(player2Team.get(2).getMonsterName()+" 3");
 			}
 
-			ChoiceDialog<String> dialog1 = new ChoiceDialog<>(monChoices1.get(0), monChoices1);
+			ChoiceDialog<String> dialog1 = new ChoiceDialog<>(
+					monChoices1.get(0), monChoices1);
 			dialog1.setTitle("Switch Monster");
 			dialog1.setHeaderText("Choose one of your monsters to switch!	");
 			dialog1.setContentText("");
@@ -575,7 +592,10 @@ public class MonsterGUI extends Application {
 		}
 
 	}
-
+	
+	/**
+	 * Updates the shop buttons to be enabled ot disabled
+	 */
 	private void updateShopButtons() {
 		if(engine.getCoins() < 100 || hbBought)
 			healthBoostBut.setDisable(true);
@@ -598,11 +618,15 @@ public class MonsterGUI extends Application {
 		else
 			godModeBut.setDisable(false);
 	}
-
+	/******************************************************************
+	 * Creates button for the item shop
+	 * @param mainStage holds the stage to create a new stage
+	 *****************************************************************/
 	public void createButtons(Stage mainStage) {
 		updateInventory();
 		healthBoostBut = new Button ("Health Boost - 100 Coins");
-		healthBoostBut.setTooltip(new Tooltip("Adds a 30 HP Boost to your monsters"));
+		healthBoostBut.setTooltip(new Tooltip("Adds a 30 HP Boost "
+				+ "to your monsters"));
 		healthBoostBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
@@ -628,7 +652,8 @@ public class MonsterGUI extends Application {
 		});
 
 		silkScarfBut = new Button ("Silk Scarf - 400 Coins");
-		silkScarfBut.setTooltip(new Tooltip("Monster can only be killed after it reaches 1 HP"));
+		silkScarfBut.setTooltip(new Tooltip("Monster can only be"
+				+ " killed after it reaches 1 HP"));
 		silkScarfBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
@@ -641,7 +666,8 @@ public class MonsterGUI extends Application {
 		});
 
 		critChanceBut = new Button("Critical Chance Drop - 500 Coins");
-		critChanceBut.setTooltip(new Tooltip("Enemy Critical Chance drops to zero"));
+		critChanceBut.setTooltip(new Tooltip("Enemy Critical Chance"
+				+ " drops to zero"));
 		critChanceBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
@@ -654,7 +680,8 @@ public class MonsterGUI extends Application {
 		});
 
 		godModeBut = new Button("God Mode - 10000 Coins");
-		godModeBut.setTooltip(new Tooltip("All enemy hit chances are zero"));
+		godModeBut.setTooltip(new Tooltip("All enemy hit chances "
+				+ "are zero"));
 		godModeBut.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent event) {
@@ -685,10 +712,15 @@ public class MonsterGUI extends Application {
 		updateInventory();
 
 	}
-
+	
+	/******************************************************************
+	 * Updates the inventory log
+	 *****************************************************************/
 	public void updateInventory() {
-		inventoryLog.setText("Coins: " + engine.getCoins() + ", Inventory: " + engine.getItemList().toString());
+		inventoryLog.setText("Coins: " + engine.getCoins() + 
+				", Inventory: " + engine.getItemList().toString());
 	}
+	
 	/******************************************************************
 	 * Checks if a monster fainted (0 health).
 	 *****************************************************************/
@@ -709,7 +741,8 @@ public class MonsterGUI extends Application {
 			engine.addBattleText(onFieldMon.getMonsterName() 
 					+ " Has Fainted\n");
 			if(isCPUGame && onFieldMon == team2Chosen) {
-				engine.addBattleText("20 coins have been added to your account\n");
+				engine.addBattleText("20 coins have been "
+						+ "added to your account\n");
 				engine.setCoins(engine.getCoins() + 20000);
 				updateInventory();
 		//		System.out.println(engine.getCoins());
@@ -752,8 +785,6 @@ public class MonsterGUI extends Application {
 			}
 		}
 	}
-
-
 
 	/******************************************************************
 	 * Resets the monsters and everything else for a new game.
@@ -814,6 +845,11 @@ public class MonsterGUI extends Application {
 		return new Image(monster.getMonsterImagePath());
 	}
 
+	/******************************************************************
+	 * Updates the image effects sprites on screen
+	 * @param effect which effect needs to pop up
+	 * @return the image of the effect
+	 *****************************************************************/
 	private Image updateImagesEffects(final String effect) {
 		return new Image(effect);
 	}
@@ -911,14 +947,15 @@ public class MonsterGUI extends Application {
 		battleLayout.add(battleLog, 0, 21);
 
 	}
-
+	
+	/******************************************************************
+	 * changes the background music depending on scene
+	 * @param scene
+	 *****************************************************************/
 	public static void backgroundMusic(String scene){
 
 		if(scene.equals("default")) {
 			defaultPlayer= new MediaPlayer(defaultBgm);
-
-			//bossPlayer.stop();
-
 			if(!firstBgm) {
 				normPlayer.stop();
 			}
@@ -936,6 +973,11 @@ public class MonsterGUI extends Application {
 			normPlayer.play();
 		}
 	}
+	/******************************************************************
+	 * Updates the audio sounds and the images for the game effects
+	 * @param move int of the move that is being performed
+	 * @param player which player
+	 *****************************************************************/
 	private void soundImagesUpdate(final int move,final int player) {
 		Image player1Icon = updateImagesEffects("transparent.png");;
 		Image player2Icon= updateImagesEffects("transparent.png");;
@@ -973,30 +1015,38 @@ public class MonsterGUI extends Application {
 		if(heal) {
 			if(player==1) {
 				Timeline Timeline1 = new Timeline(
-						new KeyFrame(Duration.ZERO, new KeyValue(player1Heal.imageProperty(),player1Icon)),
-						new KeyFrame(Duration.seconds(1), new KeyValue(player1Heal.imageProperty(),null))
+						new KeyFrame(Duration.ZERO, new KeyValue(
+								player1Heal.imageProperty(),player1Icon)),
+						new KeyFrame(Duration.seconds(1), new KeyValue(
+								player1Heal.imageProperty(),null))
 						);
 				Timeline1.play();
 			}else if(player ==2) {
 				Timeline Timeline2 = new Timeline(
-						new KeyFrame(Duration.ZERO, new KeyValue(player2Heal.imageProperty(),player2Icon)),
-						new KeyFrame(Duration.seconds(1), new KeyValue(player2Heal.imageProperty(),null))
+						new KeyFrame(Duration.ZERO, new KeyValue(
+								player2Heal.imageProperty(),player2Icon)),
+						new KeyFrame(Duration.seconds(1), new KeyValue(
+								player2Heal.imageProperty(),null))
 						);
 				Timeline2.play();
 			}
 		}else {
 			if(player==2) {
 				Timeline Timeline1 = new Timeline(
-						new KeyFrame(Duration.ZERO, new KeyValue(player1Effect.imageProperty(),player1Icon)),
-						new KeyFrame(Duration.seconds(1), new KeyValue(player1Effect.imageProperty(),null))
+						new KeyFrame(Duration.ZERO, new KeyValue(
+								player1Effect.imageProperty(),player1Icon)),
+						new KeyFrame(Duration.seconds(1), new KeyValue(
+								player1Effect.imageProperty(),null))
 						);
 				Timeline1.play();
 			}
 
 			if(player==1) {
 				Timeline Timeline2 = new Timeline(
-						new KeyFrame(Duration.ZERO, new KeyValue(player2Effect.imageProperty(),player2Icon)),
-						new KeyFrame(Duration.seconds(1), new KeyValue(player2Effect.imageProperty(),null))
+						new KeyFrame(Duration.ZERO, new KeyValue(
+								player2Effect.imageProperty(),player2Icon)),
+						new KeyFrame(Duration.seconds(1), new KeyValue(
+								player2Effect.imageProperty(),null))
 						);
 				Timeline2.play();
 			}
@@ -1013,7 +1063,7 @@ public class MonsterGUI extends Application {
 		//checks if player one has gone. if they havent
 		//it will store it into p1move.
 
-	//	System.out.println(isCPUGame);
+
 		if (!isCPUGame) {
 			if (storedMoves[0] == null) {
 				p1Move = move;
@@ -1116,7 +1166,7 @@ public class MonsterGUI extends Application {
 				}
 			}
 		} else { // This IS a CPU game, add P1's move, and randomly select P2's
-		//	System.out.println("CompGame");
+		
 			p1Move = move;
 			if (move == 1)  {
 				storedMoves[0] = team1Chosen.getMove1();
@@ -1129,14 +1179,12 @@ public class MonsterGUI extends Application {
 			}
 
 			storedMoves[1] = monsterSmash(team2Chosen);
-			//System.out.println(M_m_m_monsterSmash(team2Chosen));
+			
 			//checks which team has a faster monster
 			//who will attack first
 			if (team1Chosen.getSpeedBattle() 
 					> team2Chosen.getSpeedBattle()) {
-			//	System.out.println("Player 1 attacked first. Speed: " 
-					//	+ team1Chosen.getSpeedBattle() + " vs. " 
-					//	+ team2Chosen.getSpeedBattle());
+		
 				if(p1Move!=4)
 					engine.doMove(storedMoves[0], 1, p1Move);
 				soundImagesUpdate(p1Move,1);
@@ -1197,6 +1245,11 @@ public class MonsterGUI extends Application {
 			}
 		}
 	}
+	/******************************************************************
+	 * Picks a monster move for the enemy AI
+	 * @param enemyMon which monster is battling
+	 * @return move that it will perform
+	 *****************************************************************/
 	private Move monsterSmash(Monster enemyMon) {
 		Random rnd = new Random();
 		int moveChoice = rnd.nextInt(100);
@@ -1213,7 +1266,11 @@ public class MonsterGUI extends Application {
 			return enemyMon.getMove3();
 		}
 	}
-
+	/******************************************************************
+	 * Replaces any fainted monsters
+	 * @param teamList team of monsters
+	 * @param mon monster that needs to be replaced
+	 *****************************************************************/
 	private void replaceFaintedMonster(ArrayList<Monster> teamList, Monster mon) {
 		Monster chosenMon = null;
 		switch (engine.getTurn()) {
@@ -1260,6 +1317,10 @@ public class MonsterGUI extends Application {
 		stage.close();
 	}
 	
+	/******************************************************************
+	 * Creates game over alert or the continue to next round alert
+	 * which will trigger a level up scene
+	 *****************************************************************/
 	private void gameOverAlert() {
 		//game needs to end
 		int winner = 0;
@@ -1286,18 +1347,23 @@ public class MonsterGUI extends Application {
 
 			ArrayList<String> monChoices = new ArrayList<String>();
 			monChoices.add(player1Team.get(0).getMonsterName());
-			if (!monChoices.get(0).equals(player1Team.get(1).getMonsterName())) {
+			if (!monChoices.get(0).equals(
+					player1Team.get(1).getMonsterName())) {
 				monChoices.add(player1Team.get(1).getMonsterName());
 			}
-			if (monChoices.size() == 2 && !player1Team.get(2).getMonsterName().
-					equals(monChoices.get(0)) && !player1Team.get(2).getMonsterName().
+			if (monChoices.size() == 2 && 
+					!player1Team.get(2).getMonsterName().
+					equals(monChoices.get(0)) && 
+					!player1Team.get(2).getMonsterName().
 					equals(monChoices.get(1))) {
 				monChoices.add(player1Team.get(2).getMonsterName());
 			}
 
-			ChoiceDialog<String> dialog = new ChoiceDialog<>(monChoices.get(0), monChoices);
+			ChoiceDialog<String> dialog = new ChoiceDialog<>(
+					monChoices.get(0), monChoices);
 			dialog.setTitle("LEVEL UP!");
-			dialog.setHeaderText("Choose one of your monster types to level up!	");
+			dialog.setHeaderText("Choose one of your "
+					+ "monster types to level up!	");
 			dialog.setContentText("");
 
 			// Traditional way to get the response value.
@@ -1319,7 +1385,8 @@ public class MonsterGUI extends Application {
 			mon.resetStats(); //So no dead monsters are saved
 		}
 		
-		engine.setTeams(player1Team, player2Team); //update the teams for the engine
+		engine.setTeams(player1Team, player2Team); 
+		//update the teams for the engine
 		engine.saveGame();
 		}
 
@@ -1370,9 +1437,9 @@ public class MonsterGUI extends Application {
 		}
 	}
 	
-	/**
+	/******************************************************************
 	 * Performs the loading for the game.
-	 */
+	 *****************************************************************/
 	private void loadGame(){
 		isCPUGame = true;
 	

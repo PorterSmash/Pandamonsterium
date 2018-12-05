@@ -45,13 +45,21 @@ public class Logic {
 
 	/** Used in conjunction with the silf scarf item. */
 	private boolean silkFlag = false;
-
+	
+	/** the round number*/
 	private int round = 1;
-
+	
+	/******************************************************************
+	 * gets the round number
+	 * @return round number
+	 *****************************************************************/
 	public int getRound() {
 		return round;
 	}
-
+	/******************************************************************
+	 * sets the round number
+	 * @param round what round you want
+	 *****************************************************************/
 	public void setRound(int round) {
 		this.round = round;
 	}
@@ -186,17 +194,18 @@ public class Logic {
 		return battleLogText;
 	}
 
-	/**
+	/******************************************************************
 	 * Sets the value of the coins.
 	 * @param toSet Coin value to set
-	 */
+	 *****************************************************************/
 	public void setCoins(final int toSet) {
 		coins = toSet;
 	}
-	/**
+	
+	/******************************************************************
 	 * Returns the number of coins the player has.
 	 * @return The number of coins
-	 */
+	 *****************************************************************/
 	public int getCoins() {
 		//System.out.println("Total coins: " + coins);
 		return coins;
@@ -209,7 +218,12 @@ public class Logic {
 	public void addBattleText(final String battleText) {
 		battleLogText = battleText + battleLogText;
 	}
-
+	/******************************************************************
+	 * Calculates the damage from the move committed
+	 * @param moveCommitted takes in the move stats from move object
+	 * @param move states which move it is 1 through 4
+	 * @return int of how much damage is dealt
+	 *****************************************************************/
 	private int calcDamage(final Move moveCommitted, final int move) {
 		Monster target, attacker;
 		if (moveCommitted.getMoveTarget() == 0) {
@@ -232,7 +246,8 @@ public class Logic {
 
 				if (diceRoll(moveCommitted.getCritChance())) {
 					dmgMultiplier = 2;
-					if (itemList.contains("cc") && attacker == player2Team.get(mon2)) {
+					if (itemList.contains("cc") && attacker == 
+							player2Team.get(mon2)) {
 						dmgMultiplier = 1;
 					}
 				}
@@ -244,18 +259,24 @@ public class Logic {
 			}
 		} else if(move ==3) {
 			Random rnd = new Random();
-			dmgNum = (int)((2 * (moveCommitted.getAttackPower() + attacker.getAttackBattle())) * rnd.nextInt(1)); // Anywhere from 0 to 5 times the sum of move and attacker power as healing,
-			dmgNum = dmgNum * -1; // Still tends to be much weaker than any attack.
+			dmgNum = (int)((2 * (moveCommitted.getAttackPower() + 
+					attacker.getAttackBattle())) * rnd.nextDouble()); 
+			// Anywhere from 0 to 5 times the sum of move and 
+			//attacker power as healing,
+			dmgNum = dmgNum * -1; 
+			// Still tends to be much weaker than any attack.
 		}
 		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
 			dmgNum = 0;
 		}
-		// Initial part adds between 0% and 50% damage to the attack, but it always subtracts 25%, 
-		// so it can be anywhere between -25% and 25% damage. Gives some difference to attacks so 
+		// Initial part adds between 0% and 50% damage to the 
+		//attack, but it always subtracts 25%, 
+		// so it can be anywhere between -25% and 25% damage. 
+		//Gives some difference to attacks so 
 		// it's not both mons doing the same damage every time.
 
 		Random rdn = new Random();
-		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextInt(1)) - (dmgNum/4); 
+		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
 		return dmgNum; 
 	}
 
@@ -310,7 +331,8 @@ public class Logic {
 		}
 		if (moveNum == 2) {
 			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
-					getMonsterName() + " (Team " + teamNum + ") heavily attacked "
+					getMonsterName() + " (Team " + teamNum + 
+					") heavily attacked "
 					+ target.getMonsterName() + " (Team " + ((teamNum % 2) 
 							+ 1) + ") " + firstOrSecond + " for " + dmgDone
 					+ " damage.\n" + battleLogText;
@@ -318,7 +340,8 @@ public class Logic {
 
 		if (moveNum == 3) {
 			battleLogText = "(Turn " + (turnNum / 2) + ") " + attacker.
-					getMonsterName() + " (Team " + teamNum + ") healed themselves "
+					getMonsterName() + " (Team " + teamNum + 
+					") healed themselves "
 					+  "with " + Math.abs(dmgDone)
 					+ " health points.\n" + battleLogText;
 		}
@@ -358,10 +381,9 @@ public class Logic {
 	 ****************************************************************/
 	public void itemShop(final int price) {
 		if (price > coins) {
-			System.out.println("You do not have enough coins to purchase that");
-			//This if clause is unrealistic. In reality we would have some buttons 
-			//that would only appear if coins is large enough, or the buttons
-			//would just send a message or something if you don't have enough
+			System.out.println("You do not have enough"
+					+ " coins to purchase that");
+
 		}else {
 			switch (price) {
 			case 100:
@@ -371,7 +393,7 @@ public class Logic {
 					mon.setMaxHealthPoints(mon.getMaxHealthPoints()+30);
 					mon.setHealthBattle(mon.getMaxHealthPoints());
 				}
-				//add a health boost to the monster, like 30 hp or something
+			
 				//for each monster in player team, healthMax += 30.
 				break;
 			case 300:
@@ -383,13 +405,15 @@ public class Logic {
 				itemList.add("ss");
 				coins = coins - price;
 				//modeled after the silk scarf, a monster can only be killed
-				//after it is brought to 1 hp. So a killshot brings the monster to 1 hp,
+				//after it is brought to 1 hp. So a killshot
+				//brings the monster to 1 hp,
 				//and teh next killshot actually kills it. <maybe too ambitious>
 				break;
 			case 500:
 				itemList.add("cc");
 				coins = coins - price;
-				//enemy monster crit chance is now 0, always. <takes two lines of code>
+				//enemy monster crit chance is now 0, always.
+				//<takes two lines of code>
 				break;
 			case 10000:
 				itemList.add("gm");
@@ -400,59 +424,61 @@ public class Logic {
 				break;
 			}
 		}
-		//As of right now, if you buy all the items in the shop you become super OP. 
-		//I'm ok with this.
+	
 
 	}
 	/*****************************************************************
 	 * Generates a team of monsters to battle against the player when they
 	 * are playing alone.
 	 * @param levelID amount of stats that the enemy team has
-	 * CHANGE THE INT PARAMETER LATER TO A STRING SO THAT THE LEVEL IS NOT DETERMINED JUST BY A NUMBER
-	 * Note, levelId will be at least 4, more likely 10 sum(allStatValues) basically
+	 * CHANGE THE INT PARAMETER LATER TO A STRING SO THAT THE LEVEL 
+	 * IS NOT DETERMINED JUST BY A NUMBER
+	 * Note, levelId will be at least 4, more likely 10 
+	 * sum(allStatValues) basically
 	 *****************************************************************/
 	public void generateEnemyTeam(final int levelID) {
-		/**My current idea is to make a team of three monsters, and then 
-		have each monster start with 1 for the 4 stat values. Then
-		the system randomly chooses a number between 1-3 inclusive(let's say "a"), and then 
-		a number from 0-3 inclusive. ("b") So "a" is the amount of stat points
-		to attribute to statID (b). So for each monster in the team, we call
-		levelup(b) * a times. Also we generate the monsters randomly. So pick 3 numbers 1-6
-		and then those are the monsters we run with.
-		 */
 		 
 		player2Team.clear();
 		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
 		Random rnd = new Random();
-		String[] monsterList = {"Charizard", "Staryu", "Nidoking", "Jolteon", "Squirtle", "Raichu", "Troll", "Far-Out Man", "Gnomagician", "Magma Golem (Boss)"};
+		String[] monsterList = {"Charizard", "Staryu", 
+				"Nidoking", "Jolteon", "Squirtle", "Raichu", "Troll", 
+				"Far-Out Man", "Gnomagician", "Magma Golem (Boss)"};
 		for(int i = 0; i < 2; i ++) { // generate 2 normal monsters
 			Monster computerMonster = new Monster();
-			computerMonster.monsterFactory(monsterList[rnd.nextInt(9)]); // auto-assigns info other than stats to monster
+			computerMonster.monsterFactory(monsterList[rnd.nextInt(9)]); 
+			// auto-assigns info other than stats to monster
 			computerMonster.setAllZero(); // sets all stats to 0
-			initializeComputerMonster(singleMonsterStats, computerMonster); // loops through, adding stats
-			player2Team.add(computerMonster); // adds monster to enemy team, repeat
+			initializeComputerMonster(singleMonsterStats, computerMonster); 
+			// loops through, adding stats
+			player2Team.add(computerMonster); 
+			// adds monster to enemy team, repeat
 		}
 		// generate boss monster
 		Monster computerMonster = new Monster();
-		computerMonster.monsterFactory(monsterList[9]); // auto-assigns info other than stats to monster
+		computerMonster.monsterFactory(monsterList[9]); 
+		// auto-assigns info other than stats to monster
 		computerMonster.setAllZero(); // sets all stats to 0
-		initializeComputerMonster((int)(singleMonsterStats * 1.5), computerMonster); // loops through, adding stats, more powerful (times 1.5)
-		player2Team.add(computerMonster); // adds monster to enemy team, repeat
+		initializeComputerMonster((int)(singleMonsterStats * 1.5),
+				computerMonster); 
+		// loops through, adding stats, more powerful (times 1.5)
+		player2Team.add(computerMonster); // adds monster 
+		//to enemy team, repeat
 		
 
 	}
-	/**
+	/******************************************************************
 	 * Creates a text file that contains all necessary information
 	 * to continue with an already played game. This is only useful
 	 * in a single player context.
-	 */
+	 *****************************************************************/
 	public void saveGame() {
-		/*Creates a txt file on the players desktop that contains
-		all teh information needed to continue with a game. This includes:
-		- Monsters and monster levels
-		- Items held
-		- coins in the coin bank
-		 */
+		//Creates a txt file on the players desktop that contains
+		//all the information needed to continue with a game. This includes:
+		//- Monsters and monster levels
+		//- Items held
+		//- coins in the coin bank
+		
 		String fileName = this.toString() + ".txt";
 		try {
 			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
@@ -476,7 +502,9 @@ public class Logic {
 		}
 
 	}
-
+	/******************************************************************
+	 * Heals the health for both teams
+	 *****************************************************************/
 	public void healTeam() {
 		for (Monster mon : player1Team) {
 			mon.setHealthBattle(mon.getMaxHealthPoints());
@@ -486,10 +514,10 @@ public class Logic {
 		}
 
 	}
-	/**
+	/******************************************************************
 	 * Reads in information from a data file and continues a game.
 	 * @param fileName
-	 */
+	 *****************************************************************/
 	public void loadGame(final String fileName) {
 
 		Scanner fileIn = null;
@@ -527,8 +555,14 @@ public class Logic {
 		}
 
 	}
-
-	private void readMonster(final Scanner fileIn, String currentLine, final Monster firstMon) {
+	/******************************************************************
+	 * Reads the monster in a file
+	 * @param fileIn what file
+	 * @param currentLine what line to read
+	 * @param firstMon which monster
+	 *****************************************************************/
+	private void readMonster(final Scanner fileIn, String currentLine
+			, final Monster firstMon) {
 		//System.out.println("Name" + currentLine);
 		firstMon.monsterFactory(currentLine);
 		currentLine = fileIn.nextLine();
@@ -550,32 +584,39 @@ public class Logic {
 		firstMon.setDefenseBattle(firstMon.getDefensePoints());
 		firstMon.setSpeedBattle(firstMon.getSpeedPoints());
 	}
-	/**
-	 * RAndomizes and sets the stats of the monster.
+	/******************************************************************
+	 * Randomizes and sets the stats of the monster.
 	 * @param compMonster Monster being created
 	 * @param monsterLevel Level of the monster
-	 */
+	 *****************************************************************/
 	private void initializeComputerMonster(final int monsterLevel, 
 			final Monster compMonster) {
 		Random rnd = new Random();
-		compMonster.setMaxHealthPoints(60); // start HP at 60, since everything was set to zero, and having a monster with 0hp would be bad
-		//System.out.println(compMonster.getAttackPoints() + " " + compMonster.getDefensePoints() + " " + compMonster.getSpeedPoints() + " " + compMonster.getMaxHealthPoints());
+		compMonster.setMaxHealthPoints(60); 
+		
 		int totalLoops = 0;
 		if (compMonster.getLevel() > 3) {
-			//totalLoops = 21 + monsterLevel + rnd.nextInt(5) - 2; // 0 though 4, minus 2, so +- 2 levels
-	//		totalLoops = 15 + monsterLevel + rnd.nextInt(5) - 2;
+			//totalLoops = 21 + monsterLevel + rnd.nextInt(5) - 2; 
+			// 0 though 4, minus 2, so +- 2 levels
+			//totalLoops = 15 + monsterLevel + rnd.nextInt(5) - 2;
 		} else {
-			totalLoops = 21 + monsterLevel + rnd.nextInt(2); // can be one level above at most
+			totalLoops = 21 + monsterLevel + rnd.nextInt(2); 
+			// can be one level above at most
 		}
-		for (int i = 0; i < totalLoops; i++) { // Levels up 1 stat per level + the initial 18 stat points, randomly distributed
+		for (int i = 0; i < totalLoops; i++) { 
+			// Levels up 1 stat per level + the initial 18 
+			//stat points, randomly distributed
 			compMonster.levelUp(rnd.nextInt(4) + 1);
 		}
-		//System.out.println(compMonster.getAttackPoints() + " " + compMonster.getDefensePoints() + " " + compMonster.getSpeedPoints() + " " + compMonster.getMaxHealthPoints());
+		
 		compMonster.setAttackBattle(compMonster.getAttackPoints());
 		compMonster.setDefenseBattle(compMonster.getDefensePoints());
 		compMonster.setSpeedBattle(compMonster.getSpeedPoints());
 		compMonster.setHealthBattle(compMonster.getMaxHealthPoints());
 	}
+	/*****************************************************************
+	 * Main Method to test the game
+	 *****************************************************************/
 	public static void main(String[] args) {
 		Logic engine = new Logic();
 		Monster team1 = new Monster();
@@ -600,6 +641,11 @@ public class Logic {
 		engine.loadGame(loader + ".txt");
 
 	}
+	
+	/*****************************************************************
+	 * gets the item list that contains the shop items
+	 * @returns ItemsList
+	 *****************************************************************/
 	public ArrayList<String> getItemList() {
 		return itemList;
 	}
