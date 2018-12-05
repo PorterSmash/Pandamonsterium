@@ -150,6 +150,8 @@ public class MonsterGUI extends Application {
 
 	/** Determines if it is a CPU game. */
 	private boolean isCPUGame;
+	
+	private boolean loaded = false;
 
 	private int aiMove;
 	/******************************************************************
@@ -199,6 +201,7 @@ public class MonsterGUI extends Application {
 					@Override
 					public void handle(final ActionEvent e) {
 						loadGame();
+						if(loaded) {
 						setUpHealthBars();
 						primaryStage.setScene(battleScene);
 						updateBattleScene();
@@ -206,6 +209,7 @@ public class MonsterGUI extends Application {
 						heavyButton.setDisable(false);
 						healButton.setDisable(false);
 						switchMonButton.setDisable(false); 
+						}
 					}
 				});
 
@@ -793,6 +797,7 @@ public class MonsterGUI extends Application {
 		dBought= false;
 		ccBought= false;
 		gmBought = false;
+		loaded=false;
 		updateShopButtons();
 		// reset engine
 		engine = new Logic();
@@ -1436,32 +1441,39 @@ public class MonsterGUI extends Application {
 	 * Performs the loading for the game.
 	 *****************************************************************/
 	private void loadGame(){
-		isCPUGame = true;
-	    
-        TextInputDialog fileInput = new TextInputDialog(engine.toString());
-        fileInput.setTitle("Load Game");
-        fileInput.setHeaderText("Enter save file information");
-        fileInput.setContentText(
-                "Enter the name of the save file you wish to load from:");
+		 isCPUGame = true;
+	        
+	        TextInputDialog fileInput = new TextInputDialog(engine.toString());
+	        fileInput.setTitle("Load Game");
+	        fileInput.setHeaderText("Enter save file information");
+	        fileInput.setContentText(
+	                "Enter the name of the save file you wish to load from:");
 
-        Optional<String> result = fileInput.showAndWait();
-        
-        result.ifPresent(fileName -> 
-        engine.loadGame(fileName + ".txt"));
-        
-        player1Team = engine.getTeam1();
-        engine.healTeam();
-        engine.generateEnemyTeam(player1Team.get(0).getLevel() 
-                + player1Team.get(1).getLevel() 
-                + player1Team.get(2).getLevel());
-        
-        player2Team = engine.getTeam2();
+	        Optional<String> result = fileInput.showAndWait();
+	        
+	        String fileName = result.get();
+	        if (new File(fileName + ".txt").canExecute()) {
+	            result.ifPresent(file -> 
+	            engine.loadGame(file + ".txt"));
+	            player1Team = engine.getTeam1();
+		        engine.healTeam();
+		        engine.generateEnemyTeam(player1Team.get(0).getLevel() 
+		                + player1Team.get(1).getLevel() 
+		                + player1Team.get(2).getLevel());
+		        
+		        player2Team = engine.getTeam2();
 
-        team1Chosen = player1Team.get(0);
-        team2Chosen = player2Team.get(0);    
-        engine.setTeamsAndMons(player1Team, 
-                player2Team, 0, 0);
-        updateInventory();
-		
+		        team1Chosen = player1Team.get(0);
+		        team2Chosen = player2Team.get(0);    
+		        engine.setTeamsAndMons(player1Team, 
+		                player2Team, 0, 0);
+		        updateInventory();
+		        loaded = true;
+	        }
+	        
+	        
+	        
+	       
+	        
 	}
 }

@@ -418,8 +418,7 @@ import javafx.scene.control.ChoiceDialog;
 			("Health", choices);
 			dialog.setTitle("You leveled up!");
 			dialog.setHeaderText("Congratulations, your monster " 
-			+ this.getMonsterName() + " leveled up to level " 
-					+ monsterLevel + "!");
+			+ this.getMonsterName() + " leveled up!");
 			dialog.setContentText("Pick a stat to level up:");
 
 			// Traditional way to get the response value.
