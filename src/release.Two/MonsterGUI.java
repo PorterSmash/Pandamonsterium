@@ -1225,7 +1225,8 @@ public class MonsterGUI extends Application {
 					engine.changeTurn();
 				}
 				checkFainted(); // should check team 1
-				if (team1Chosen.getHealthBattle() != 0) {
+				System.out.print(team1Chosen.getHealthBattle());
+				if (team1Chosen.getHealthBattle() > 0) {
 					if(p1Move!=4)
 						engine.doMove(storedMoves[0], 1, 
 								p1Move);

@@ -222,17 +222,17 @@ public class Logic {
 	 * Calculates the damage from the move committed
 	 * @param moveCommitted takes in the move stats from move object
 	 * @param move states which move it is 1 through 4
+	 * @param moveTarget indicates which team is targeted
 	 * @return int of how much damage is dealt
 	 *****************************************************************/
-	private int calcDamage(final Move moveCommitted, final int move) {
+	private int calcDamage(final Move moveCommitted, final int move,final int moveTarget) {
 		Monster target, attacker;
-		if (moveCommitted.getMoveTarget() == 0) {
+		if (moveTarget == 0) {
 			target = player1Team.get(mon1);
 			attacker = player2Team.get(mon2);
 		} else {
 			target = player2Team.get(mon2);
 			attacker = player1Team.get(mon1);
-			
 			if (itemList.contains("d")) {
 				moveCommitted.setHitChance(
 						moveCommitted.getHitChance() / 2);
@@ -241,6 +241,7 @@ public class Logic {
 
 		int dmgNum = 0;
 		if (move != 3) {
+			
 			if (diceRoll(moveCommitted.getHitChance())) {
 				int dmgMultiplier = 1;
 
@@ -255,7 +256,7 @@ public class Logic {
 						+ attacker.getAttackBattle()) 
 						* dmgMultiplier) - (target.
 								getDefenseBattle() / 2));
-
+				
 			}
 		} else if(move ==3) {
 			Random rnd = new Random();
@@ -266,9 +267,7 @@ public class Logic {
 			dmgNum = dmgNum * -1; 
 			// Still tends to be much weaker than any attack.
 		}
-		if(itemList.contains("gm") && attacker == player2Team.get(mon2)) {
-			dmgNum = 0;
-		}
+		
 		// Initial part adds between 0% and 50% damage to the 
 		//attack, but it always subtracts 25%, 
 		// so it can be anywhere between -25% and 25% damage. 
@@ -277,6 +276,10 @@ public class Logic {
 
 		Random rdn = new Random();
 		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
+		if(itemList.contains("gm") && attacker == player2Team.get(mon2) &&
+				target == player1Team.get(mon1)) {
+			dmgNum = 0;
+		}
 		return dmgNum; 
 	}
 
@@ -303,7 +306,7 @@ public class Logic {
 		if (moveNum == 3) {
 			target = attacker;
 		}
-		int dmgDone = calcDamage(moveDone, moveNum);
+		int dmgDone = calcDamage(moveDone, moveNum,moveTarget);
 		if (itemList.contains("ss") && !silkFlag
 				&& dmgDone > target.getHealthBattle()
 				&& teamNum == 2) {
