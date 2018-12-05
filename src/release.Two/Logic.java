@@ -493,7 +493,7 @@ public class Logic {
 	}
 	/******************************************************************
 	 * Reads in information from a data file and continues a game.
-	 * @param fileName
+	 * @param fileName File to load from
 	 *****************************************************************/
 	public void loadGame(final String fileName) {
 

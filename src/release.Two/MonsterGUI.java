@@ -715,6 +715,7 @@ public class MonsterGUI extends Application {
 	
 	/******************************************************************
 	 * Checks if a monster fainted (0 health).
+	 * @return boolean True if fainted, false if not
 	 *****************************************************************/
 	public boolean checkFainted() {
 		boolean fainted = false;
@@ -953,7 +954,7 @@ public class MonsterGUI extends Application {
 	
 	/******************************************************************
 	 * changes the background music depending on scene
-	 * @param scene
+	 * @param scene Either battle or menu
 	 *****************************************************************/
 	public static void backgroundMusic(String scene){
 
