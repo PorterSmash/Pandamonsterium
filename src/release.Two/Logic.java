@@ -412,7 +412,6 @@ public class Logic {
 	 * sum(allStatValues) basically
 	 *****************************************************************/
 	public void generateEnemyTeam(final int levelID) {
-		 
 		player2Team.clear();
 		int singleMonsterStats = levelID / 3; //monsterLevel for each monster
 		Random rnd = new Random();
@@ -514,6 +513,7 @@ public class Logic {
 					player1Team.add(readMonster);
 				}
 				if (!currentLine.equals(",")) {
+					currentLine = fileIn.nextLine();
 					String[] items = currentLine.split(",");
 					for (int i = 0; i < items.length; i++) {
 						itemList.add(items[i]);
