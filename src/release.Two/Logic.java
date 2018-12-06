@@ -512,14 +512,12 @@ public class Logic {
 					readMonster(fileIn, currentLine, readMonster);
 					player1Team.add(readMonster);
 				}
-				if (!currentLine.equals(",")) {
-					currentLine = fileIn.nextLine();
+				currentLine = fileIn.nextLine();
+				if (!currentLine.equals(",") && !currentLine.equals("")) {
 					String[] items = currentLine.split(",");
 					for (int i = 0; i < items.length; i++) {
 						itemList.add(items[i]);
 					}
-					currentLine = fileIn.nextLine();
-				} else {
 					currentLine = fileIn.nextLine();
 				}
 				currentLine = fileIn.nextLine();
