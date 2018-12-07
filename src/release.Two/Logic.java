@@ -560,10 +560,7 @@ public class Logic {
 		currentLine = fileIn.nextLine();
 	//	System.out.println("Speed" + currentLine);
 		firstMon.setSpeedPoints(Integer.parseInt(currentLine));
-		firstMon.setHealthBattle(firstMon.getMaxHealthPoints());
-		firstMon.setAttackBattle(firstMon.getAttackPoints());
-		firstMon.setDefenseBattle(firstMon.getDefensePoints());
-		firstMon.setSpeedBattle(firstMon.getSpeedPoints());
+		firstMon.resetStats();
 	}
 	/******************************************************************
 	 * Randomizes and sets the stats of the monster.
@@ -590,10 +587,7 @@ public class Logic {
 			compMonster.levelUp(rnd.nextInt(4) + 1);
 		}
 		
-		compMonster.setAttackBattle(compMonster.getAttackPoints());
-		compMonster.setDefenseBattle(compMonster.getDefensePoints());
-		compMonster.setSpeedBattle(compMonster.getSpeedPoints());
-		compMonster.setHealthBattle(compMonster.getMaxHealthPoints());
+		compMonster.resetStats();
 	}
 	/*****************************************************************
 	 * Main Method to test the game
