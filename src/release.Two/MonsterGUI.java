@@ -48,7 +48,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
 /**********************************************************************
  * This class displays the monster battle to the user.
  * It uses javafx elements to display a launch screen, monster
@@ -59,7 +58,8 @@ import javafx.util.Duration;
  *********************************************************************/
 public class MonsterGUI extends Application {
 	/** Declares the three needed scenes.*/
-	private Scene titleScene, monsterScene, battleScene, pickMonster,itemShop;
+	private Scene titleScene, monsterScene, battleScene, 
+	pickMonster,itemShop;
 
 	/** Pane used for switching monsters. */
 	private FlowPane switchMonPane;
@@ -249,21 +249,24 @@ public class MonsterGUI extends Application {
 		monsterBox1.setLayoutY(100);
 
 		monsterBox1.getItems().addAll("Charizard", "Staryu", 
-				"Nidoking", "Squirtle", "Jolteon", "Raichu","Eevee","Gengar",
+				"Nidoking", "Squirtle", "Jolteon", "Raichu"
+				,"Eevee","Gengar",
 				"Blaziken","Swellow","Ivysaur","Rattata",
 				"Magikarp","Beedrill","Ludicolo");
 		monsterBox1.getSelectionModel().selectFirst();
 
 		ChoiceBox<String> monsterBox2 = new ChoiceBox<>();
 		monsterBox2.getItems().addAll("Charizard", "Staryu", 
-				"Nidoking", "Squirtle", "Jolteon", "Raichu","Eevee","Gengar",
+				"Nidoking", "Squirtle", "Jolteon", "Raichu",
+				"Eevee","Gengar",
 				"Blaziken","Swellow","Ivysaur","Rattata",
 				"Magikarp","Beedrill","Ludicolo");
 		monsterBox2.getSelectionModel().select(1);;
 
 		ChoiceBox<String> monsterBox3 = new ChoiceBox<>();
 		monsterBox3.getItems().addAll("Charizard", "Staryu", 
-				"Nidoking", "Squirtle", "Jolteon", "Raichu","Eevee","Gengar",
+				"Nidoking", "Squirtle", "Jolteon", "Raichu",
+				"Eevee","Gengar",
 				"Blaziken","Swellow","Ivysaur","Rattata",
 				"Magikarp","Beedrill","Ludicolo");
 		monsterBox3.getSelectionModel().select(2);
@@ -515,7 +518,8 @@ public class MonsterGUI extends Application {
 				Monster placeHolder = new Monster();
 				int index = 1;
 				for (Monster mon : player1Team) {
-					if (result.get().equals(mon.getMonsterName()+" "+index)) {
+					if (result.get().equals(mon.getMonsterName()+
+							" "+index)) {
 						placeHolder = mon;
 						break;
 					}
@@ -1243,7 +1247,8 @@ public class MonsterGUI extends Application {
 	 * @param teamList team of monsters
 	 * @param mon monster that needs to be replaced
 	 *****************************************************************/
-	private void replaceFaintedMonster(ArrayList<Monster> teamList, Monster mon) {
+	private void replaceFaintedMonster(ArrayList<Monster> teamList, 
+			Monster mon) {
 		Monster chosenMon = null;
 		switch (engine.getTurn()) {
 		case 0:
