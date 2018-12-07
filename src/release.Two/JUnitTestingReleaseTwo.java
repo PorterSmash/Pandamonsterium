@@ -290,7 +290,7 @@ public class JUnitTestingReleaseTwo {
 	public void testMonsterFactoryChar1() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Charizard");
-		assertEquals(testMonster.getMaxHealthPoints(), 120);
+		assertEquals(testMonster.getMaxHealthPoints(), 100);
 	}
 	/**********************************************
 	 * Test monster factory attack.
@@ -326,7 +326,7 @@ public class JUnitTestingReleaseTwo {
 	public void testMonsterFactoryStar1() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Staryu");
-		assertEquals(testMonster.getMaxHealthPoints(), 100);
+		assertEquals(testMonster.getMaxHealthPoints(), 80);
 	}
 	/**********************************************
 	 * Test Test monster factory attack for different monster.
@@ -335,7 +335,7 @@ public class JUnitTestingReleaseTwo {
 	public void testMonsterFactoryStar2() {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Staryu");
-		assertEquals(testMonster.getAttackPoints(), 6);
+		assertEquals(testMonster.getAttackPoints(), 8);
 	}
 	/**********************************************
 	 * Test monster factory defense for different monster.
@@ -395,7 +395,7 @@ public class JUnitTestingReleaseTwo {
 		Monster testMonster = new Monster();
 		testMonster.monsterFactory("Charizard");
 		testMonster.resetMonsterLevel();
-		assertEquals(testMonster.getLevel(), 3);
+		assertEquals(testMonster.getLevel(), 1);
 	}
 	/**
 	 * Test set all zero method.
@@ -800,12 +800,13 @@ public class JUnitTestingReleaseTwo {
 		testEngine.itemShop(100);
 		testEngine.itemShop(200);
 		testEngine.itemShop(300);
+		testEngine.itemShop(400);
 		testEngine.itemShop(500);
 		testEngine.itemShop(10000);
 		testEngine.itemShop(0);
 		testEngine.itemShop(1000000000);
 		
-		assertEquals(testEngine.getItemList().size(), 4);
+		assertEquals(testEngine.getItemList().size(), 5);
 		
 	}
 	/**
@@ -823,12 +824,13 @@ public class JUnitTestingReleaseTwo {
 		team1.add(target);
 		team2.add(attacker);
 		testEngine.setTeamsAndMons(team1, team2, 0, 0);
-		testEngine.setCoins(1000000);
+		testEngine.setCoins(1000000000);
 		testEngine.itemShop(100);
 		testEngine.itemShop(200);
 		testEngine.itemShop(300);
+		testEngine.itemShop(400);
 		testEngine.itemShop(500);
-		testEngine.itemShop(10000);
+		testEngine.itemShop(3000000);
 		
 		target = new Monster();
 		attacker = new Monster();
@@ -844,8 +846,6 @@ public class JUnitTestingReleaseTwo {
 		testMove.setCritChance(0);
 		testMove.setHitChance(10);
 		attacker.getMove1().setCritChance(0);
-		System.out.println("This should be true");
-		System.out.println(testEngine.getItemList().contains("gm"));
 		testEngine.doMove(testMove, 0, 1);
 		testEngine.doMove(testMove, 1, 0);
 		
@@ -868,7 +868,7 @@ public class JUnitTestingReleaseTwo {
 		team2.get(0).setHealthBattle(10);
 		testEngine.setTeams(team1, team2);
 		testEngine.healTeam();
-		assertEquals(team1.get(0).getHealthBattle(), 120);
+		assertEquals(team1.get(0).getHealthBattle(), 100);
 		assertEquals(team2.get(0).getHealthBattle(), 80);
 	}
 	/**
@@ -917,6 +917,5 @@ public class JUnitTestingReleaseTwo {
 				+ "Hit Chance: 1\n" 
 				+ " Move Target: 1");
 	}
-
 	
 }
