@@ -190,7 +190,7 @@ public class Logic {
 	 * @return The number of coins
 	 *****************************************************************/
 	public int getCoins() {
-		//System.out.println("Total coins: " + coins);
+		
 		return coins;
 	}
 
@@ -258,10 +258,6 @@ public class Logic {
 
 		Random rdn = new Random();
 		dmgNum = dmgNum + (int)(dmgNum/2 * rdn.nextDouble()) - (dmgNum/4); 
-		System.out.println("\nAll three of these need to be true before gm runs");
-		System.out.println(itemList.contains("gm"));
-		System.out.println(attacker == player2Team.get(mon2));
-		System.out.println(target == player1Team.get(mon1));
 		if(itemList.contains("gm") && attacker == player2Team.get(mon2) &&
 				target == player1Team.get(mon1)) {
 			dmgNum = 0;
@@ -543,22 +539,17 @@ public class Logic {
 	 * @param firstMon which monster
 	 *****************************************************************/
 	private void readMonster(final Scanner fileIn, String currentLine
-			, final Monster firstMon) {
-		//System.out.println("Name" + currentLine);
+			, final Monster firstMon) {	
 		firstMon.monsterFactory(currentLine);
-		currentLine = fileIn.nextLine();
-		//System.out.println("Health" + currentLine);
+		currentLine = fileIn.nextLine();	
 		firstMon.setMaxHealthPoints(
 				Integer.parseInt(currentLine));
-		currentLine = fileIn.nextLine();
-		//System.out.println("Attack" + currentLine);
+		currentLine = fileIn.nextLine();	
 		firstMon.setAttackPoints(Integer.parseInt(currentLine));
 		currentLine = fileIn.nextLine();
-	//	System.out.println("Defense" + currentLine);
 		firstMon.setDefensePoints(
 				Integer.parseInt(currentLine));
 		currentLine = fileIn.nextLine();
-	//	System.out.println("Speed" + currentLine);
 		firstMon.setSpeedPoints(Integer.parseInt(currentLine));
 		firstMon.resetStats();
 	}
@@ -571,28 +562,15 @@ public class Logic {
 			final Monster compMonster) {
 		Random rnd = new Random();
 		compMonster.setMaxHealthPoints(60); 
-		
-		int totalLoops = 0;
-		if (compMonster.getLevel() > 3) {
-			//totalLoops = 21 + monsterLevel + rnd.nextInt(5) - 2; 
-			// 0 though 4, minus 2, so +- 2 levels
-			//totalLoops = 15 + monsterLevel + rnd.nextInt(5) - 2;
-		} else {
-			totalLoops = 21 + monsterLevel + rnd.nextInt(2); 
-			// can be one level above at most
-		}
+
+		int	totalLoops = 21 + monsterLevel + rnd.nextInt(2); 
 		for (int i = 0; i < totalLoops; i++) { 
 			// Levels up 1 stat per level + the initial 18 
 			//stat points, randomly distributed
 			compMonster.levelUp(rnd.nextInt(4) + 1);
 		}
-		
 		compMonster.resetStats();
 	}
-	/*****************************************************************
-	 * Main Method to test the game
-	 *****************************************************************/
-	
 	/*****************************************************************
 	 * gets the item list that contains the shop items
 	 * @return ItemList list of items

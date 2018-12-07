@@ -287,8 +287,10 @@ public class MonsterGUI extends Application {
 						String[] choices = {monster1, 
 								monster2, monster3};
 						if (!isCPUGame) {
-							if (monster1.equals(monster2) || monster2.equals(monster3) || monster3.equals(monster1)) {
-								System.out.println("Please choose 3 different monsters!");
+							if (monster1.equals(monster2) || 
+									monster2.equals(monster3) || 
+									monster3.equals(monster1)) {
+								alertMonster();
 							} else {
 								if (!playerOnePicked) {
 									whichTeam.setText(
@@ -325,8 +327,10 @@ public class MonsterGUI extends Application {
 								}
 							}		
 						} else {
-							if (monster1.equals(monster2) || monster2.equals(monster3) || monster3.equals(monster1)) {
-								System.out.println("Please choose 3 different monsters!");
+							if (monster1.equals(monster2) || monster2.equals(monster3) 
+									|| monster3.equals(monster1)) {
+								
+								alertMonster();
 							} else {
 								for (int i = 0; i < 3; i++) {
 									Monster monster = new Monster();
@@ -1434,7 +1438,6 @@ public class MonsterGUI extends Application {
         	   System.exit(1);
            }
            
-           
            String fileName = result.get();
            if (new File(fileName + ".txt").canExecute()) {
                result.ifPresent(file -> 
@@ -1445,7 +1448,7 @@ public class MonsterGUI extends Application {
                for (Monster mon : player1Team) {
                    mon.resetMonsterLevel();
                }
-               
+         
                engine.generateEnemyTeam(player1Team.get(0).getLevel() 
                        + player1Team.get(1).getLevel() 
                        + player1Team.get(2).getLevel());
@@ -1460,9 +1463,13 @@ public class MonsterGUI extends Application {
                loaded = true;
                backgroundMusic("normBattle");
            }
-          
-           
+       
    }
+	/******************************************************************
+	 * Sets up the images
+	 * @param battleLayout takes in the battle layout we are using
+	 * @param placeHolder puts in a placeholder image
+	 *****************************************************************/
 	private void setUpImages(GridPane battleLayout, Image placeHolder) {
 		player1Sprite = new ImageView(placeHolder);
 		player2Sprite = new ImageView(placeHolder);
@@ -1487,10 +1494,24 @@ public class MonsterGUI extends Application {
 		battleLayout.add(player1Heal, 0, 12);	
 		battleLayout.add(player2Heal, 2, 12);
 	}
+	/******************************************************************
+	 * disables the buttons
+	 *****************************************************************/
 	private void setButtonsDisableFalse() {
 		attackButton.setDisable(false);
 		heavyButton.setDisable(false);
 		healButton.setDisable(false);
 		switchMonButton.setDisable(false);
+	}
+	/******************************************************************
+	 * Alerts the player not to pick the monster more than once
+	 *****************************************************************/
+	private void alertMonster() {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Choose a different Monster");
+		alert.setHeaderText(null);
+		alert.setContentText("You cannot have the same monster,"
+				+ " please pick another monster.");
+		alert.showAndWait();
 	}
 }
