@@ -518,7 +518,6 @@ public class Logic {
 					for (int i = 0; i < items.length; i++) {
 						itemList.add(items[i]);
 					}
-					currentLine = fileIn.nextLine();
 				}
 				currentLine = fileIn.nextLine();
 				coins = Integer.parseInt(currentLine);	

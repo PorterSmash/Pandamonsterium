@@ -4,6 +4,7 @@ package release.Two;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Timer;
@@ -270,14 +271,14 @@ public class MonsterGUI extends Application {
 				"Nidoking", "Squirtle", "Jolteon", "Raichu","Eevee","Gengar",
 				"Blaziken","Swellow","Ivysaur","Rattata",
 				"Magikarp","Beedrill","Ludicolo");
-		monsterBox2.getSelectionModel().selectFirst();
+		monsterBox2.getSelectionModel().select(1);;
 
 		ChoiceBox<String> monsterBox3 = new ChoiceBox<>();
 		monsterBox3.getItems().addAll("Charizard", "Staryu", 
 				"Nidoking", "Squirtle", "Jolteon", "Raichu","Eevee","Gengar",
 				"Blaziken","Swellow","Ivysaur","Rattata",
 				"Magikarp","Beedrill","Ludicolo");
-		monsterBox3.getSelectionModel().selectFirst();
+		monsterBox3.getSelectionModel().select(2);
 
 		// Choose monster button (goes to next scene)
 		Button chooseMonsterButton = new Button("Choose your Monster");
@@ -298,10 +299,8 @@ public class MonsterGUI extends Application {
 						String[] choices = {monster1, 
 								monster2, monster3};
 						if (!isCPUGame) {
-							if (choices[0] == null || choices[1] == null
-									|| choices[2] == null) {
-							//	System.out.println(
-								//		"Choose all monsters");
+							if (monster1.equals(monster2) || monster2.equals(monster3) || monster3.equals(monster1)) {
+								System.out.println("Please choose 3 different monsters!");
 							} else {
 								if (!playerOnePicked) {
 									whichTeam.setText(
@@ -341,35 +340,38 @@ public class MonsterGUI extends Application {
 								}
 							}		
 						} else {
-							for (int i = 0; i < 3; i++) {
-								Monster monster = new Monster();
-								monster.monsterFactory(choices[i]);
-								player1Team.add(monster);
+							if (monster1.equals(monster2) || monster2.equals(monster3) || monster3.equals(monster1)) {
+								System.out.println("Please choose 3 different monsters!");
+							} else {
+								for (int i = 0; i < 3; i++) {
+									Monster monster = new Monster();
+									monster.monsterFactory(choices[i]);
+									player1Team.add(monster);
+								}
+
+								team1Chosen = player1Team.get(0);
+								
+								engine.generateEnemyTeam(
+										player1Team.get(0).getLevel()
+										+ player1Team.get(1).getLevel()
+										+ player1Team.get(2).getLevel());
+								player2Team = engine.getTeam2();
+								team2Chosen = player2Team.get(0);
+							
+								setUpHealthBars();
+							
+								engine.setTeamsAndMons(player1Team, 
+										player2Team, 0, 0);
+
+								primaryStage.setScene(battleScene);
+								updateBattleScene();
+								backgroundMusic("normBattle");
+								playerOnePicked = false;
+								attackButton.setDisable(false);
+								heavyButton.setDisable(false);
+								healButton.setDisable(false);
+								switchMonButton.setDisable(false);
 							}
-
-							team1Chosen = player1Team.get(0);
-							
-							engine.generateEnemyTeam(
-									player1Team.get(0).getLevel()
-									+ player1Team.get(1).getLevel()
-									+ player1Team.get(2).getLevel());
-							player2Team = engine.getTeam2();
-							team2Chosen = player2Team.get(0);
-						
-							setUpHealthBars();
-						
-							engine.setTeamsAndMons(player1Team, 
-									player2Team, 0, 0);
-
-							primaryStage.setScene(battleScene);
-							updateBattleScene();
-							backgroundMusic("normBattle");
-							playerOnePicked = false;
-							attackButton.setDisable(false);
-							heavyButton.setDisable(false);
-							healButton.setDisable(false);
-							switchMonButton.setDisable(false);
-							
 						}
 					}
 				});
@@ -541,6 +543,11 @@ public class MonsterGUI extends Application {
 
 			// Traditional way to get the response value.
 			Optional<String> result = dialog1.showAndWait();
+			try {
+	        	   result.get();
+	           } catch (NoSuchElementException e) {
+	        	   System.exit(1);
+	           }
 			if (result.isPresent()){
 				Monster placeHolder = new Monster();
 				int index = 1;
@@ -583,6 +590,11 @@ public class MonsterGUI extends Application {
 
 			// Traditional way to get the response value.
 			Optional<String> result = dialog1.showAndWait();
+			try {
+	        	   result.get();
+	           } catch (NoSuchElementException e) {
+	        	   System.exit(1);
+	           }
 			if (result.isPresent()){
 				Monster placeHolder = new Monster();
 				int index =1;
@@ -1369,6 +1381,11 @@ public class MonsterGUI extends Application {
 
 			// Traditional way to get the response value.
 			Optional<String> result = dialog.showAndWait();
+			try {
+	        	   result.get();
+	           } catch (NoSuchElementException e) {
+	        	   System.exit(1);
+	           }
 			if (result.isPresent()){
 				Monster placeHolder = new Monster();
 				for (Monster mon : player1Team) {
@@ -1411,8 +1428,14 @@ public class MonsterGUI extends Application {
 		if(playerOneWin&&isCPUGame) {
 			alert.getButtonTypes().add(bContinue);
 		}
-
+		
 		Optional<ButtonType> option = alert.showAndWait();
+        
+        try {
+     	   option.get();
+        } catch (Exception e) {
+     	   System.exit(1);
+        }
 		attackButton.setDisable(true);
 		heavyButton.setDisable(true);
 		healButton.setDisable(true);
@@ -1453,6 +1476,12 @@ public class MonsterGUI extends Application {
                    "Enter the name of the save file you wish to load from:");
 
            Optional<String> result = fileInput.showAndWait();
+           try {
+        	   result.get();
+           } catch (NoSuchElementException e) {
+        	   System.exit(1);
+           }
+           
            
            String fileName = result.get();
            if (new File(fileName + ".txt").canExecute()) {
