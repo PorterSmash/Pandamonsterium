@@ -1,6 +1,5 @@
 package release.Two;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,14 +8,11 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JOptionPane;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -192,10 +188,7 @@ public class MonsterGUI extends Application {
 					@Override
 					public void handle(final ActionEvent arg0) {
 						isCPUGame = true;
-						attackButton.setDisable(false);
-						heavyButton.setDisable(false);
-						healButton.setDisable(false);
-						switchMonButton.setDisable(false);
+						setButtonsDisableFalse();
 						primaryStage.setScene(monsterScene);	
 					}
 				});
@@ -212,10 +205,7 @@ public class MonsterGUI extends Application {
 						setUpHealthBars();
 						primaryStage.setScene(battleScene);
 						updateBattleScene();
-						attackButton.setDisable(false);
-						heavyButton.setDisable(false);
-						healButton.setDisable(false);
-						switchMonButton.setDisable(false); 
+						setButtonsDisableFalse(); 
 						}
 					}
 				});
@@ -223,8 +213,6 @@ public class MonsterGUI extends Application {
 		ImageView titleImage1 = new ImageView(titleImage);
 		titleImage1.setFitHeight(300);
 		titleImage1.setFitWidth(300);
-
-		//startLayout.setGridLinesVisible(true);
 
 		VBox root = new VBox();
 		root.getChildren().add(startLayout);
@@ -333,10 +321,7 @@ public class MonsterGUI extends Application {
 									updateBattleScene();
 									backgroundMusic("normBattle");
 									playerOnePicked = false;
-									attackButton.setDisable(false);
-									heavyButton.setDisable(false);
-									healButton.setDisable(false);
-									switchMonButton.setDisable(false);
+									setButtonsDisableFalse();
 								}
 							}		
 						} else {
@@ -349,8 +334,7 @@ public class MonsterGUI extends Application {
 									player1Team.add(monster);
 								}
 
-								team1Chosen = player1Team.get(0);
-								
+								team1Chosen = player1Team.get(0);	
 								engine.generateEnemyTeam(
 										player1Team.get(0).getLevel()
 										+ player1Team.get(1).getLevel()
@@ -367,10 +351,7 @@ public class MonsterGUI extends Application {
 								updateBattleScene();
 								backgroundMusic("normBattle");
 								playerOnePicked = false;
-								attackButton.setDisable(false);
-								heavyButton.setDisable(false);
-								healButton.setDisable(false);
-								switchMonButton.setDisable(false);
+								setButtonsDisableFalse();
 							}
 						}
 					}
@@ -477,9 +458,7 @@ public class MonsterGUI extends Application {
 			@Override
 			public void handle(final ActionEvent event) {
 				buttonMove(4);
-				//switchMonsters();
 				updateBattleScene();
-				//primaryStage.setScene(itemShop);
 			}
 		});
 
@@ -490,33 +469,13 @@ public class MonsterGUI extends Application {
 		battleScene = new Scene(battleLayout, 925, 625);
 		setUpBattleLayout(battleLayout, healthBarBack1, healthBarBack2);
 
-		player1Sprite = new ImageView(placeHolder);
-		player2Sprite = new ImageView(placeHolder);
-
-		player1Effect = new ImageView(placeHolder);
-		player2Effect = new ImageView(placeHolder);
-
-		player1Heal = new ImageView(placeHolder);
-		player2Heal = new ImageView(placeHolder);
-
-		player1Effect.setVisible(false);
-		player2Effect.setVisible(false);
-		player1Heal.setVisible(false);
-		player2Heal.setVisible(false);
-
-		battleLayout.add(player1Sprite, 0, 12);	
-		battleLayout.add(player2Sprite, 2, 12);	
-
-		battleLayout.add(player1Effect, 0, 12);	
-		battleLayout.add(player2Effect, 2, 12);	
-
-		battleLayout.add(player1Heal, 0, 12);	
-		battleLayout.add(player2Heal, 2, 12);	
+		setUpImages(battleLayout, placeHolder);	
 
 		mainStage = primaryStage;
 		primaryStage.show();
 
 	}
+
 	
 	/******************************************************************
 	 * Switches Monster upon request if they are still in game
@@ -709,10 +668,7 @@ public class MonsterGUI extends Application {
 				setUpHealthBars();
 				updateBattleScene();
 				backgroundMusic("normBattle");
-				attackButton.setDisable(false);
-				heavyButton.setDisable(false);
-				healButton.setDisable(false);
-				switchMonButton.setDisable(false);
+				setButtonsDisableFalse();
 				mainStage.setScene(battleScene);
 				updateBattleScene();
 			}
@@ -755,7 +711,6 @@ public class MonsterGUI extends Application {
 						+ "added to your account\n");
 				engine.setCoins(engine.getCoins() + 20000);
 				updateInventory();
-		//		System.out.println(engine.getCoins());
 			}
 			updateBattleScene();
 
@@ -1320,10 +1275,7 @@ public class MonsterGUI extends Application {
 					player2Team, -1, switchedMonsterIndex);
 		}
 
-		attackButton.setDisable(false);
-		heavyButton.setDisable(false);
-		healButton.setDisable(false);
-		switchMonButton.setDisable(false);
+		setButtonsDisableFalse();
 
 
 		switchMonPane.getChildren().clear();
@@ -1508,6 +1460,37 @@ public class MonsterGUI extends Application {
                loaded = true;
                backgroundMusic("normBattle");
            }
+          
            
    }
+	private void setUpImages(GridPane battleLayout, Image placeHolder) {
+		player1Sprite = new ImageView(placeHolder);
+		player2Sprite = new ImageView(placeHolder);
+
+		player1Effect = new ImageView(placeHolder);
+		player2Effect = new ImageView(placeHolder);
+
+		player1Heal = new ImageView(placeHolder);
+		player2Heal = new ImageView(placeHolder);
+
+		player1Effect.setVisible(false);
+		player2Effect.setVisible(false);
+		player1Heal.setVisible(false);
+		player2Heal.setVisible(false);
+
+		battleLayout.add(player1Sprite, 0, 12);	
+		battleLayout.add(player2Sprite, 2, 12);	
+
+		battleLayout.add(player1Effect, 0, 12);	
+		battleLayout.add(player2Effect, 2, 12);	
+
+		battleLayout.add(player1Heal, 0, 12);	
+		battleLayout.add(player2Heal, 2, 12);
+	}
+	private void setButtonsDisableFalse() {
+		attackButton.setDisable(false);
+		heavyButton.setDisable(false);
+		healButton.setDisable(false);
+		switchMonButton.setDisable(false);
+	}
 }
